@@ -63,16 +63,23 @@ namespace ShopTask.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public ActionResult DeleteProduct(int productId)
+        [HttpPost]
+        public bool DeleteProduct(int productId)
         {
             using (ShopContext dbContext = new ShopContext())
             {
                 Product product = dbContext.products.Find(productId);
-                dbContext.products.Remove(product);
-                dbContext.SaveChanges();
+                if (product != null)
+                {
+                    dbContext.products.Remove(product);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            return ViewTable();
         }
 
         public ActionResult ViewTable()

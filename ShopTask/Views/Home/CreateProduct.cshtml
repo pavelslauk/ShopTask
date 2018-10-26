@@ -9,19 +9,19 @@
     {
         <h3>Add new product.</h3>
         <div>
-            @Html.LabelFor(model => model.title, "Title")
+            @Html.LabelFor(model => model.Title, "Title")
             <br />
-            @Html.EditorFor(model => model.title)
-            @Html.ValidationMessageFor(model => model.title, "", new { style = "color:red;" })
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title, "", new { style = "color:red;" })
             <br /><br />
-            @Html.LabelFor(model => model.price, "Price")
+            @Html.LabelFor(model => model.Price, "Price")
             <br />
-            @Html.EditorFor(model => model.price)
-            @Html.ValidationMessageFor(model => model.price, "", new { style = "color:red;" })
+            @Html.EditorFor(model => model.Price)
+            @Html.ValidationMessageFor(model => model.Price, "", new { style = "color:red;" })
             <br /><br />
-            @Html.LabelFor(model => model.description, "Description")
+            @Html.LabelFor(model => model.Description, "Description")
             <br />
-            @Html.TextAreaFor(model => model.description, new { cols = "40", rows = "3" })
+            @Html.TextAreaFor(model => model.Description, new { cols = "40", rows = "3" })
             <br /><br />
         </div>
         <input type="submit" value="Add" />

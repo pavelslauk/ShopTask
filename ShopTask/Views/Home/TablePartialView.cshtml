@@ -5,10 +5,10 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.title)
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th class="col2">
-                @Html.DisplayNameFor(model => model.price)
+                @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
             </th>
@@ -18,13 +18,13 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.title)
+                    @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td class="col2">
-                    @Html.DisplayFor(modelItem => item.price)
+                    @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "EditProduct", new { productId = item.id }) | @Ajax.ActionLink("Delete", "DeleteProduct", new { productId = item.id }, new AjaxOptions { UpdateTargetId = "main", Confirm = "Remove " + item.title + "?" })
+                    @Html.ActionLink("Edit", "EditProduct", new { productId = item.Id }) | <a href="#" onclick="deletefunc('@item.Id', '@item.Title')">Delete</a>
                 </td>
             </tr>
         }
@@ -36,3 +36,5 @@ else
 }
 <br />
 @Html.ActionLink("Add new product", "CreateProduct")
+
+<script src="~/Scripts/TablePartialView/Delete.js"></script>
