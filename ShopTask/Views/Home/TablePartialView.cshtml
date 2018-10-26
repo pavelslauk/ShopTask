@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ShopTask.Models.Product>
+
+@if (Model.Count() != 0)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th class="col2">
+                @Html.DisplayNameFor(model => model.price)
+            </th>
+            <th>
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td class="col2">
+                    @Html.DisplayFor(modelItem => item.price)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditProduct", new { productId = item.id }) | @Ajax.ActionLink("Delete", "DeleteProduct", new { productId = item.id }, new AjaxOptions { UpdateTargetId = "main", Confirm = "Remove " + item.title + "?" })
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>No products</p>
+}
+<br />
+@Html.ActionLink("Add new product", "CreateProduct")
