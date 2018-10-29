@@ -1,40 +1,42 @@
 ﻿@model IEnumerable<ShopTask.Models.Product>
 
-@if (Model.Count() != 0)
-{
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th class="col2">
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-            </th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
+<div class="tablebody">
+    @if (Model.Count() != 0)
+    {
+        <table class="table">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td class="col2">
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "EditProduct", new { productId = item.Id }) | <a href="#" onclick="deletefunc('@item.Id', '@item.Title')">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th class="col2">
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                </th>
             </tr>
-        }
-    </table>
-}
-else
-{
-    <p>No products</p>
-}
-<br />
-@Html.ActionLink("Add new product", "CreateProduct")
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td class="col2">
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditProduct", new { productId = item.Id }) | <a href="#" class="deletelink" data-id="@item.Id" data-title="@item.Title" data-deleteurl="@Url.Action("DeleteProduct","Home")" data-updateurl="@Url.Action("ViewTable","Home")">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p>No products</p>
+    }
+    <br />
+    @Html.ActionLink("Add new product", "CreateProduct")
+</div>
 
 <script src="~/Scripts/TablePartialView/Delete.js"></script>

@@ -8,6 +8,6 @@ namespace ShopTask.Models
 {
     public class ShopContext : DbContext
     {
-        public DbSet<Product> products { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }
