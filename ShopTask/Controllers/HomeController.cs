@@ -71,12 +71,7 @@ namespace ShopTask.Controllers
             {
                 try
                 {
-                    Product product = new Product();
-                    product.Id = productId;
-                    dbContext.Products.Attach(product);
-                    dbContext.Products.Remove(product);
-                    dbContext.SaveChanges();
-                    return true;
+                    return Delete(dbContext, productId);
                 }
                 catch(DbUpdateConcurrencyException e)
                 {
@@ -104,6 +99,16 @@ namespace ShopTask.Controllers
         {
             bool result = (price > 0)&&(price<=1000000);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private bool Delete(ShopContext dbContext, int productId)
+        {
+            Product product = new Product();
+            product.Id = productId;
+            dbContext.Products.Attach(product);
+            dbContext.Products.Remove(product);
+            dbContext.SaveChanges();
+            return true;
         }
     }
 }
