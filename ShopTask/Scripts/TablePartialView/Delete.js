@@ -1,18 +1,11 @@
 ﻿$('.deletelink').click(function (event) {
     var itemData = event.target.dataset;
-    var tableData = document.getElementById('productTable').dataset;
+    var urls = document.getElementById('productTable').dataset;
     if (confirm('Remove ' + itemData.title + '?')) {
-        $.post(tableData.deleteUrl, { productId: itemData.id }, function (result) {
+        $.post(urls.deleteUrl, { productId: itemData.id }, function (result) {
             if (result) {
-                alert('Success!')
-                $.ajax({
-                    url: tableData.updateUrl,
-                    type: 'GET',
-                    dataType: 'html',
-                    success: function (resultHtml) {
-                        $('#main').html(resultHtml);
-                    }
-                })
+                alert('Success!');
+                $('#' + itemData.id).fadeOut(1000);
             }
             else {
                 alert('Error!')

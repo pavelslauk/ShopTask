@@ -67,8 +67,8 @@ namespace ShopTask.Controllers
         [HttpPost]
         public JsonResult DeleteProduct(int productId)
         {
-            bool result = DeleteProductInternal(productId);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var isdeleted = DeleteProductInternal(productId);
+            return Json(isdeleted, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ViewTable()
@@ -89,38 +89,20 @@ namespace ShopTask.Controllers
 
         private bool DeleteProductInternal(int productId)
         {
-            try
-            {
-                return DeleteProductById(productId);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return CheckProductExistence(productId);
-            }
-        }
-
-        private bool DeleteProductById(int productId)
-        {
             using (var dbContext = new ShopContext())
             {
-                Product product = new Product { Id = productId };
-                dbContext.Products.Attach(product);
-                dbContext.Products.Remove(product);
-                dbContext.SaveChanges();
-                return true;
-            }
-        }
-
-        private bool CheckProductExistence(int productId)
-        {
-            using (var dbContext = new ShopContext())
-            {
-                Product product = dbContext.Products.FirstOrDefault(p => p.Id == productId);
-                if (product == null)
+                try
                 {
+                    Product product = new Product { Id = productId };
+                    dbContext.Products.Attach(product);
+                    dbContext.Products.Remove(product);
+                    dbContext.SaveChanges();
                     return true;
                 }
-                return false;
+                catch (DbUpdateConcurrencyException)
+                {
+                    return dbContext.Products.Any(product => product.Id == productId);
+                }
             }
         }
     }
