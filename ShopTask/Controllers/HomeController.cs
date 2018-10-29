@@ -67,23 +67,14 @@ namespace ShopTask.Controllers
         [HttpPost]
         public JsonResult DeleteProduct(int productId)
         {
-            using (var dbContext = new ShopContext())
-            {
-                try
-                {
-                    Delete(dbContext, productId);
-                    return Json(true, JsonRequestBehavior.AllowGet);
-                }
-                catch(DbUpdateConcurrencyException e)
-                {
-                    Product product = dbContext.Products.FirstOrDefault(p => p.Id == productId);
-                    if (product == null)
-                    {
-                        return Json(true, JsonRequestBehavior.AllowGet); ;
-                    }
-                    return Json(false, JsonRequestBehavior.AllowGet); ;
-                }                                
+            try
+            {         
+                return DeleteProductInternal(productId);
             }
+            catch(DbUpdateConcurrencyException)
+            {
+                return CheckProductExistence(productId);
+            }                                
         }
 
         public ActionResult ViewTable()
@@ -102,12 +93,29 @@ namespace ShopTask.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private void Delete(ShopContext dbContext, int productId)
+        private JsonResult DeleteProductInternal(int productId)
         {
-            Product product = new Product { Id = productId };
-            dbContext.Products.Attach(product);
-            dbContext.Products.Remove(product);
-            dbContext.SaveChanges();
+            using (var dbContext = new ShopContext())
+            {
+                Product product = new Product { Id = productId };
+                dbContext.Products.Attach(product);
+                dbContext.Products.Remove(product);
+                dbContext.SaveChanges();
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        private JsonResult CheckProductExistence(int productId)
+        {
+            using (var dbContext = new ShopContext())
+            {
+                Product product = dbContext.Products.FirstOrDefault(p => p.Id == productId);
+                if (product == null)
+                {
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                }
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
