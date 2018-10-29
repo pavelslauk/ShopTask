@@ -67,14 +67,8 @@ namespace ShopTask.Controllers
         [HttpPost]
         public JsonResult DeleteProduct(int productId)
         {
-            try
-            {         
-                return DeleteProductInternal(productId);
-            }
-            catch(DbUpdateConcurrencyException)
-            {
-                return CheckProductExistence(productId);
-            }                                
+            bool result = DeleteProductInternal(productId);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ViewTable()
@@ -93,7 +87,19 @@ namespace ShopTask.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private JsonResult DeleteProductInternal(int productId)
+        private bool DeleteProductInternal(int productId)
+        {
+            try
+            {
+                return DeleteProductById(productId);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return CheckProductExistence(productId);
+            }
+        }
+
+        private bool DeleteProductById(int productId)
         {
             using (var dbContext = new ShopContext())
             {
@@ -101,20 +107,20 @@ namespace ShopTask.Controllers
                 dbContext.Products.Attach(product);
                 dbContext.Products.Remove(product);
                 dbContext.SaveChanges();
-                return Json(true, JsonRequestBehavior.AllowGet);
+                return true;
             }
         }
 
-        private JsonResult CheckProductExistence(int productId)
+        private bool CheckProductExistence(int productId)
         {
             using (var dbContext = new ShopContext())
             {
                 Product product = dbContext.Products.FirstOrDefault(p => p.Id == productId);
                 if (product == null)
                 {
-                    return Json(true, JsonRequestBehavior.AllowGet);
+                    return true;
                 }
-                return Json(false, JsonRequestBehavior.AllowGet);
+                return false;
             }
         }
     }
