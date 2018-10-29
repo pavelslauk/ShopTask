@@ -1,16 +1,16 @@
-﻿$(".deletelink").click(function deletefunc(event) {
-    var data = event.target.dataset;
-    if (confirm('Remove ' + data.title + '?')) {
-        $.post(data.deleteurl, { productId: data.id }, function (data) {
-            if (data == 'True') {
+﻿$('.deletelink').click(function (event) {
+    var itemData = event.target.dataset;
+    var tableData = document.getElementById('js-product-table').dataset;
+    if (confirm('Remove ' + itemData.title + '?')) {
+        $.post(tableData.deleteUrl, { productId: itemData.id }, function (result) {
+            if (result) {
                 alert('Success!')
                 $.ajax({
-                    url: data.updateurl,
-                    type: "GET",
-                    dataType: "html",
-                    success: function (data) {
-                        var result = $('<div />').append(data).find('.tablebody').html();
-                        $('#main').html(result);
+                    url: tableData.updateUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (resultHtml) {
+                        $('#main').html(resultHtml);
                     }
                 })
             }

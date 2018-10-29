@@ -1,9 +1,8 @@
 ﻿@model IEnumerable<ShopTask.Models.Product>
 
-<div class="tablebody">
     @if (Model.Count() != 0)
     {
-        <table class="table">
+        <table id="js-product-table" class="table" data-delete-url="@Url.Action("DeleteProduct","Home")" data-update-url="@Url.Action("ViewTable","Home")">
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Title)
@@ -25,7 +24,7 @@
                         @Html.DisplayFor(modelItem => item.Price)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "EditProduct", new { productId = item.Id }) | <a href="#" class="deletelink" data-id="@item.Id" data-title="@item.Title" data-deleteurl="@Url.Action("DeleteProduct","Home")" data-updateurl="@Url.Action("ViewTable","Home")">Delete</a>
+                        @Html.ActionLink("Edit", "EditProduct", new { productId = item.Id }) | <a href="#" class="deletelink" data-id="@item.Id" data-title="@item.Title">Delete</a>
                     </td>
                 </tr>
             }
@@ -37,6 +36,5 @@
     }
     <br />
     @Html.ActionLink("Add new product", "CreateProduct")
-</div>
 
 <script src="~/Scripts/TablePartialView/Delete.js"></script>

@@ -65,22 +65,23 @@ namespace ShopTask.Controllers
         }
 
         [HttpPost]
-        public bool DeleteProduct(int productId)
+        public JsonResult DeleteProduct(int productId)
         {
             using (var dbContext = new ShopContext())
             {
                 try
                 {
-                    return Delete(dbContext, productId);
+                    Delete(dbContext, productId);
+                    return Json(true, JsonRequestBehavior.AllowGet);
                 }
                 catch(DbUpdateConcurrencyException e)
                 {
                     Product product = dbContext.Products.FirstOrDefault(p => p.Id == productId);
                     if (product == null)
                     {
-                        return true;
+                        return Json(true, JsonRequestBehavior.AllowGet); ;
                     }
-                    return false;
+                    return Json(false, JsonRequestBehavior.AllowGet); ;
                 }                                
             }
         }
@@ -101,14 +102,12 @@ namespace ShopTask.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private bool Delete(ShopContext dbContext, int productId)
+        private void Delete(ShopContext dbContext, int productId)
         {
-            Product product = new Product();
-            product.Id = productId;
+            Product product = new Product { Id = productId };
             dbContext.Products.Attach(product);
             dbContext.Products.Remove(product);
             dbContext.SaveChanges();
-            return true;
         }
     }
 }
