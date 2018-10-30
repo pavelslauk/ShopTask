@@ -43,7 +43,7 @@ namespace ShopTask.Controllers
         {
             using (var dbContext = new ShopContext())
             {
-                Product product = dbContext.Products.Find(productId);
+                var product = dbContext.Products.Find(productId);
                 return View(product);
             }
         }
@@ -67,23 +67,23 @@ namespace ShopTask.Controllers
         [HttpPost]
         public JsonResult DeleteProduct(int productId)
         {
-            var isdeleted = DeleteProductInternal(productId);
-            return Json(isdeleted, JsonRequestBehavior.AllowGet);
+            var isDeleted = DeleteProductInternal(productId);
+            return Json(isDeleted, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ViewTable()
         {
             using (var dbContext = new ShopContext())
             {
-                List<Product> products = dbContext.Products.ToList();
-                return PartialView("TablePartialView" ,products);
+                var products = dbContext.Products.ToList();
+                return PartialView("TablePartialView", products);
             }
         }
 
         [HttpGet]
         public JsonResult CheckPrice(decimal price)
         {
-            bool result = (price > 0)&&(price<=1000000);
+            bool result = (price > 0)&&(price <= 1000000);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -93,7 +93,7 @@ namespace ShopTask.Controllers
             {
                 try
                 {
-                    Product product = new Product { Id = productId };
+                    var product = new Product { Id = productId };
                     dbContext.Products.Attach(product);
                     dbContext.Products.Remove(product);
                     dbContext.SaveChanges();
@@ -101,7 +101,7 @@ namespace ShopTask.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    return dbContext.Products.Any(product => product.Id == productId);
+                    return !dbContext.Products.Any(product => product.Id == productId);
                 }
             }
         }
