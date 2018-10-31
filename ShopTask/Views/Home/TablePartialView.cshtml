@@ -30,7 +30,7 @@
     </table>
 }
 
-@Html.EmptyTablePlaceholder("No table", Model.Any())
+@Html.EmptyTablePlaceholder("No table", Model.Any(), new { @class = "js-empty-table-placeholder" })
 
 <br />
 @Html.ActionLink("Add new product", "CreateProduct")
