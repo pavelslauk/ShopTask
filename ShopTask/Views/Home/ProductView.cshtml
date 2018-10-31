@@ -1,39 +1,38 @@
 ﻿@model ShopTask.Models.Product
 
-@if(Model != null)
-{
-    ViewBag.Title = "Edit product";
-    ViewBag.Header = "Edit product "+ Model.Title;
+@{
+    string header;
+    if (Model != null)
+    {
+        ViewBag.Title = "Edit product";
+        header = "Edit product " + Model.Title;
+    }
+    else
+    {
+        ViewBag.Title = "Create product";
+        header = "Create new product";
+    }
 }
-else
-{
-    ViewBag.Title = "Create product";
-    ViewBag.Header = "Create new product";
-}
-
 <div class="forms">
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
-        <h3>@ViewBag.Header</h3>
+        <h3>@header</h3>
         <div>
-            @if (Model != null)
-            {
-                @Html.HiddenFor(model => model.Id)
-            }
+            @Html.HiddenFor(model => model.Id)
 
-            @Html.LabelFor(model => model.Title, "Title")
+            @Html.LabelFor(model => model.Title)
             <br />
             @Html.EditorFor(model => model.Title)
             @Html.ValidationMessageFor(model => model.Title, "", new { style = "color:red;" })
             <br /><br />
-            @Html.LabelFor(model => model.Price, "Price")
+            @Html.LabelFor(model => model.Price)
             <br />
             @Html.EditorFor(model => model.Price)
             @Html.ValidationMessageFor(model => model.Price, "", new { style = "color:red;" })
             <br /><br />
-            @Html.LabelFor(model => model.Description, "Description")
+            @Html.LabelFor(model => model.Description)
             <br />
             @Html.TextAreaFor(model => model.Description, new { cols = "40", rows = "3" })
             <br /><br />

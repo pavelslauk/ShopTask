@@ -9,17 +9,13 @@ namespace ShopTask.Helpers
 {
     public static class TableHelper
     {
-        public static MvcHtmlString EmptyTablePlaceholder(this HtmlHelper html, string placeholder, bool tableIsExists, object htmlAttributes = null)
-        {
-            var pTag = new TagBuilder("p");
-            pTag.SetInnerText(placeholder);
-            pTag.MergeAttributes(HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));          
+        public static MvcHtmlString AddHiddenClass(this HtmlHelper html, bool tableIsExists)
+        {         
             if (tableIsExists)
             {
-                pTag.MergeAttribute("class", pTag.Attributes["class"] + " hidden", true);
+                return new MvcHtmlString("hidden ");
             }
-
-            return new MvcHtmlString(pTag.ToString());
+            return new MvcHtmlString("");
         }
     }
 }

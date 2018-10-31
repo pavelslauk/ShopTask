@@ -8,13 +8,15 @@ namespace ShopTask.Models
 {
     public class Product
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
+
         [Required]
         [Display(Name = "Title")]
         public string Title { get; set; }
         [Display(Name = "Price")]
         [Remote("CheckPrice", "Home", ErrorMessage = "Incorrect value")]
         public decimal Price { get; set; }
+        [Display(Name = "Description")]
         public string Description { get; set; }
     }
 }
