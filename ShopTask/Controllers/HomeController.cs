@@ -35,6 +35,7 @@ namespace ShopTask.Controllers
                 dbContext.Products.Add(product);
                 dbContext.SaveChanges();
             }
+
             return RedirectToAction("Index");
         }
 
@@ -44,6 +45,7 @@ namespace ShopTask.Controllers
             using (var dbContext = new ShopContext())
             {
                 var product = dbContext.Products.Find(productId);
+
                 return View(product);
             }
         }
@@ -61,6 +63,7 @@ namespace ShopTask.Controllers
                 dbContext.Entry(product).State = EntityState.Modified;
                 dbContext.SaveChanges();
             }
+
             return RedirectToAction("Index");
         }
 
@@ -68,6 +71,7 @@ namespace ShopTask.Controllers
         public JsonResult DeleteProduct(int productId)
         {
             var isDeleted = DeleteProductInternal(productId);
+
             return Json(isDeleted, JsonRequestBehavior.AllowGet);
         }
 
@@ -76,6 +80,7 @@ namespace ShopTask.Controllers
             using (var dbContext = new ShopContext())
             {
                 var products = dbContext.Products.ToList();
+
                 return PartialView("TablePartialView", products);
             }
         }
@@ -83,7 +88,8 @@ namespace ShopTask.Controllers
         [HttpGet]
         public JsonResult CheckPrice(decimal price)
         {
-            bool result = (price > 0)&&(price <= 1000000);
+            bool result = (price > 0) && (price <= 1000000);
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

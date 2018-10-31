@@ -14,12 +14,12 @@
             @Html.EditorFor(model => model.Title)
             @Html.ValidationMessageFor(model => model.Title, "", new { style = "color:red;" })
             <br /><br />
-            @Html.LabelFor(model => model.Price, "Price")
+            <label>Price</label>
             <br />
             @Html.EditorFor(model => model.Price)
             @Html.ValidationMessageFor(model => model.Price, "", new { style = "color:red;" })
             <br /><br />
-            @Html.LabelFor(model => model.Description, "Description")
+            <label>Description</label>
             <br />
             @Html.TextAreaFor(model => model.Description, new { cols = "40", rows = "3" })
             <br /><br />
