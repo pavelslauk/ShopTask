@@ -1,7 +1,14 @@
 ﻿@model ShopTask.Models.Product
 
-@{
-    ViewBag.Title = "EditProduct";
+@if(Model != null)
+{
+    ViewBag.Title = "Edit product";
+    ViewBag.Header = "Edit product "+ Model.Title;
+}
+else
+{
+    ViewBag.Title = "Create product";
+    ViewBag.Header = "Create new product";
 }
 
 <div class="forms">
@@ -9,21 +16,24 @@
     {
         @Html.AntiForgeryToken()
 
-        <h3>Edit product</h3>
+        <h3>@ViewBag.Header</h3>
         <div>
-            @Html.HiddenFor(model => model.Id)
+            @if (Model != null)
+            {
+                @Html.HiddenFor(model => model.Id)
+            }
 
-            Title
+            @Html.LabelFor(model => model.Title, "Title")
             <br />
             @Html.EditorFor(model => model.Title)
             @Html.ValidationMessageFor(model => model.Title, "", new { style = "color:red;" })
             <br /><br />
-            <label>Price</label>
+            @Html.LabelFor(model => model.Price, "Price")
             <br />
             @Html.EditorFor(model => model.Price)
             @Html.ValidationMessageFor(model => model.Price, "", new { style = "color:red;" })
             <br /><br />
-            <label>Description</label>
+            @Html.LabelFor(model => model.Description, "Description")
             <br />
             @Html.TextAreaFor(model => model.Description, new { cols = "40", rows = "3" })
             <br /><br />

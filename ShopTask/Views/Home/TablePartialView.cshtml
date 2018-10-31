@@ -1,6 +1,7 @@
-﻿@model IEnumerable<ShopTask.Models.Product>
+﻿@using ShopTask.Helpers;
+@model IEnumerable<ShopTask.Models.Product>
 
-@if (Model.Count() != 0)
+@if (Model.Any())
 {
     <table id="productTable" class="table" 
             data-delete-url="@Url.Action("DeleteProduct","Home")">
@@ -18,7 +19,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td class="table-product-title">@item.Title</td>
+                <td class="js-table-product-title">@item.Title</td>
                 <td class="col2">@item.Price</td>
                 <td>
                     @Html.ActionLink("Edit", "EditProduct", new { productId = item.Id }) | 
@@ -29,7 +30,7 @@
     </table>
 }
 
-<p class="table-placeholder hidden">No products</p>
+@Html.EmptyTablePlaceholder("No table", Model.Any())
 
 <br />
 @Html.ActionLink("Add new product", "CreateProduct")

@@ -19,15 +19,16 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CreateProduct()
         {
-            return View();
+            return View("ProductView");
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult CreateProduct(Product product)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View("ProductView");
             }
 
             using (var dbContext = new ShopContext())
@@ -46,16 +47,17 @@ namespace ShopTask.Controllers
             {
                 var product = dbContext.Products.Find(productId);
 
-                return View(product);
+                return View("ProductView", product);
             }
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult EditProduct(Product product)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View("ProductView");
             }
 
             using (var dbContext = new ShopContext())

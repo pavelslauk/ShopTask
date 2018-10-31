@@ -157,6 +157,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\TableHelper.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\ShopContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -194,8 +195,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\CreateProduct.cshtml" />
-    <Content Include="Views\Home\EditProduct.cshtml" />
+    <Content Include="Views\Home\ProductView.cshtml" />
     <Content Include="Views\Home\TablePartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
