@@ -29,11 +29,6 @@ td {
     border: 1px solid black;
 }
 
-
-.forms {
-    margin-left: 43%;
-}
-
 .main {
     margin-top: 25px;
     margin-left: 43%;
@@ -50,6 +45,13 @@ td {
 
 body {
     margin: 0;
+    font-family: Arial;
+}
+
+.navbar-body {
+    margin-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .navbar {
@@ -57,18 +59,15 @@ body {
     top: 0;
     right: 0;
     left: 0;
-    background-color: lightgray;
-}
-
-.navbar-body {
-    margin-left: 60px;
+    background-color: #d9d9d9;
 }
 
 .navbar-link {
-    font-size: 32px;
-    margin-left: 20px;
-    padding-left: 4px;  
-    padding-right: 4px;
+    font-size: 14px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: inherit;
+    padding-bottom: inherit;
 }
 
 .navbar-link:link,
@@ -79,9 +78,15 @@ body {
 
 .navbar-link:hover,
 .navbar-link:active {
-    background-color: dimgray;
+    background-color: #5e5e5e;
 }
 
+.active-page-link {
+    background-color: #989898;
+}
 
+.product-form-body {
+    margin-left: 40%;
+}
 
 

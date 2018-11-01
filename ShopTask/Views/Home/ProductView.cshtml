@@ -9,37 +9,31 @@
     }
     else
     {
-        ViewBag.Title = "Create product";
+        ViewBag.Title = "New product";
         header = "Create new product";
     }
+
 }
-<div class="forms">
+<div>
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-
-        <h3>@header</h3>
-        <div>
+        <div class="product-form-body">
+            <p class="product-form-header">@header</p>
             @Html.HiddenFor(model => model.Id)
 
             @Html.LabelFor(model => model.Title)
-            <br />
             @Html.EditorFor(model => model.Title)
             @Html.ValidationMessageFor(model => model.Title, "", new { style = "color:red;" })
             <br /><br />
             @Html.LabelFor(model => model.Price)
-            <br />
             @Html.EditorFor(model => model.Price)
             @Html.ValidationMessageFor(model => model.Price, "", new { style = "color:red;" })
             <br /><br />
             @Html.LabelFor(model => model.Description)
-            <br />
             @Html.TextAreaFor(model => model.Description, new { cols = "40", rows = "3" })
             <br /><br />
-        </div>
-        <input type="submit" value="Save" />
+            <input type="submit" value="Save" />
+        </div>       
     }
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
 </div>
