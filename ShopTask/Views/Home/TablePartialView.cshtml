@@ -1,14 +1,5 @@
 ﻿@model IEnumerable<ShopTask.Models.Product>
 
-@helper AddHiddenClass(bool tableIsExists)
-{
-    if (tableIsExists)
-    {
-        var s = "hidden ";
-        @s
-    }
-}
-
 @if (Model.Any())
 {
     <table id="productTable" class="table"
@@ -38,7 +29,13 @@
     </table>
 }
 
-<p class="@AddHiddenClass(Model.Any())js-empty-table-placeholder">No table</p>
+<p class="
+    @if (Model.Any())
+    {
+        var s = "hidden ";
+        @s
+    }
+js-empty-table-placeholder">No table</p>
 
 <br />
 @Html.ActionLink("Add new product", "CreateProduct")
