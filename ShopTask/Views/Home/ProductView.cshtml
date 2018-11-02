@@ -14,26 +14,42 @@
     }
 
 }
-<div>
+<div class="product-form">
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        <div class="product-form-body">
-            <p class="product-form-header">@header</p>
-            @Html.HiddenFor(model => model.Id)
+        <div class="product-form-header">
+            <p class="product-form-header-text">@header</p>
+        </div>
+        @Html.HiddenFor(model => model.Id)
 
-            @Html.LabelFor(model => model.Title)
-            @Html.EditorFor(model => model.Title)
+        <br />
+        <div class="product-form-col2">
             @Html.ValidationMessageFor(model => model.Title, "", new { style = "color:red;" })
-            <br /><br />
-            @Html.LabelFor(model => model.Price)
-            @Html.EditorFor(model => model.Price)
+        </div>
+        @Html.LabelFor(model => model.Title, new { @class = "product-form-col1" })
+        <div class="product-form-col2">
+            @Html.EditorFor(model => model.Title)
+        </div>
+        <br /><br />
+
+        <div class="product-form-col2">
             @Html.ValidationMessageFor(model => model.Price, "", new { style = "color:red;" })
-            <br /><br />
-            @Html.LabelFor(model => model.Description)
-            @Html.TextAreaFor(model => model.Description, new { cols = "40", rows = "3" })
-            <br /><br />
-            <input type="submit" value="Save" />
-        </div>       
+        </div>
+        @Html.LabelFor(model => model.Price, new { @class = "product-form-col1" })
+        <div class="product-form-col2">
+            @Html.EditorFor(model => model.Price)
+        </div>
+        <br /><br />
+
+        @Html.LabelFor(model => model.Description, new { @class = "product-form-col1" })
+        <div class="product-form-col2">
+            @Html.TextAreaFor(model => model.Description, new { @class = "product-textarea", rows = "6" })
+        </div>
+        <br /><br />
+
+        <div class="product-form-col2">
+            <input type="submit" class="product-form-save-button" value="Save" />
+        </div>
     }
 </div>
