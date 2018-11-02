@@ -2,34 +2,33 @@
 
 @if (Model.Any())
 {
-    <table id="productTable" class="table"
+    <table id="productTable" class="product-table"
            data-delete-url="@Url.Action("DeleteProduct","Home")">
         <tr>
-            <th>
+            <td>
                 Title
-            </th>
-            <th class="col2">
+            </td>
+            <td>
                 Price
-            </th>
-            <th>
-            </th>
+            </td>
+            <td>
+            </td>
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
-                <td class="js-table-product-title">@item.Title</td>
-                <td class="col2">@item.Price</td>
+                <td class="js-table-product-title"><a href="/Product/@item.Id" class="edit-link">@item.Title</a></td>
+                <td>@item.Price</td>
                 <td>
-                    @Html.ActionLink("Edit", "EditProduct", new { productId = item.Id }) |
-                    <a href="#" class="deletelink" data-id="@item.Id">Delete</a>
+                    <a href="#" class="delete-link" data-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
     </table>
 }
 
-<p class="@(Model.Any() ? "hidden " : "") js-empty-table-placeholder">No table</p>
+<p class="@(Model.Any() ? "hidden " : "") empty-table-placeholder">No table</p>
 
 <br />
 
