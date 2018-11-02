@@ -79,6 +79,20 @@ body {
     border-radius: 4px;
 }
 
+.product-form-header {
+    background-color: #e5e5e5;
+    border-bottom: 2px solid #8f8f8f;
+}
+
+.product-form-header-text {
+    margin-bottom: 8px;
+    margin-top: 12px;
+}
+
+.product-form-body {
+    margin-top: 30px;
+}
+
 .product-form-col1 {
     float: left;
     width: 30%;
@@ -94,21 +108,12 @@ body {
     resize: none;
 }
 
-.text-box,
+.product-text-box,
 .product-textarea {
     border-radius: 4px;
     border: 1px solid #a7a7a7;
+    margin-bottom: 40px;
 }
-
-.product-form-header {
-    background-color: #e5e5e5;
-    border-bottom: 2px solid #8f8f8f;
-}
-
-.product-form-header-text {
-    margin-bottom: 8px;
-}
-
 
 .product-form-save-button {
     background-color: inherit;
@@ -150,7 +155,7 @@ td {
     text-align: center;
 }
 
-.empty-table-placeholder {
+.js-empty-table-placeholder {
     margin-top: 50px;
     font-size: 18px;
     text-align: center;

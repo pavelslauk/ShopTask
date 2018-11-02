@@ -46,7 +46,6 @@ namespace ShopTask.Controllers
             using (var dbContext = new ShopContext())
             {
                 var product = dbContext.Products.Find(productId);
-
                 return View("ProductView", product);
             }
         }

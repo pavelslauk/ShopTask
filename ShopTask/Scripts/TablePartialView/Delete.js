@@ -3,10 +3,10 @@
     var selectors = {
         productTable: '#productTable',
         tableProductTitle: '.js-table-product-title',
-        emptyTablePlaceholder: '.empty-table-placeholder'
+        emptyTablePlaceholder: '.js-empty-table-placeholder'
     };
 
-    $('.delete-link').click(function () {
+    $('.js-delete-link').click(function () {
         var table = $(selectors.productTable);
         var itemId = $(this).attr('data-id');
         var deleteUrl = table.attr('data-delete-url');
