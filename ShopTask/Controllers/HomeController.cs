@@ -101,7 +101,7 @@ namespace ShopTask.Controllers
                 }
                 catch (DbUpdateConcurrencyException e)
                 {
-                    Logger.Default.Warn("DbUpdateConcurrencyException in HomeController.DeleteProductInternal(int productId)", e);
+                    Logger.Default.Warn(e);
                     return !dbContext.Products.Any(product => product.Id == productId);
                 }
             }
