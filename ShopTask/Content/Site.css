@@ -44,8 +44,8 @@ textarea {
 
 .navbar-link {
     font-size: 14px;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding-left: 7px;
+    padding-right: 7px;
     padding-top: inherit;
     padding-bottom: inherit;
 }
@@ -127,15 +127,6 @@ textarea {
     border-color: #0187f8;
 }
 
-.edit-link {
-    color: black;
-    text-decoration: none;
-}
-
-.edit-link:hover {
-    color: #0187f8;
-}
-
 .product-table {
     margin-top: 50px;
     width: 100%;
@@ -153,6 +144,8 @@ tr {
 
 td {
     text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .js-empty-table-placeholder {
