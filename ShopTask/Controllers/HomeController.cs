@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using ShopTask.Models;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using ShopTask.Utils;
 
 namespace ShopTask.Controllers
 {
@@ -98,8 +99,9 @@ namespace ShopTask.Controllers
                     dbContext.SaveChanges();
                     return true;
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException e)
                 {
+                    Logger.Default.Warn("DbUpdateConcurrencyException in HomeController.DeleteProductInternal(int productId)", e);
                     return !dbContext.Products.Any(product => product.Id == productId);
                 }
             }
