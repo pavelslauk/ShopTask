@@ -19,7 +19,7 @@
         {
             <tr>
                 <td class="js-table-product-title"><a href="@Url.Action("EditProduct", "Home", new { productId = item.Id})" class="edit-link">@item.Title</a></td>
-                <td>@item.Price</td>
+                <td class="table-product-price">@item.Price</td>
                 <td>
                     <a href="#" class="js-delete-link" data-id="@item.Id">Delete</a>
                 </td>

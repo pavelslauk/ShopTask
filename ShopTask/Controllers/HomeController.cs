@@ -86,14 +86,6 @@ namespace ShopTask.Controllers
             }
         }
 
-        [HttpGet]
-        public JsonResult CheckPrice(decimal price)
-        {
-            bool result = (price > 0) && (price <= 1000000);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
         private bool DeleteProductInternal(int productId)
         {
             using (var dbContext = new ShopContext())
