@@ -2,27 +2,26 @@
 
 @if (Model.Any())
 {
-    <table id="productTable" class="table"
-           data-delete-url="@Url.Action("DeleteProduct","Home")">
+    <table id="productTable" class="product-table"
+           data-delete-url="@Url.Action("DeleteProduct", "Home")">
         <tr>
-            <th>
+            <td>
                 Title
-            </th>
-            <th class="col2">
+            </td>
+            <td>
                 Price
-            </th>
-            <th>
-            </th>
+            </td>
+            <td>
+            </td>
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
-                <td class="js-table-product-title">@item.Title</td>
-                <td class="col2">@item.Price</td>
+                <td class="js-table-product-title"><a href="@Url.Action("EditProduct", "Home", new { productId = item.Id})" class="edit-link">@item.Title</a></td>
+                <td class="table-product-price">@item.Price</td>
                 <td>
-                    @Html.ActionLink("Edit", "EditProduct", new { productId = item.Id }) |
-                    <a href="#" class="deletelink" data-id="@item.Id">Delete</a>
+                    <a href="#" class="js-delete-link" data-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
@@ -30,8 +29,5 @@
 }
 
 <p class="@(Model.Any() ? "hidden " : "") js-empty-table-placeholder">No table</p>
-
-<br />
-@Html.ActionLink("Add new product", "CreateProduct")
 
 <script src="~/Scripts/TablePartialView/Delete.js"></script>

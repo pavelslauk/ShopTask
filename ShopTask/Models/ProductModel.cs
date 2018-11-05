@@ -14,7 +14,7 @@ namespace ShopTask.Models
         [Display(Name = "Title")]
         public string Title { get; set; }
         [Display(Name = "Price")]
-        [Remote("CheckPrice", "Home", ErrorMessage = "Incorrect value")]
+        [RegularExpression(@"(^[1-9][0-9]*(\.[0-9]*)?)|(^0\.(([0-9]*)?[1-9]([0-9]*)?))$", ErrorMessage = "Incorrect value")]
         public decimal Price { get; set; }
         [Display(Name = "Description")]
         public string Description { get; set; }

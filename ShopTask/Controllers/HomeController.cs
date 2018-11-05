@@ -46,7 +46,6 @@ namespace ShopTask.Controllers
             using (var dbContext = new ShopContext())
             {
                 var product = dbContext.Products.Find(productId);
-
                 return View("ProductView", product);
             }
         }
@@ -85,14 +84,6 @@ namespace ShopTask.Controllers
 
                 return PartialView("TablePartialView", products);
             }
-        }
-
-        [HttpGet]
-        public JsonResult CheckPrice(decimal price)
-        {
-            bool result = (price > 0) && (price <= 1000000);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         private bool DeleteProductInternal(int productId)

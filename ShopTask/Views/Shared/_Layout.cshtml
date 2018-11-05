@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@helper AddActivePageClass(string action)
+{
+    if(action == ViewContext.RouteData.GetRequiredString("action"))
+    {
+        @("active-page-link")
+    }
+}
+
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -15,8 +24,8 @@
 
     <div class="navbar">
         <div class="navbar-body">
-            <a href="#" class="navbar-link">New Product</a>
-            <a href="#" class="navbar-link">Inventory</a>
+            <a href="@Url.Action("CreateProduct", "Home")" class="navbar-link @AddActivePageClass("CreateProduct")">New product</a>
+            <a href="@Url.Action("Index", "Home")" class="navbar-link @AddActivePageClass("Index")">Inventory</a>
         </div>
     </div>
 

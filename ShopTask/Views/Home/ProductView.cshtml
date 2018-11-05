@@ -9,37 +9,45 @@
     }
     else
     {
-        ViewBag.Title = "Create product";
+        ViewBag.Title = "New product";
         header = "Create new product";
     }
+
 }
-<div class="forms">
+<div class="product-form">
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-
-        <h3>@header</h3>
-        <div>
-            @Html.HiddenFor(model => model.Id)
-
-            @Html.LabelFor(model => model.Title)
-            <br />
-            @Html.EditorFor(model => model.Title)
-            @Html.ValidationMessageFor(model => model.Title, "", new { style = "color:red;" })
-            <br /><br />
-            @Html.LabelFor(model => model.Price)
-            <br />
-            @Html.EditorFor(model => model.Price)
-            @Html.ValidationMessageFor(model => model.Price, "", new { style = "color:red;" })
-            <br /><br />
-            @Html.LabelFor(model => model.Description)
-            <br />
-            @Html.TextAreaFor(model => model.Description, new { cols = "40", rows = "3" })
-            <br /><br />
+        <div class="product-form-header">
+            <p class="product-form-header-text">@header</p>
         </div>
-        <input type="submit" value="Save" />
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="product-form-body">
+            <div class="product-form-col2">
+                @Html.ValidationMessageFor(model => model.Title, "", new { style = "color:red;" })
+            </div>
+            @Html.LabelFor(model => model.Title, new { @class = "product-form-col1" })
+            <div class="product-form-col2">
+                @Html.TextBoxFor(model => model.Title, new { @class = "product-text-box" })
+            </div>
+
+            <div class="product-form-col2">
+                @Html.ValidationMessageFor(model => model.Price, "", new { style = "color:red;" })
+            </div>
+            @Html.LabelFor(model => model.Price, new { @class = "product-form-col1" })
+            <div class="product-form-col2">
+                @Html.TextBoxFor(model => model.Price, new { @class = "product-text-box" })
+            </div>
+
+            @Html.LabelFor(model => model.Description, new { @class = "product-form-col1" })
+            <div class="product-form-col2">
+                @Html.TextAreaFor(model => model.Description, new { @class = "product-textarea", rows = "6" })
+            </div>
+
+            <div class="product-form-col2">
+                <input type="submit" class="product-form-save-button" value="Save" />
+            </div>
+        </div>
     }
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
 </div>

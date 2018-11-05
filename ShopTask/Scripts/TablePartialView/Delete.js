@@ -6,7 +6,7 @@
         emptyTablePlaceholder: '.js-empty-table-placeholder'
     };
 
-    $('.deletelink').click(function () {
+    $('.js-delete-link').click(function () {
         var table = $(selectors.productTable);
         var itemId = $(this).attr('data-id');
         var deleteUrl = table.attr('data-delete-url');
