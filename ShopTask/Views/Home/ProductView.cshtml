@@ -18,8 +18,8 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        <div class="product-form-header">
-            <p class="product-form-header-text">@header</p>
+        <div class="form-header">
+            <p class="form-header-text">@header</p>
         </div>
         @Html.HiddenFor(model => model.Id)
 
@@ -46,7 +46,7 @@
             </div>
 
             <div class="product-form-col2">
-                <input type="submit" class="product-form-save-button" value="Save" />
+                <input type="submit" class="form-save-button" value="Save" />
             </div>
         </div>
     }

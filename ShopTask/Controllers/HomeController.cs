@@ -87,6 +87,86 @@ namespace ShopTask.Controllers
             }
         }
 
+        public ActionResult CategoryForm()
+        {
+            return View();
+        }
+
+        public ActionResult ViewCategoryTable()
+        {
+            using (var dbContext = new ShopContext())
+            {
+                var categories = dbContext.Categories.ToArray();
+
+                return PartialView("CategoryTablePartialView", categories);
+            }
+        }
+
+        public ActionResult ChangeCategories(string newCategoryName, Category[] changedCategories)
+        {
+            AddNewCategory(newCategoryName);
+            if(changedCategories != null)
+            {
+                ChangeCategoriesInternal(changedCategories);
+            }           
+
+            return ViewCategoryTable();
+        }
+
+        private void ChangeCategoriesInternal(Category[] changedCategories)
+        {
+            for (int i = 0; i < changedCategories.Length; i++)
+            {
+                if (changedCategories[i].Name != null)
+                {
+                    UpdateCategory(changedCategories[i]);
+                }
+                else
+                {
+                    DeleteCategory(changedCategories[i]);
+                }
+            }
+        }      
+
+        private void UpdateCategory(Category updatedCategory)
+        {
+            using (var dbContext = new ShopContext())
+            {
+                dbContext.Entry(updatedCategory).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+        }
+
+        private void DeleteCategory(Category deletedCategory)
+        {
+            using (var dbContext = new ShopContext())
+            {
+                try
+                {
+                    dbContext.Categories.Attach(deletedCategory);
+                    dbContext.Categories.Remove(deletedCategory);
+                    dbContext.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException e)
+                {
+                    Logger.Default.Warn(e);
+                }
+            }
+        }
+
+        private void AddNewCategory(string newCategoryName)
+        {
+            if (newCategoryName != "")
+            {
+                using (var dbContext = new ShopContext())
+                {
+                    var category = new Category { Name = newCategoryName };
+                    dbContext.Categories.Add(category);
+                    dbContext.SaveChanges();
+                }
+            }
+        }
+
         private bool DeleteProductInternal(int productId)
         {
             using (var dbContext = new ShopContext())

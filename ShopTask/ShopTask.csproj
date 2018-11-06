@@ -160,6 +160,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\ShopContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -178,6 +179,8 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.placeholder.js" />
+    <Content Include="Scripts\jquery.placeholder.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -200,6 +203,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\ProductView.cshtml" />
     <Content Include="Views\Home\TablePartialView.cshtml" />
+    <Content Include="Views\Home\CategoryTablePartialView.cshtml" />
+    <Content Include="Views\Home\CategoryForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

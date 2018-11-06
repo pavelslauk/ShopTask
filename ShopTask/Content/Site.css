@@ -65,7 +65,8 @@ textarea {
     background-color: #989898;
 }
 
-.product-form {
+.product-form,
+.category-form {
     padding: 5px;
     padding-bottom: 100px;
     margin: auto;
@@ -75,17 +76,23 @@ textarea {
     border-radius: 4px;
 }
 
-.product-form-header {
+.form-header {
     border-bottom: 2px solid #8f8f8f;
 }
 
-.product-form-header-text {
+.form-header-text {
     margin-bottom: 8px;
     margin-top: 12px;
 }
 
-.product-form-body {
+.product-form-body,
+.category-form-body {
     margin-top: 30px;
+}
+
+.category-form-body {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .product-form-col1 {
@@ -110,20 +117,22 @@ textarea {
 }
 
 .product-text-box,
-.product-textarea {
+.product-textarea,
+.category-input,
+.new-category-input {
     border-radius: 4px;
     border: 1px solid #a7a7a7;
     margin-bottom: 40px;
 }
 
-.product-form-save-button {
+.form-save-button {
     background-color: inherit;
     border-radius: 4px;
     border: 1px solid #a7a7a7;
     padding: 4px 14px;  
 }
 
-.product-form-save-button:hover {
+.form-save-button:hover {
     border-color: #0187f8;
 }
 
@@ -160,4 +169,16 @@ td {
 
 .table-product-price {
     text-align: right;
+}
+
+.category-table {
+    margin-top: 25px;
+}
+
+.new-category-input {
+    margin-right: 50%;
+}
+
+.category-input {
+    margin-right: 10px;
 }
