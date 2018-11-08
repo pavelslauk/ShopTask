@@ -12,6 +12,7 @@ namespace ShopTask.Controllers
 {
     public class HomeController : Controller
     {
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
@@ -77,94 +78,88 @@ namespace ShopTask.Controllers
             return Json(isDeleted, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ViewTable()
+        [HttpGet]
+        public ActionResult ProductsPartial()
         {
             using (var dbContext = new ShopContext())
             {
                 var products = dbContext.Products.ToList();
 
-                return PartialView("TablePartialView", products);
+                return PartialView("ProductsPartial", products);
             }
         }
 
-        public ActionResult CategoryForm()
+        [HttpGet]
+        public ActionResult Categories()
         {
             return View();
         }
 
-        public ActionResult ViewCategoryTable()
+        public ActionResult CategoriesPartial()
         {
             using (var dbContext = new ShopContext())
             {
-                var categories = dbContext.Categories.ToArray();
+                var categories = dbContext.Categories.ToList();
+                categories.Add(new Category());
+                ModelState.Clear();
 
-                return PartialView("CategoryTablePartialView", categories);
+                return PartialView("CategoriesPartial", categories);
             }
         }
 
-        public ActionResult ChangeCategories(string newCategoryName, Category[] changedCategories)
+        [HttpPost]
+        public JsonResult UpdateCategories(List<Category> changedCategories)
         {
-            AddNewCategory(newCategoryName);
-            if(changedCategories != null)
+            try
             {
-                ChangeCategoriesInternal(changedCategories);
-            }           
-
-            return ViewCategoryTable();
+                using (var dbContext = new ShopContext())
+                {
+                    AddNewCategory(changedCategories, dbContext);
+                    UpdateExistingCategories(changedCategories, dbContext);
+                    dbContext.SaveChanges();
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                }               
+            }
+            catch (Exception e)
+            {
+                Logger.Default.Warn(e);
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }          
         }
 
-        private void ChangeCategoriesInternal(Category[] changedCategories)
+        private void UpdateExistingCategories(List<Category> changedCategories, ShopContext dbContext)
         {
-            for (int i = 0; i < changedCategories.Length; i++)
+            for (int i = 0; i < changedCategories.Count(); i++)
             {
                 if (changedCategories[i].Name != null)
                 {
-                    UpdateCategory(changedCategories[i]);
+                    UpdateCategory(changedCategories[i], dbContext);
                 }
                 else
                 {
-                    DeleteCategory(changedCategories[i]);
+                    DeleteCategory(changedCategories[i], dbContext);
                 }
             }
         }      
 
-        private void UpdateCategory(Category updatedCategory)
+        private void UpdateCategory(Category updatedCategory, ShopContext dbContext)
         {
-            using (var dbContext = new ShopContext())
-            {
-                dbContext.Entry(updatedCategory).State = EntityState.Modified;
-                dbContext.SaveChanges();
-            }
+            dbContext.Entry(updatedCategory).State = EntityState.Modified;
         }
 
-        private void DeleteCategory(Category deletedCategory)
+        private void DeleteCategory(Category deletedCategory, ShopContext dbContext)
         {
-            using (var dbContext = new ShopContext())
-            {
-                try
-                {
-                    dbContext.Categories.Attach(deletedCategory);
-                    dbContext.Categories.Remove(deletedCategory);
-                    dbContext.SaveChanges();
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    Logger.Default.Warn(e);
-                }
-            }
+            dbContext.Categories.Attach(deletedCategory);
+            dbContext.Categories.Remove(deletedCategory);         
         }
 
-        private void AddNewCategory(string newCategoryName)
+        private void AddNewCategory(List<Category> changedCategories, ShopContext dbContext)
         {
-            if (newCategoryName != "")
+            if (changedCategories.Last().Name != null)
             {
-                using (var dbContext = new ShopContext())
-                {
-                    var category = new Category { Name = newCategoryName };
-                    dbContext.Categories.Add(category);
-                    dbContext.SaveChanges();
-                }
+                dbContext.Categories.Add(changedCategories.Last());
             }
+            changedCategories.Remove(changedCategories.Last());
         }
 
         private bool DeleteProductInternal(int productId)
