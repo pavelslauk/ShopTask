@@ -85,7 +85,7 @@ namespace ShopTask.Controllers
             {
                 var products = dbContext.Products.ToList();
 
-                return PartialView("ProductsPartial", products);
+                return PartialView(products);
             }
         }
 
@@ -95,6 +95,7 @@ namespace ShopTask.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult CategoriesPartial()
         {
             using (var dbContext = new ShopContext())
@@ -126,7 +127,7 @@ namespace ShopTask.Controllers
                 {
                     foreach (var category in categories)
                     {
-                        UpdateCategory(category, dbContext);
+                        AddOrUpdateCategory(category, dbContext);
                     }
                     dbContext.SaveChanges();
                     return true;
@@ -139,7 +140,7 @@ namespace ShopTask.Controllers
             }
         }
 
-        private void UpdateCategory(Category category, ShopContext dbContext)
+        private void AddOrUpdateCategory(Category category, ShopContext dbContext)
         {
             if (category.Id == null)
             {
