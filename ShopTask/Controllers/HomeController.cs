@@ -109,36 +109,45 @@ namespace ShopTask.Controllers
         [HttpPost]
         public ActionResult UpdateCategories(Category[] categories)
         {
+            ModelState.Clear();
+            var isUpdated = UpdateCategoriesInternal(categories);
+            if (!isUpdated)
+            {
+                ModelState.AddModelError("UpdateFailed", "There is some error");
+            }
+            return CategoriesPartial();                         
+        }
+
+        private bool UpdateCategoriesInternal(Category[] categories)
+        {
             try
             {
-                ModelState.Clear();
                 using (var dbContext = new ShopContext())
                 {
-                    UpdateAllCategories(categories, dbContext);
+                    foreach (var category in categories)
+                    {
+                        UpdateCategory(category, dbContext);
+                    }
                     dbContext.SaveChanges();
-                    return CategoriesPartial();
-                }               
+                    return true;
+                }
             }
             catch (DbUpdateConcurrencyException e)
             {
                 Logger.Default.Warn(e);
-                ModelState.AddModelError("UpdateFailed", "There is some error");
-                return CategoriesPartial();
+                return false;
             }
         }
 
-        private void UpdateAllCategories(Category[] categories, ShopContext dbContext)
+        private void UpdateCategory(Category category, ShopContext dbContext)
         {
-            foreach (var category in categories)
+            if (category.Id == null)
             {
-                if (category.Id == null)
-                {
-                    AddNewCategory(category, dbContext);
-                }
-                else
-                {
-                    UpdateExistingCategory(category, dbContext);
-                }
+                AddNewCategory(category, dbContext);
+            }
+            else
+            {
+                UpdateExistingCategory(category, dbContext);
             }
         }
 
