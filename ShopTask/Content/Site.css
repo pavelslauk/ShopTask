@@ -35,8 +35,7 @@ textarea {
     width: inherit;
 }
 
-.navbar {
-    
+.navbar {   
     top: 0;
     width: 100%;
     background-color: #d9d9d9;
@@ -181,4 +180,9 @@ td {
 
 .category-input {
     margin-right: 10px;
+}
+
+.update-validation-message {
+    color: red;
+    margin-bottom: 5px;
 }

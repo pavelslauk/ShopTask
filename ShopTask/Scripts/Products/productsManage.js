@@ -3,8 +3,7 @@
     var selectors = {
         productTable: '#productTable',
         tableProductTitle: '.js-table-product-title',
-        emptyTablePlaceholder: '.js-empty-table-placeholder',
-        categories: '#categories'
+        emptyTablePlaceholder: '.js-empty-table-placeholder'
     };
 
     $('.js-delete-link').click(function () {

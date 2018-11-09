@@ -101,43 +101,44 @@ namespace ShopTask.Controllers
             {
                 var categories = dbContext.Categories.ToList();
                 categories.Add(new Category());
-                ModelState.Clear();
 
                 return PartialView("CategoriesPartial", categories);
             }
         }
 
         [HttpPost]
-        public JsonResult UpdateCategories(List<Category> changedCategories)
+        public ActionResult UpdateCategories(Category[] categories)
         {
             try
             {
+                ModelState.Clear();
                 using (var dbContext = new ShopContext())
                 {
-                    AddNewCategory(changedCategories, dbContext);
-                    UpdateExistingCategories(changedCategories, dbContext);
+                    AddCategory(categories.FirstOrDefault(category => category.Id == null), dbContext);
+                    UpdateExistingCategories(categories, dbContext);
                     dbContext.SaveChanges();
-                    return Json(true, JsonRequestBehavior.AllowGet);
+                    return CategoriesPartial();
                 }               
             }
-            catch (Exception e)
+            catch (DbUpdateConcurrencyException e)
             {
                 Logger.Default.Warn(e);
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }          
+                ModelState.AddModelError("UpdateFailed", "There is some error");
+                return CategoriesPartial();
+            }
         }
 
-        private void UpdateExistingCategories(List<Category> changedCategories, ShopContext dbContext)
+        private void UpdateExistingCategories(Category[] categories, ShopContext dbContext)
         {
-            for (int i = 0; i < changedCategories.Count(); i++)
+            foreach(var category in categories.Where(category => category.Id != null))
             {
-                if (changedCategories[i].Name != null)
+                if (category.Name != null)
                 {
-                    UpdateCategory(changedCategories[i], dbContext);
+                    UpdateCategory(category, dbContext);
                 }
                 else
                 {
-                    DeleteCategory(changedCategories[i], dbContext);
+                    DeleteCategory(category, dbContext);
                 }
             }
         }      
@@ -150,16 +151,15 @@ namespace ShopTask.Controllers
         private void DeleteCategory(Category deletedCategory, ShopContext dbContext)
         {
             dbContext.Categories.Attach(deletedCategory);
-            dbContext.Categories.Remove(deletedCategory);         
+            dbContext.Categories.Remove(deletedCategory);
         }
 
-        private void AddNewCategory(List<Category> changedCategories, ShopContext dbContext)
+        private void AddCategory(Category newCategory, ShopContext dbContext)
         {
-            if (changedCategories.Last().Name != null)
+            if (newCategory.Name != null)
             {
-                dbContext.Categories.Add(changedCategories.Last());
+                dbContext.Categories.Add(newCategory);
             }
-            changedCategories.Remove(changedCategories.Last());
         }
 
         private bool DeleteProductInternal(int productId)

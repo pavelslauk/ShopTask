@@ -7,15 +7,15 @@
         <p class="form-header-text">Categories</p>
     </div>
     <div class="category-form-body">
-        @using (Ajax.BeginForm("UpdateCategories", new AjaxOptions { OnSuccess = "updateComplete" }))
+        @using (Ajax.BeginForm("UpdateCategories", new AjaxOptions { UpdateTargetId = "categories" }))
         {
             <input type="submit" class="form-save-button" value="Save" />
 
-            <div id="categories" class="category-table" data-categories-url="@Url.Action("CategoriesPartial", "Home")">
+            <div id="categories" class="category-table">
                 @Html.Action("CategoriesPartial")
             </div>
         }
     </div>
 </div>
 
-<script src="~/Scripts/Categories/OnUpdateSuccess.js"></script>
+<script src="~/Scripts/Categories/categories.js"></script>
