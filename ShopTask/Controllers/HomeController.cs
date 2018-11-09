@@ -114,8 +114,7 @@ namespace ShopTask.Controllers
                 ModelState.Clear();
                 using (var dbContext = new ShopContext())
                 {
-                    AddCategory(categories.FirstOrDefault(category => category.Id == null), dbContext);
-                    UpdateExistingCategories(categories, dbContext);
+                    UpdateAllCategories(categories, dbContext);
                     dbContext.SaveChanges();
                     return CategoriesPartial();
                 }               
@@ -128,35 +127,37 @@ namespace ShopTask.Controllers
             }
         }
 
-        private void UpdateExistingCategories(Category[] categories, ShopContext dbContext)
+        private void UpdateAllCategories(Category[] categories, ShopContext dbContext)
         {
-            foreach(var category in categories.Where(category => category.Id != null))
+            foreach (var category in categories)
             {
-                if (category.Name != null)
+                if (category.Id == null)
                 {
-                    UpdateCategory(category, dbContext);
+                    AddNewCategory(category, dbContext);
                 }
                 else
                 {
-                    DeleteCategory(category, dbContext);
+                    UpdateExistingCategory(category, dbContext);
                 }
             }
+        }
+
+        private void UpdateExistingCategory(Category existingCategory, ShopContext dbContext)
+        {
+            if (!string.IsNullOrEmpty(existingCategory.Name))
+            {
+                dbContext.Entry(existingCategory).State = EntityState.Modified;
+            }
+            else
+            {
+                dbContext.Categories.Attach(existingCategory);
+                dbContext.Categories.Remove(existingCategory);
+            }
         }      
-
-        private void UpdateCategory(Category updatedCategory, ShopContext dbContext)
+        
+        private void AddNewCategory(Category newCategory, ShopContext dbContext)
         {
-            dbContext.Entry(updatedCategory).State = EntityState.Modified;
-        }
-
-        private void DeleteCategory(Category deletedCategory, ShopContext dbContext)
-        {
-            dbContext.Categories.Attach(deletedCategory);
-            dbContext.Categories.Remove(deletedCategory);
-        }
-
-        private void AddCategory(Category newCategory, ShopContext dbContext)
-        {
-            if (newCategory.Name != null)
+            if (!string.IsNullOrEmpty(newCategory.Name))
             {
                 dbContext.Categories.Add(newCategory);
             }
