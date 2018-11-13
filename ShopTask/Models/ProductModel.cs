@@ -13,10 +13,16 @@ namespace ShopTask.Models
         [Required]
         [Display(Name = "Title")]
         public string Title { get; set; }
+
         [Display(Name = "Price")]
         [RegularExpression(@"(^[1-9][0-9]*(\.[0-9]*)?)|(^0\.(([0-9]*)?[1-9]([0-9]*)?))$", ErrorMessage = "Incorrect value")]
         public decimal Price { get; set; }
+
         [Display(Name = "Description")]
         public string Description { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace ShopTask.Models
     {
         public int? Id { get; set; }
 
+        [Display(Name = "Category")]
         public string Name { get; set; }
     }
 }

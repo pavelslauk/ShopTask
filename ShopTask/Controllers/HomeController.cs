@@ -21,7 +21,12 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CreateProduct()
         {
-            return View("ProductView");
+            using (var dbContext = new ShopContext())
+            {
+                ViewBag.Categories = new SelectList(dbContext.Categories.ToList(), "Id", "Name");
+
+                return View("ProductView");
+            }
         }
 
         [HttpPost]
@@ -48,6 +53,8 @@ namespace ShopTask.Controllers
             using (var dbContext = new ShopContext())
             {
                 var product = dbContext.Products.Find(productId);
+                ViewBag.Categories = new SelectList(dbContext.Categories.ToList(), "Id", "Name", product.CategoryId);
+
                 return View("ProductView", product);
             }
         }
@@ -83,7 +90,7 @@ namespace ShopTask.Controllers
         {
             using (var dbContext = new ShopContext())
             {
-                var products = dbContext.Products.ToList();
+                var products = dbContext.Products.Include(product => product.Category).ToList();
 
                 return PartialView(products);
             }

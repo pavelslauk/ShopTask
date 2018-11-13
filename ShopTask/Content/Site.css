@@ -1,6 +1,6 @@
 ﻿body {
     margin: auto;
-    width: 60%;
+    width: 1100px;
     font-family: Arial;
 }
 
@@ -37,7 +37,7 @@ textarea {
 
 .navbar {   
     top: 0;
-    width: 100%;
+    width: 1100px;
     background-color: #d9d9d9;
 }
 
@@ -115,8 +115,14 @@ textarea {
     width: 169px;
 }
 
+.product-dropdownlist {
+    width: 171px;
+    height: 19px;
+}
+
 .product-text-box,
 .product-textarea,
+.product-dropdownlist,
 .category-input,
 .new-category-input {
     border-radius: 4px;
@@ -137,7 +143,7 @@ textarea {
 
 .product-table {
     margin-top: 50px;
-    width: 100%;
+    width: 1100px;
 }
 
 table,
@@ -162,13 +168,22 @@ td {
     text-align: center;
 }
 
-.js-table-product-title {
+.js-table-product-title,
+.table-product-category {
     text-align: left;
+    width: 450px;
 }
 
 .table-product-price {
     text-align: right;
 }
+
+.table-product-price,
+.table-product-delete {
+    width: 100px;
+}
+
+
 
 .category-table {
     margin-top: 25px;
