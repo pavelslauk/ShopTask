@@ -1,6 +1,6 @@
 ﻿body {
     margin: auto;
-    width: 60%;
+    width: 1100px;
     font-family: Arial;
 }
 
@@ -35,10 +35,9 @@ textarea {
     width: inherit;
 }
 
-.navbar {
-    
+.navbar {   
     top: 0;
-    width: 100%;
+    width: 1100px;
     background-color: #d9d9d9;
 }
 
@@ -65,7 +64,8 @@ textarea {
     background-color: #989898;
 }
 
-.product-form {
+.product-form,
+.category-form {
     padding: 5px;
     padding-bottom: 100px;
     margin: auto;
@@ -75,17 +75,23 @@ textarea {
     border-radius: 4px;
 }
 
-.product-form-header {
+.form-header {
     border-bottom: 2px solid #8f8f8f;
 }
 
-.product-form-header-text {
+.form-header-text {
     margin-bottom: 8px;
     margin-top: 12px;
 }
 
-.product-form-body {
+.product-form-body,
+.category-form-body {
     margin-top: 30px;
+}
+
+.category-form-body {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .product-form-col1 {
@@ -109,27 +115,35 @@ textarea {
     width: 169px;
 }
 
+.product-dropdownlist {
+    width: 171px;
+    height: 19px;
+}
+
 .product-text-box,
-.product-textarea {
+.product-textarea,
+.product-dropdownlist,
+.category-input,
+.new-category-input {
     border-radius: 4px;
     border: 1px solid #a7a7a7;
     margin-bottom: 40px;
 }
 
-.product-form-save-button {
+.form-save-button {
     background-color: inherit;
     border-radius: 4px;
     border: 1px solid #a7a7a7;
     padding: 4px 14px;  
 }
 
-.product-form-save-button:hover {
+.form-save-button:hover {
     border-color: #0187f8;
 }
 
 .product-table {
     margin-top: 50px;
-    width: 100%;
+    width: 1100px;
 }
 
 table,
@@ -154,10 +168,36 @@ td {
     text-align: center;
 }
 
-.js-table-product-title {
+.js-table-product-title,
+.table-product-category {
     text-align: left;
+    width: 450px;
 }
 
 .table-product-price {
     text-align: right;
+}
+
+.table-product-price,
+.table-product-delete {
+    width: 100px;
+}
+
+
+
+.category-table {
+    margin-top: 25px;
+}
+
+.new-category-input {
+    margin-right: 50%;
+}
+
+.category-input {
+    margin-right: 10px;
+}
+
+.update-validation-message {
+    color: red;
+    margin-bottom: 5px;
 }

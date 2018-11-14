@@ -1,8 +1,9 @@
-﻿@model ShopTask.Models.Product
+﻿@using ShopTask.Models
+@model ProductModel
 
 @{
     string header;
-    if (Model != null)
+    if (Model.Id != null)
     {
         ViewBag.Title = "Edit product";
         header = "Edit product " + Model.Title;
@@ -12,14 +13,14 @@
         ViewBag.Title = "New product";
         header = "Create new product";
     }
-
 }
+
 <div class="product-form">
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        <div class="product-form-header">
-            <p class="product-form-header-text">@header</p>
+        <div class="form-header">
+            <p class="form-header-text">@header</p>
         </div>
         @Html.HiddenFor(model => model.Id)
 
@@ -30,6 +31,11 @@
             @Html.LabelFor(model => model.Title, new { @class = "product-form-col1" })
             <div class="product-form-col2">
                 @Html.TextBoxFor(model => model.Title, new { @class = "product-text-box" })
+            </div>
+
+            @Html.LabelFor(model => model.Category.Name, new { @class = "product-form-col1" })
+            <div class="product-form-col2">
+                @Html.DropDownListFor(model => model.CategoryId, Model.Categories, new { @class = "product-dropdownlist"})
             </div>
 
             <div class="product-form-col2">
@@ -46,7 +52,7 @@
             </div>
 
             <div class="product-form-col2">
-                <input type="submit" class="product-form-save-button" value="Save" />
+                <input type="submit" class="form-save-button" value="Save" />
             </div>
         </div>
     }
