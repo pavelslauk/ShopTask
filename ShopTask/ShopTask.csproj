@@ -223,7 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShopTask.DataAccess\ShopTask.DataAccess.csproj">
-      <Project>{424236F4-3495-44B2-94A2-E9A5E5941D3F}</Project>
+      <Project>{0472960F-81AB-487E-90D3-285777766D73}</Project>
       <Name>ShopTask.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>

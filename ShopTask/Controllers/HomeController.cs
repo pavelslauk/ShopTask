@@ -29,23 +29,25 @@ namespace ShopTask.Controllers
         {
             using (var dbContext = new ShopContext())
             {
-                var categories = new SelectList(dbContext.Categories.ToList(), "Id", "Name");
-                var productModel = new ProductModel { Categories = categories };
+                var productModel = new ProductModel { Categories = GetCategorySelectList() };
+
                 return View("ProductView", productModel);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateProduct(Product product)
+        public ActionResult CreateProduct(ProductModel productModel)
         {
             if (!ModelState.IsValid)
             {
                 return View("ProductView");
             }
 
+
             using (var dbContext = new ShopContext())
             {
+                var product = Mapper.Map<ProductModel, Product>(productModel);
                 dbContext.Products.Add(product);
                 dbContext.SaveChanges();
             }
@@ -59,7 +61,7 @@ namespace ShopTask.Controllers
             using (var dbContext = new ShopContext())
             {
                 var product = Mapper.Map<Product, ProductModel>(dbContext.Products.Find(productId));
-                product.Categories = new SelectList(dbContext.Categories.ToList(), "Id", "Name", product.CategoryId);
+                product.Categories = GetCategorySelectList(product.CategoryId);
 
                 return View("ProductView", product);
             }
@@ -67,7 +69,7 @@ namespace ShopTask.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProduct(Product product)
+        public ActionResult EditProduct(ProductModel productModel)
         {
             if (!ModelState.IsValid)
             {
@@ -76,6 +78,7 @@ namespace ShopTask.Controllers
 
             using (var dbContext = new ShopContext())
             {
+                var product = Mapper.Map<ProductModel, Product>(productModel);
                 dbContext.Entry(product).State = EntityState.Modified;
                 dbContext.SaveChanges();
             }
@@ -96,7 +99,7 @@ namespace ShopTask.Controllers
         {
             using (var dbContext = new ShopContext())
             {
-                var products = Mapper.Map<List<Product>, List<ProductModel>>(dbContext.Products.Include(product => product.Category).ToList());
+                var products = dbContext.Products.Include(product => product.Category).ToList();
 
                 return PartialView(products);
             }
@@ -115,7 +118,6 @@ namespace ShopTask.Controllers
             {
                 var categories = Mapper.Map<List<Category>, List<CategoryModel>>(dbContext.Categories.ToList());
                 categories.Add(new CategoryModel());
-
                 return PartialView("CategoriesPartial", categories);
             }
         }
@@ -129,7 +131,7 @@ namespace ShopTask.Controllers
             {
                 ModelState.AddModelError("UpdateFailed", "There is some error");
             }
-            return CategoriesPartial();                         
+            return CategoriesPartial();
         }
 
         private bool UpdateCategoriesInternal(Category[] categories)
@@ -155,7 +157,7 @@ namespace ShopTask.Controllers
 
         private void AddOrUpdateCategory(Category category, ShopContext dbContext)
         {
-            if (category.Id == null)
+            if (category.Id == 0)
             {
                 AddNewCategory(category, dbContext);
             }
@@ -167,6 +169,7 @@ namespace ShopTask.Controllers
 
         private void UpdateExistingCategory(Category existingCategory, ShopContext dbContext)
         {
+
             if (!string.IsNullOrEmpty(existingCategory.Name))
             {
                 dbContext.Entry(existingCategory).State = EntityState.Modified;
@@ -180,6 +183,7 @@ namespace ShopTask.Controllers
         
         private void AddNewCategory(Category newCategory, ShopContext dbContext)
         {
+
             if (!string.IsNullOrEmpty(newCategory.Name))
             {
                 dbContext.Categories.Add(newCategory);
@@ -203,6 +207,18 @@ namespace ShopTask.Controllers
                     Logger.Default.Warn(e);
                     return !dbContext.Products.Any(product => product.Id == productId);
                 }
+            }
+        }
+
+        private SelectList GetCategorySelectList(int currentCategory = 0)
+        {
+            using (var dbContext = new ShopContext())
+            {
+                if(currentCategory != 0)
+                {
+                    return new SelectList(dbContext.Categories.ToList(), "Id", "Name", currentCategory);
+                }
+                return new SelectList(dbContext.Categories.ToList(), "Id", "Name");
             }
         }
     }

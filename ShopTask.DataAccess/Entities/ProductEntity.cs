@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace ShopTask.DataAccess.Entities
 {
     public class Product
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
+        [Required]
         public string Title { get; set; }
 
+        [RegularExpression(@"(^[1-9][0-9]*(\.[0-9]*)?)|(^0\.(([0-9]*)?[1-9]([0-9]*)?))$", ErrorMessage = "Incorrect value")]
         public decimal Price { get; set; }
 
         public string Description { get; set; }

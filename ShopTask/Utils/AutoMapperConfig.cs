@@ -15,6 +15,7 @@ namespace ShopTask.Utils
             Mapper.Initialize(config =>
             {
                 config.CreateMap<Product, ProductModel>();
+                config.CreateMap<ProductModel, Product>();
                 config.CreateMap<Category, CategoryModel>();
             });
         }
