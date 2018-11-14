@@ -1,9 +1,9 @@
 ﻿@using ShopTask.Models
-@model Product
+@model ProductModel
 
 @{
     string header;
-    if (Model != null)
+    if (Model.Id != null)
     {
         ViewBag.Title = "Edit product";
         header = "Edit product " + Model.Title;
@@ -13,7 +13,6 @@
         ViewBag.Title = "New product";
         header = "Create new product";
     }
-    SelectList categories = ViewBag.Categories;
 }
 
 <div class="product-form">
@@ -36,7 +35,7 @@
 
             @Html.LabelFor(model => model.Category.Name, new { @class = "product-form-col1" })
             <div class="product-form-col2">
-                @Html.DropDownListFor(model => model.CategoryId, categories, new { @class = "product-dropdownlist", rows = "6" })
+                @Html.DropDownListFor(model => model.CategoryId, Model.Categories, new { @class = "product-dropdownlist"})
             </div>
 
             <div class="product-form-col2">

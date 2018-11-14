@@ -19,6 +19,7 @@ namespace ShopTask
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             log4net.Config.XmlConfigurator.Configure();
+            AutoMapperConfig.Initialize();
         }
 
         protected void Application_Error()

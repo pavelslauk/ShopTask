@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShopTask.DataAccess.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Web.Mvc;
 
 namespace ShopTask.Models
 {
-    public class Product
+    public class ProductModel
     {
         public int? Id { get; set; }
 
@@ -23,6 +24,8 @@ namespace ShopTask.Models
 
         public int CategoryId { get; set; }
 
-        public Category Category { get; set; }
+        public CategoryModel Category { get; set; }
+
+        public SelectList Categories { get; set; }
     }
 }

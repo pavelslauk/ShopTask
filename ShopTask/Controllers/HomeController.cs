@@ -7,11 +7,17 @@ using ShopTask.Models;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using ShopTask.Utils;
+using ShopTask.DataAccess;
+using ShopTask.DataAccess.Entities;
+using AutoMapper;
+
+
 
 namespace ShopTask.Controllers
 {
     public class HomeController : Controller
     {
+
         [HttpGet]
         public ActionResult Index()
         {
@@ -23,9 +29,9 @@ namespace ShopTask.Controllers
         {
             using (var dbContext = new ShopContext())
             {
-                ViewBag.Categories = new SelectList(dbContext.Categories.ToList(), "Id", "Name");
-
-                return View("ProductView");
+                var categories = new SelectList(dbContext.Categories.ToList(), "Id", "Name");
+                var productModel = new ProductModel { Categories = categories };
+                return View("ProductView", productModel);
             }
         }
 
@@ -52,8 +58,8 @@ namespace ShopTask.Controllers
         {
             using (var dbContext = new ShopContext())
             {
-                var product = dbContext.Products.Find(productId);
-                ViewBag.Categories = new SelectList(dbContext.Categories.ToList(), "Id", "Name", product.CategoryId);
+                var product = Mapper.Map<Product, ProductModel>(dbContext.Products.Find(productId));
+                product.Categories = new SelectList(dbContext.Categories.ToList(), "Id", "Name", product.CategoryId);
 
                 return View("ProductView", product);
             }
@@ -90,7 +96,7 @@ namespace ShopTask.Controllers
         {
             using (var dbContext = new ShopContext())
             {
-                var products = dbContext.Products.Include(product => product.Category).ToList();
+                var products = Mapper.Map<List<Product>, List<ProductModel>>(dbContext.Products.Include(product => product.Category).ToList());
 
                 return PartialView(products);
             }
@@ -107,8 +113,8 @@ namespace ShopTask.Controllers
         {
             using (var dbContext = new ShopContext())
             {
-                var categories = dbContext.Categories.ToList();
-                categories.Add(new Category());
+                var categories = Mapper.Map<List<Category>, List<CategoryModel>>(dbContext.Categories.ToList());
+                categories.Add(new CategoryModel());
 
                 return PartialView("CategoriesPartial", categories);
             }
