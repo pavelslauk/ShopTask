@@ -29,7 +29,7 @@ namespace ShopTask.Controllers
         {
             using (var dbContext = new ShopContext())
             {
-                var productModel = new ProductModel { Categories = GetCategorySelectList() };
+                var productModel = new ProductModel { Categories = GetCategorySelectList(dbContext) };
 
                 return View("ProductView", productModel);
             }
@@ -61,7 +61,7 @@ namespace ShopTask.Controllers
             using (var dbContext = new ShopContext())
             {
                 var product = Mapper.Map<Product, ProductModel>(dbContext.Products.Find(productId));
-                product.Categories = GetCategorySelectList(product.CategoryId);
+                product.Categories = GetCategorySelectList(dbContext, product.CategoryId);
 
                 return View("ProductView", product);
             }
@@ -210,16 +210,13 @@ namespace ShopTask.Controllers
             }
         }
 
-        private SelectList GetCategorySelectList(int currentCategory = 0)
+        private SelectList GetCategorySelectList(ShopContext dbContext, int currentCategory = 0)
         {
-            using (var dbContext = new ShopContext())
+            if(currentCategory != 0)
             {
-                if(currentCategory != 0)
-                {
-                    return new SelectList(dbContext.Categories.ToList(), "Id", "Name", currentCategory);
-                }
-                return new SelectList(dbContext.Categories.ToList(), "Id", "Name");
+                return new SelectList(dbContext.Categories.ToList(), "Id", "Name", currentCategory);
             }
+            return new SelectList(dbContext.Categories.ToList(), "Id", "Name");
         }
     }
 }
