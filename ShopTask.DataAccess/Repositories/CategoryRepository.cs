@@ -3,45 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ShopTask.DataAccess.Interfaces;
 using ShopTask.DataAccess.Entities;
 using System.Data.Entity;
 
 namespace ShopTask.DataAccess.Repositories
 {
-    public class CategoryRepository : IRepository<Category>
+    public class CategoriesRepository : IRepository<Category>
     {
-        private ShopContext dbContext;
+        private ShopContext _dbContext;
 
-        public CategoryRepository(ShopContext context)
+        public CategoriesRepository(ShopContext context)
         {
-            dbContext = context;
+            _dbContext = context;
         }
 
         public IEnumerable<Category> GetAll()
         {
-            return dbContext.Categories;
+            return _dbContext.Categories;
         }
 
         public Category GetById(int id)
         {
-            return dbContext.Categories.Find(id);
+            return _dbContext.Categories.Find(id);
+        }
+
+        public IEnumerable<Category> Find(Func<Category, bool> predicate)
+        {
+            return _dbContext.Categories.Where(predicate);
         }
 
         public void Add(Category category)
         {
-            dbContext.Categories.Add(category);
+            _dbContext.Categories.Add(category);
         }
 
         public void Update(Category category)
         {
-            dbContext.Entry(category).State = EntityState.Modified;
+            _dbContext.Entry(category).State = EntityState.Modified;
         }
 
         public void Delete(Category category)
         {
-            dbContext.Categories.Attach(category);
-            dbContext.Categories.Remove(category);
+            _dbContext.Categories.Attach(category);
+            _dbContext.Categories.Remove(category);
         }
     }
 }

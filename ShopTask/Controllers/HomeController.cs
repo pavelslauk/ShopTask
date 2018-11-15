@@ -28,7 +28,7 @@ namespace ShopTask.Controllers
         {
             using (var unitOfWork = new UnitOfWork())
             {
-                var productModel = new ProductModel { Categories = GetCategorySelectList(unitOfWork) };
+                var productModel = new ProductModel { Categories = GetCategorySelectList(unitOfWork.Categories) };
 
                 return View("ProductView", productModel);
             }
@@ -60,7 +60,7 @@ namespace ShopTask.Controllers
             using (var unitOfWork = new UnitOfWork())
             {
                 var product = Mapper.Map<Product, ProductModel>(unitOfWork.Products.GetById(productId));
-                product.Categories = GetCategorySelectList(unitOfWork, product.CategoryId);
+                product.Categories = GetCategorySelectList(unitOfWork.Categories, product.CategoryId);
 
                 return View("ProductView", product);
             }
@@ -115,7 +115,7 @@ namespace ShopTask.Controllers
         {
             using (var unitOfWork = new UnitOfWork())
             {
-                var categories = Mapper.Map<List<Category>, List<CategoryModel>>(unitOfWork.Categories.GetAll().ToList());
+                var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(unitOfWork.Categories.GetAll());
                 categories.Add(new CategoryModel());
                 return PartialView("CategoriesPartial", categories);
             }
@@ -141,7 +141,7 @@ namespace ShopTask.Controllers
                 {
                     foreach (var category in categories)
                     {
-                        AddOrUpdateCategory(category, unitOfWork);
+                        AddOrUpdateCategory(category, unitOfWork.Categories);
                     }
                     unitOfWork.Save();
                     return true;
@@ -154,37 +154,37 @@ namespace ShopTask.Controllers
             }
         }
 
-        private void AddOrUpdateCategory(Category category, UnitOfWork unitOfWork)
+        private void AddOrUpdateCategory(Category category, CategoriesRepository categories)
         {
             if (category.Id == 0)
             {
-                AddNewCategory(category, unitOfWork);
+                AddNewCategory(category, categories);
             }
             else
             {
-                UpdateExistingCategory(category, unitOfWork);
+                UpdateExistingCategory(category, categories);
             }
         }
 
-        private void UpdateExistingCategory(Category existingCategory, UnitOfWork unitOfWork)
+        private void UpdateExistingCategory(Category existingCategory, CategoriesRepository categories)
         {
 
             if (!string.IsNullOrEmpty(existingCategory.Name))
             {
-                unitOfWork.Categories.Update(existingCategory);
+                categories.Update(existingCategory);
             }
             else
             {
-                unitOfWork.Categories.Delete(existingCategory);
+                categories.Delete(existingCategory);
             }
         }      
         
-        private void AddNewCategory(Category newCategory, UnitOfWork unitOfWork)
+        private void AddNewCategory(Category newCategory, CategoriesRepository categories)
         {
 
             if (!string.IsNullOrEmpty(newCategory.Name))
             {
-                unitOfWork.Categories.Add(newCategory);
+                categories.Add(newCategory);
             }
         }
 
@@ -207,13 +207,13 @@ namespace ShopTask.Controllers
             }
         }
 
-        private SelectList GetCategorySelectList(UnitOfWork unitOfWork, int currentCategory = 0)
+        private SelectList GetCategorySelectList(CategoriesRepository categories, int currentCategory = 0)
         {
             if(currentCategory != 0)
             {
-                return new SelectList(unitOfWork.Categories.GetAll().ToList(), "Id", "Name", currentCategory);
+                return new SelectList(categories.GetAll().ToList(), "Id", "Name", currentCategory);
             }
-            return new SelectList(unitOfWork.Categories.GetAll().ToList(), "Id", "Name");
+            return new SelectList(categories.GetAll().ToList(), "Id", "Name");
         }
     }
 }

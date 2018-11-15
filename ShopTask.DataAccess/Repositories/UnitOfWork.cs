@@ -8,48 +8,29 @@ namespace ShopTask.DataAccess.Repositories
 {
     public class UnitOfWork : IDisposable
     {
-        private ShopContext dbContext = new ShopContext();
-        private CategoryRepository categoryRepository;
-        private ProductRepository productRepository;
+        private ShopContext _dbContext = new ShopContext();
+        private CategoriesRepository _categoriesRepository;
+        private ProductsRepository _productsRepository;
+        private bool _disposed = false;
 
-        public CategoryRepository Categories
-        {
-            get
-            {
-                if (categoryRepository == null)
-                    categoryRepository = new CategoryRepository(dbContext);
+        public CategoriesRepository Categories { get { return _categoriesRepository = _categoriesRepository ?? new CategoriesRepository(_dbContext); } }
 
-                return categoryRepository;
-            }
-        }
-
-        public ProductRepository Products
-        {
-            get
-            {
-                if (productRepository == null)
-                    productRepository = new ProductRepository(dbContext);
-
-                return productRepository;
-            }
-        }
+        public ProductsRepository Products { get { return _productsRepository = _productsRepository ?? new ProductsRepository(_dbContext); } }
 
         public void Save()
         {
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
         }
-
-        private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!_disposed)
             {
                 if (disposing)
                 {
-                    dbContext.Dispose();
+                    _dbContext.Dispose();
                 }
-                disposed = true;
+                _disposed = true;
             }
         }
 
