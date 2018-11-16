@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 
 namespace ShopTask.DataAccess.Repositories
 {
-    public class ProductsRepository : IRepository<Product>
+    public class ProductsRepository
     {
         private ShopContext _dbContext;
 
@@ -18,7 +18,7 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext = context;
         }
 
-        public IEnumerable<Product> GetAll(Expression<Func<Product, object>> includePredicate)
+        public IEnumerable<Product> GetAll(Expression<Func<Product, Category>> includePredicate)
         {
             return _dbContext.Products.Include(includePredicate);
         }
@@ -28,7 +28,7 @@ namespace ShopTask.DataAccess.Repositories
             return _dbContext.Products.Find(id);
         }
 
-        public IEnumerable<Product> Find(Expression<Func<Product, object>> includePredicate, Expression<Func<Product, bool>> predicate)
+        public IEnumerable<Product> Find(Expression<Func<Product, bool>> predicate, Expression<Func<Product, Category>> includePredicate)
         {
             return _dbContext.Products.Include(includePredicate).Where(predicate);
         }
@@ -47,11 +47,6 @@ namespace ShopTask.DataAccess.Repositories
         {
             _dbContext.Products.Attach(product);
             _dbContext.Products.Remove(product);
-        }
-
-        public bool IsAnyProduct(Expression<Func<Product, bool>> predicate)
-        {
-            return _dbContext.Products.Any(predicate);
         }
     }
 }

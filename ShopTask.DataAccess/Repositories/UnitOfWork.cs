@@ -17,12 +17,12 @@ namespace ShopTask.DataAccess.Repositories
 
         public UnitOfWork()
         {
-            _dbContext.Database.Log = LogTransaction;
+            _dbContext.Database.Log = transaction => Logger.Default.Info(transaction);
         }
 
-        public CategoriesRepository Categories { get { return (_categoriesRepository != null) ? _categoriesRepository : _categoriesRepository = new CategoriesRepository(_dbContext); } }
+        public CategoriesRepository Categories => _categoriesRepository ?? (_categoriesRepository = new CategoriesRepository(_dbContext));
 
-        public ProductsRepository Products { get { return (_productsRepository != null) ? _productsRepository : _productsRepository = new ProductsRepository(_dbContext); } }
+        public ProductsRepository Products => _productsRepository ?? (_productsRepository = new ProductsRepository(_dbContext));
 
         public void Save()
         {           
@@ -45,11 +45,6 @@ namespace ShopTask.DataAccess.Repositories
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        private void LogTransaction(string transaction)
-        {
-            Logger.Default.Info(transaction);
         }
     }
 }
