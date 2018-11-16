@@ -96,7 +96,7 @@ namespace ShopTask.Controllers
         {
             using (var unitOfWork = new UnitOfWork())
             {
-                var products = unitOfWork.Products.GetAll(includePredicate: product => product.Category).ToList();
+                var products = unitOfWork.Products.GetAll(include: product => product.Category).ToList();
 
                 return PartialView(products);
             }
@@ -200,7 +200,7 @@ namespace ShopTask.Controllers
                 catch (DbUpdateConcurrencyException e)
                 {
                     Logger.Default.Warn(e);
-                    return !unitOfWork.Products.Find(predicate: product => product.Id == productId, includePredicate: product => product.Category).Any();
+                    return !unitOfWork.Products.Find(where: product => product.Id == productId, include: product => product.Category).Any();
                 }
             }
         }

@@ -28,9 +28,9 @@ namespace ShopTask.DataAccess.Repositories
             return _dbContext.Categories.Find(id);
         }
 
-        public IEnumerable<Category> Find(Expression<Func<Category, bool>> predicate)
+        public IEnumerable<Category> Find(Expression<Func<Category, bool>> where)
         {
-            return _dbContext.Categories.Where(predicate);
+            return _dbContext.Categories.Where(where);
         }
 
         public void Add(Category category)

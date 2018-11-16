@@ -18,9 +18,9 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext = context;
         }
 
-        public IEnumerable<Product> GetAll(Expression<Func<Product, Category>> includePredicate)
+        public IEnumerable<Product> GetAll(Expression<Func<Product, object>> include)
         {
-            return _dbContext.Products.Include(includePredicate);
+            return _dbContext.Products.Include(include);
         }
 
         public Product GetById(int id)
@@ -28,9 +28,9 @@ namespace ShopTask.DataAccess.Repositories
             return _dbContext.Products.Find(id);
         }
 
-        public IEnumerable<Product> Find(Expression<Func<Product, bool>> predicate, Expression<Func<Product, Category>> includePredicate)
+        public IEnumerable<Product> Find(Expression<Func<Product, bool>> where, Expression<Func<Product, object>> include)
         {
-            return _dbContext.Products.Include(includePredicate).Where(predicate);
+            return _dbContext.Products.Include(include).Where(where);
         }
 
         public void Add(Product product)
