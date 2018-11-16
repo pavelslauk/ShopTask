@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShopTask.Core.Utils;
 
 namespace ShopTask.DataAccess.Repositories
 {
@@ -13,12 +15,17 @@ namespace ShopTask.DataAccess.Repositories
         private ProductsRepository _productsRepository;
         private bool _disposed = false;
 
-        public CategoriesRepository Categories { get { return _categoriesRepository = _categoriesRepository ?? new CategoriesRepository(_dbContext); } }
+        public UnitOfWork()
+        {
+            _dbContext.Database.Log = LogTransaction;
+        }
 
-        public ProductsRepository Products { get { return _productsRepository = _productsRepository ?? new ProductsRepository(_dbContext); } }
+        public CategoriesRepository Categories { get { return (_categoriesRepository != null) ? _categoriesRepository : _categoriesRepository = new CategoriesRepository(_dbContext); } }
+
+        public ProductsRepository Products { get { return (_productsRepository != null) ? _productsRepository : _productsRepository = new ProductsRepository(_dbContext); } }
 
         public void Save()
-        {
+        {           
             _dbContext.SaveChanges();
         }
 
@@ -38,6 +45,11 @@ namespace ShopTask.DataAccess.Repositories
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private void LogTransaction(string transaction)
+        {
+            Logger.Default.Info(transaction);
         }
     }
 }

@@ -5,12 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using ShopTask.Models;
 using System.Data.Entity.Infrastructure;
-using ShopTask.Utils;
+using ShopTask.Core.Utils;
 using ShopTask.DataAccess.Entities;
 using ShopTask.DataAccess.Repositories;
 using AutoMapper;
-
-
 
 namespace ShopTask.Controllers
 {
@@ -98,7 +96,7 @@ namespace ShopTask.Controllers
         {
             using (var unitOfWork = new UnitOfWork())
             {
-                var products = unitOfWork.Products.GetAll().ToList();
+                var products = unitOfWork.Products.GetAll(product => product.Category).ToList();
 
                 return PartialView(products);
             }

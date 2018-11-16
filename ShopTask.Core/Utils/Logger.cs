@@ -5,7 +5,7 @@ using System.Web;
 using log4net;
 using log4net.Config;
 
-namespace ShopTask.Utils
+namespace ShopTask.Core.Utils
 {
     public static class Logger
     {

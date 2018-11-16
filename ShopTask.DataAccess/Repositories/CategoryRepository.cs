@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ShopTask.DataAccess.Entities;
 using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace ShopTask.DataAccess.Repositories
 {
@@ -17,7 +18,7 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext = context;
         }
 
-        public IEnumerable<Category> GetAll()
+        public IEnumerable<Category> GetAll(Expression<Func<Category, object>> includePredicate = null)
         {
             return _dbContext.Categories;
         }
@@ -27,7 +28,7 @@ namespace ShopTask.DataAccess.Repositories
             return _dbContext.Categories.Find(id);
         }
 
-        public IEnumerable<Category> Find(Func<Category, bool> predicate)
+        public IEnumerable<Category> Find(Expression<Func<Category, object>> includePredicate = null, Expression<Func<Category, bool>> predicate)
         {
             return _dbContext.Categories.Where(predicate);
         }

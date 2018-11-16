@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ShopTask.DataAccess.Entities;
 using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace ShopTask.DataAccess.Repositories
 {
@@ -17,9 +18,9 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext = context;
         }
 
-        public IEnumerable<Product> GetAll()
+        public IEnumerable<Product> GetAll(Expression<Func<Product, object>> includePredicate)
         {
-            return _dbContext.Products.Include(product => product.Category);
+            return _dbContext.Products.Include(includePredicate);
         }
 
         public Product GetById(int id)
@@ -27,10 +28,9 @@ namespace ShopTask.DataAccess.Repositories
             return _dbContext.Products.Find(id);
         }
 
-        public IEnumerable<Product> Find(Func<Product, bool> predicate)
+        public IEnumerable<Product> Find(Expression<Func<Product, object>> includePredicate, Expression<Func<Product, bool>> predicate)
         {
-
-            return _dbContext.Products.Include(product => product.Category).Where(predicate);
+            return _dbContext.Products.Include(includePredicate).Where(predicate);
         }
 
         public void Add(Product product)
@@ -49,7 +49,7 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext.Products.Remove(product);
         }
 
-        public bool IsAnyProduct(Func<Product, bool> predicate)
+        public bool IsAnyProduct(Expression<Func<Product, bool>> predicate)
         {
             return _dbContext.Products.Any(predicate);
         }
