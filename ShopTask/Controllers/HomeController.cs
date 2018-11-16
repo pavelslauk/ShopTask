@@ -4,14 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ShopTask.Models;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using ShopTask.Utils;
-using ShopTask.DataAccess;
+using ShopTask.Core.Utils;
 using ShopTask.DataAccess.Entities;
+using ShopTask.DataAccess.Repositories;
 using AutoMapper;
-
-
 
 namespace ShopTask.Controllers
 {
@@ -27,9 +24,9 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CreateProduct()
         {
-            using (var dbContext = new ShopContext())
+            using (var unitOfWork = new UnitOfWork())
             {
-                var productModel = new ProductModel { Categories = GetCategorySelectList(dbContext) };
+                var productModel = new ProductModel { Categories = GetCategorySelectList(unitOfWork.Categories) };
 
                 return View("ProductView", productModel);
             }
@@ -45,11 +42,11 @@ namespace ShopTask.Controllers
             }
 
 
-            using (var dbContext = new ShopContext())
+            using (var unitOfWork = new UnitOfWork())
             {
                 var product = Mapper.Map<ProductModel, Product>(productModel);
-                dbContext.Products.Add(product);
-                dbContext.SaveChanges();
+                unitOfWork.Products.Add(product);
+                unitOfWork.Save();
             }
 
             return RedirectToAction("Index");
@@ -58,10 +55,10 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult EditProduct(int productId)
         {
-            using (var dbContext = new ShopContext())
+            using (var unitOfWork = new UnitOfWork())
             {
-                var product = Mapper.Map<Product, ProductModel>(dbContext.Products.Find(productId));
-                product.Categories = GetCategorySelectList(dbContext, product.CategoryId);
+                var product = Mapper.Map<Product, ProductModel>(unitOfWork.Products.GetById(productId));
+                product.Categories = GetCategorySelectList(unitOfWork.Categories, product.CategoryId);
 
                 return View("ProductView", product);
             }
@@ -76,11 +73,11 @@ namespace ShopTask.Controllers
                 return View("ProductView");
             }
 
-            using (var dbContext = new ShopContext())
+            using (var unitOfWork = new UnitOfWork())
             {
                 var product = Mapper.Map<ProductModel, Product>(productModel);
-                dbContext.Entry(product).State = EntityState.Modified;
-                dbContext.SaveChanges();
+                unitOfWork.Products.Update(product);
+                unitOfWork.Save();
             }
 
             return RedirectToAction("Index");
@@ -97,9 +94,9 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult ProductsPartial()
         {
-            using (var dbContext = new ShopContext())
+            using (var unitOfWork = new UnitOfWork())
             {
-                var products = dbContext.Products.Include(product => product.Category).ToList();
+                var products = unitOfWork.Products.GetAll(include: product => product.Category).ToList();
 
                 return PartialView(products);
             }
@@ -114,9 +111,9 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CategoriesPartial()
         {
-            using (var dbContext = new ShopContext())
+            using (var unitOfWork = new UnitOfWork())
             {
-                var categories = Mapper.Map<List<Category>, List<CategoryModel>>(dbContext.Categories.ToList());
+                var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(unitOfWork.Categories.GetAll());
                 categories.Add(new CategoryModel());
                 return PartialView("CategoriesPartial", categories);
             }
@@ -138,13 +135,13 @@ namespace ShopTask.Controllers
         {
             try
             {
-                using (var dbContext = new ShopContext())
+                using (var unitOfWork = new UnitOfWork())
                 {
                     foreach (var category in categories)
                     {
-                        AddOrUpdateCategory(category, dbContext);
+                        AddOrUpdateCategory(category, unitOfWork.Categories);
                     }
-                    dbContext.SaveChanges();
+                    unitOfWork.Save();
                     return true;
                 }
             }
@@ -155,68 +152,66 @@ namespace ShopTask.Controllers
             }
         }
 
-        private void AddOrUpdateCategory(Category category, ShopContext dbContext)
+        private void AddOrUpdateCategory(Category category, CategoriesRepository categories)
         {
             if (category.Id == 0)
             {
-                AddNewCategory(category, dbContext);
+                AddNewCategory(category, categories);
             }
             else
             {
-                UpdateExistingCategory(category, dbContext);
+                UpdateExistingCategory(category, categories);
             }
         }
 
-        private void UpdateExistingCategory(Category existingCategory, ShopContext dbContext)
+        private void UpdateExistingCategory(Category existingCategory, CategoriesRepository categories)
         {
 
             if (!string.IsNullOrEmpty(existingCategory.Name))
             {
-                dbContext.Entry(existingCategory).State = EntityState.Modified;
+                categories.Update(existingCategory);
             }
             else
             {
-                dbContext.Categories.Attach(existingCategory);
-                dbContext.Categories.Remove(existingCategory);
+                categories.Delete(existingCategory);
             }
         }      
         
-        private void AddNewCategory(Category newCategory, ShopContext dbContext)
+        private void AddNewCategory(Category newCategory, CategoriesRepository categories)
         {
 
             if (!string.IsNullOrEmpty(newCategory.Name))
             {
-                dbContext.Categories.Add(newCategory);
+                categories.Add(newCategory);
             }
         }
 
         private bool DeleteProductInternal(int productId)
         {
-            using (var dbContext = new ShopContext())
+            using (var unitOfWork = new UnitOfWork())
             {
                 try
                 {
                     var product = new Product { Id = productId };
-                    dbContext.Products.Attach(product);
-                    dbContext.Products.Remove(product);
-                    dbContext.SaveChanges();
+                    unitOfWork.Products.Delete(product);
+                    unitOfWork.Save();
                     return true;
                 }
                 catch (DbUpdateConcurrencyException e)
                 {
                     Logger.Default.Warn(e);
-                    return !dbContext.Products.Any(product => product.Id == productId);
+                    return !unitOfWork.Products.Find(where: product => product.Id == productId, include: product => product.Category).Any();
                 }
             }
         }
 
-        private SelectList GetCategorySelectList(ShopContext dbContext, int currentCategory = 0)
+        private SelectList GetCategorySelectList(CategoriesRepository categories, int currentCategory = 0)
         {
             if(currentCategory != 0)
             {
-                return new SelectList(dbContext.Categories.ToList(), "Id", "Name", currentCategory);
+                return new SelectList(categories.GetAll().ToList(), "Id", "Name", currentCategory);
             }
-            return new SelectList(dbContext.Categories.ToList(), "Id", "Name");
+            return new SelectList(categories.GetAll().ToList(), "Id", "Name");
         }
     }
 }

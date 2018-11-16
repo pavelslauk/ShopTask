@@ -14,6 +14,11 @@ namespace ShopTask
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Categories",
+                url: "Categories",
+                defaults: new { controller = "Home", action = "Categories" });
+
+            routes.MapRoute(
                 name: "CreateProduct",
                 url: "Product",
                 defaults: new { controller = "Home", action = "CreateProduct" });
