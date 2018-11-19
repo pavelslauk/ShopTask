@@ -8,7 +8,7 @@ using ShopTask.Core.Utils;
 
 namespace ShopTask.DataAccess.Repositories
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         private ShopContext _dbContext = new ShopContext();
         private CategoriesRepository _categoriesRepository;

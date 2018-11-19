@@ -15,6 +15,13 @@ namespace ShopTask.Controllers
     public class HomeController : Controller
     {
 
+        IUnitOfWork _unitOfWork;
+
+        public HomeController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         [HttpGet]
         public ActionResult Index()
         {
@@ -24,12 +31,9 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CreateProduct()
         {
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var productModel = new ProductModel { Categories = GetCategorySelectList(unitOfWork.Categories) };
+            var productModel = new ProductModel { Categories = GetCategorySelectList(_unitOfWork.Categories) };
 
-                return View("ProductView", productModel);
-            }
+            return View("ProductView", productModel);
         }
 
         [HttpPost]
@@ -41,13 +45,9 @@ namespace ShopTask.Controllers
                 return View("ProductView");
             }
 
-
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var product = Mapper.Map<ProductModel, Product>(productModel);
-                unitOfWork.Products.Add(product);
-                unitOfWork.Save();
-            }
+            var product = Mapper.Map<ProductModel, Product>(productModel);
+            _unitOfWork.Products.Add(product);
+            _unitOfWork.Save();
 
             return RedirectToAction("Index");
         }
@@ -55,13 +55,10 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult EditProduct(int productId)
         {
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var product = Mapper.Map<Product, ProductModel>(unitOfWork.Products.GetById(productId));
-                product.Categories = GetCategorySelectList(unitOfWork.Categories, product.CategoryId);
+            var product = Mapper.Map<Product, ProductModel>(_unitOfWork.Products.GetById(productId));
+            product.Categories = GetCategorySelectList(_unitOfWork.Categories, product.CategoryId);
 
-                return View("ProductView", product);
-            }
+            return View("ProductView", product);
         }
 
         [HttpPost]
@@ -73,12 +70,9 @@ namespace ShopTask.Controllers
                 return View("ProductView");
             }
 
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var product = Mapper.Map<ProductModel, Product>(productModel);
-                unitOfWork.Products.Update(product);
-                unitOfWork.Save();
-            }
+            var product = Mapper.Map<ProductModel, Product>(productModel);
+            _unitOfWork.Products.Update(product);
+            _unitOfWork.Save();
 
             return RedirectToAction("Index");
         }
@@ -94,12 +88,9 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult ProductsPartial()
         {
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var products = unitOfWork.Products.GetAll(include: product => product.Category).ToList();
+            var products = _unitOfWork.Products.GetAll(include: product => product.Category).ToList();
 
-                return PartialView(products);
-            }
+            return PartialView(products);
         }
 
         [HttpGet]
@@ -111,12 +102,9 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CategoriesPartial()
         {
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(unitOfWork.Categories.GetAll());
-                categories.Add(new CategoryModel());
-                return PartialView("CategoriesPartial", categories);
-            }
+            var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(_unitOfWork.Categories.GetAll());
+            categories.Add(new CategoryModel());
+            return PartialView("CategoriesPartial", categories);
         }
 
         [HttpPost]
@@ -135,15 +123,12 @@ namespace ShopTask.Controllers
         {
             try
             {
-                using (var unitOfWork = new UnitOfWork())
+                foreach (var category in categories)
                 {
-                    foreach (var category in categories)
-                    {
-                        AddOrUpdateCategory(category, unitOfWork.Categories);
-                    }
-                    unitOfWork.Save();
-                    return true;
+                    AddOrUpdateCategory(category, _unitOfWork.Categories);
                 }
+                _unitOfWork.Save();
+                return true;
             }
             catch (DbUpdateConcurrencyException e)
             {
@@ -175,8 +160,8 @@ namespace ShopTask.Controllers
             {
                 categories.Delete(existingCategory);
             }
-        }      
-        
+        }
+
         private void AddNewCategory(Category newCategory, CategoriesRepository categories)
         {
 
@@ -188,26 +173,23 @@ namespace ShopTask.Controllers
 
         private bool DeleteProductInternal(int productId)
         {
-            using (var unitOfWork = new UnitOfWork())
+            try
             {
-                try
-                {
-                    var product = new Product { Id = productId };
-                    unitOfWork.Products.Delete(product);
-                    unitOfWork.Save();
-                    return true;
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    Logger.Default.Warn(e);
-                    return !unitOfWork.Products.Find(where: product => product.Id == productId, include: product => product.Category).Any();
-                }
+                var product = new Product { Id = productId };
+                _unitOfWork.Products.Delete(product);
+                _unitOfWork.Save();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                Logger.Default.Warn(e);
+                return !_unitOfWork.Products.Find(where: product => product.Id == productId, include: product => product.Category).Any();
             }
         }
 
         private SelectList GetCategorySelectList(CategoriesRepository categories, int currentCategory = 0)
         {
-            if(currentCategory != 0)
+            if (currentCategory != 0)
             {
                 return new SelectList(categories.GetAll().ToList(), "Id", "Name", currentCategory);
             }
