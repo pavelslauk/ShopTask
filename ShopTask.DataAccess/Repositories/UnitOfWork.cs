@@ -10,23 +10,19 @@ namespace ShopTask.DataAccess.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private ShopContext _dbContext = new ShopContext();
-        private CategoriesRepository _categoriesRepository;
-        private ProductsRepository _productsRepository;
+        private ShopContext _dbContext;
         private bool _disposed = false;
+
+        public ShopContext Context => _dbContext ?? (_dbContext = new ShopContext());
 
         public UnitOfWork()
         {
-            _dbContext.Database.Log = transaction => Logger.Default.Info(transaction);
+            Context.Database.Log = transaction => Logger.Default.Info(transaction);
         }
 
-        public CategoriesRepository Categories => _categoriesRepository ?? (_categoriesRepository = new CategoriesRepository(_dbContext));
-
-        public ProductsRepository Products => _productsRepository ?? (_productsRepository = new ProductsRepository(_dbContext));
-
-        public void Save()
-        {           
-            _dbContext.SaveChanges();
+        public void Commit()
+        {
+            Context.SaveChanges();
         }
 
         public virtual void Dispose(bool disposing)
@@ -35,7 +31,7 @@ namespace ShopTask.DataAccess.Repositories
             {
                 if (disposing)
                 {
-                    _dbContext.Dispose();
+                    Context.Dispose();
                 }
                 _disposed = true;
             }

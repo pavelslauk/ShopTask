@@ -9,44 +9,40 @@ using System.Linq.Expressions;
 
 namespace ShopTask.DataAccess.Repositories
 {
-    public class CategoriesRepository
+    public class CategoriesRepository : IRepository<Category>
     {
-        private ShopContext _dbContext;
+        private ShopContext _context;
+        public ShopContext Context { set { _context = value; } }
 
-        public CategoriesRepository(ShopContext context)
+        public IEnumerable<Category> GetAll(Expression<Func<Category, object>> include = null)
         {
-            _dbContext = context;
-        }
-
-        public IEnumerable<Category> GetAll()
-        {
-            return _dbContext.Categories;
+            return _context.Categories;
         }
 
         public Category GetById(int id)
         {
-            return _dbContext.Categories.Find(id);
+            return _context.Categories.Find(id);
         }
 
-        public IEnumerable<Category> Find(Expression<Func<Category, bool>> where)
+        public IEnumerable<Category> Find(Expression<Func<Category, bool>> where, Expression<Func<Category, object>> include = null)
         {
-            return _dbContext.Categories.Where(where);
+            return _context.Categories.Where(where);
         }
 
         public void Add(Category category)
         {
-            _dbContext.Categories.Add(category);
+            _context.Categories.Add(category);
         }
 
         public void Update(Category category)
         {
-            _dbContext.Entry(category).State = EntityState.Modified;
+            _context.Entry(category).State = EntityState.Modified;
         }
 
         public void Delete(Category category)
         {
-            _dbContext.Categories.Attach(category);
-            _dbContext.Categories.Remove(category);
+            _context.Categories.Attach(category);
+            _context.Categories.Remove(category);
         }
     }
 }

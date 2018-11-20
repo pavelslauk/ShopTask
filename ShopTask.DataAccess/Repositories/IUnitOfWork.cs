@@ -8,8 +8,7 @@ namespace ShopTask.DataAccess.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {
-        CategoriesRepository Categories { get; }
-        ProductsRepository Products { get; }
-        void Save();
+        ShopContext Context { get; }
+        void Commit();
     }
 }
