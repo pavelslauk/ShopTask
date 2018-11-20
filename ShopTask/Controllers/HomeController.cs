@@ -24,8 +24,6 @@ namespace ShopTask.Controllers
             _unitOfWork = unitOfWork;
             _categories = categories;
             _products = products;
-            _categories.Context = unitOfWork.Context;
-            _products.Context = unitOfWork.Context;
         }
 
         [HttpGet]

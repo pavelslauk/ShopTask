@@ -9,7 +9,6 @@ namespace ShopTask.DataAccess.Repositories
 {
     public interface IRepository<T> where T : class
     {
-        ShopContext Context { set; }
         IEnumerable<T> GetAll(Expression<Func<T, object>> include = null);
         T GetById(int id);
         IEnumerable<T> Find(Expression<Func<T, bool>> where, Expression<Func<T, object>> include = null);

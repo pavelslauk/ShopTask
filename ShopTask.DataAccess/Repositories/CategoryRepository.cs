@@ -11,38 +11,42 @@ namespace ShopTask.DataAccess.Repositories
 {
     public class CategoriesRepository : IRepository<Category>
     {
-        private ShopContext _context;
-        public ShopContext Context { set { _context = value; } }
+        private ShopContext _dbContext;
+
+        public CategoriesRepository(ShopContext context)
+        {
+            _dbContext = context;
+        }
 
         public IEnumerable<Category> GetAll(Expression<Func<Category, object>> include = null)
         {
-            return _context.Categories;
+            return _dbContext.Categories;
         }
 
         public Category GetById(int id)
         {
-            return _context.Categories.Find(id);
+            return _dbContext.Categories.Find(id);
         }
 
         public IEnumerable<Category> Find(Expression<Func<Category, bool>> where, Expression<Func<Category, object>> include = null)
         {
-            return _context.Categories.Where(where);
+            return _dbContext.Categories.Where(where);
         }
 
         public void Add(Category category)
         {
-            _context.Categories.Add(category);
+            _dbContext.Categories.Add(category);
         }
 
         public void Update(Category category)
         {
-            _context.Entry(category).State = EntityState.Modified;
+            _dbContext.Entry(category).State = EntityState.Modified;
         }
 
         public void Delete(Category category)
         {
-            _context.Categories.Attach(category);
-            _context.Categories.Remove(category);
+            _dbContext.Categories.Attach(category);
+            _dbContext.Categories.Remove(category);
         }
     }
 }

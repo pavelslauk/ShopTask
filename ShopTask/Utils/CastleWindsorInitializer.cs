@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Castle.Windsor;
+using Castle.Windsor.Installer;
 
 namespace ShopTask.Utils
 {
@@ -12,7 +13,7 @@ namespace ShopTask.Utils
         public static void Initialize()
         {
             var container = new WindsorContainer();
-            container.Install(new ApplicationCastleInstaller());
+            container.Install(new ApplicationInstaller(), FromAssembly.Named("ShopTask.DataAccess"));
             ControllerBuilder.Current.SetControllerFactory(new CastleControllerFactory(container));
         }
     }

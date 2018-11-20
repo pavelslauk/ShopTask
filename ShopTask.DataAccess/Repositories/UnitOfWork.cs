@@ -13,16 +13,15 @@ namespace ShopTask.DataAccess.Repositories
         private ShopContext _dbContext;
         private bool _disposed = false;
 
-        public ShopContext Context => _dbContext ?? (_dbContext = new ShopContext());
-
-        public UnitOfWork()
+        public UnitOfWork(ShopContext context)
         {
-            Context.Database.Log = transaction => Logger.Default.Info(transaction);
+            _dbContext = context;
+            _dbContext.Database.Log = transaction => Logger.Default.Info(transaction);
         }
 
         public void Commit()
         {
-            Context.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         public virtual void Dispose(bool disposing)
@@ -31,7 +30,7 @@ namespace ShopTask.DataAccess.Repositories
             {
                 if (disposing)
                 {
-                    Context.Dispose();
+                    _dbContext.Dispose();
                 }
                 _disposed = true;
             }
