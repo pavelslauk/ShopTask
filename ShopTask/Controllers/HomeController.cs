@@ -15,6 +15,17 @@ namespace ShopTask.Controllers
     public class HomeController : Controller
     {
 
+        IUnitOfWork _unitOfWork;
+        IRepository<Category> _categories;
+        IRepository<Product> _products;
+
+        public HomeController(IUnitOfWork unitOfWork, IRepository<Category> categories, IRepository<Product> products)
+        {
+            _unitOfWork = unitOfWork;
+            _categories = categories;
+            _products = products;
+        }
+
         [HttpGet]
         public ActionResult Index()
         {
@@ -24,12 +35,9 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CreateProduct()
         {
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var productModel = new ProductModel { Categories = GetCategorySelectList(unitOfWork.Categories) };
+            var productModel = new ProductModel { Categories = GetCategorySelectList(_categories) };
 
-                return View("ProductView", productModel);
-            }
+            return View("ProductView", productModel);
         }
 
         [HttpPost]
@@ -41,13 +49,9 @@ namespace ShopTask.Controllers
                 return View("ProductView");
             }
 
-
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var product = Mapper.Map<ProductModel, Product>(productModel);
-                unitOfWork.Products.Add(product);
-                unitOfWork.Save();
-            }
+            var product = Mapper.Map<ProductModel, Product>(productModel);
+            _products.Add(product);
+            _unitOfWork.Commit();
 
             return RedirectToAction("Index");
         }
@@ -55,13 +59,10 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult EditProduct(int productId)
         {
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var product = Mapper.Map<Product, ProductModel>(unitOfWork.Products.GetById(productId));
-                product.Categories = GetCategorySelectList(unitOfWork.Categories, product.CategoryId);
+            var product = Mapper.Map<Product, ProductModel>(_products.GetById(productId));
+            product.Categories = GetCategorySelectList(_categories, product.CategoryId);
 
-                return View("ProductView", product);
-            }
+            return View("ProductView", product);
         }
 
         [HttpPost]
@@ -73,12 +74,9 @@ namespace ShopTask.Controllers
                 return View("ProductView");
             }
 
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var product = Mapper.Map<ProductModel, Product>(productModel);
-                unitOfWork.Products.Update(product);
-                unitOfWork.Save();
-            }
+            var product = Mapper.Map<ProductModel, Product>(productModel);
+            _products.Update(product);
+            _unitOfWork.Commit();
 
             return RedirectToAction("Index");
         }
@@ -94,12 +92,9 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult ProductsPartial()
         {
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var products = unitOfWork.Products.GetAll(include: product => product.Category).ToList();
+            var products = _products.GetAll(include: product => product.Category).ToList();
 
-                return PartialView(products);
-            }
+            return PartialView(products);
         }
 
         [HttpGet]
@@ -111,12 +106,9 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CategoriesPartial()
         {
-            using (var unitOfWork = new UnitOfWork())
-            {
-                var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(unitOfWork.Categories.GetAll());
-                categories.Add(new CategoryModel());
-                return PartialView("CategoriesPartial", categories);
-            }
+            var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(_categories.GetAll());
+            categories.Add(new CategoryModel());
+            return PartialView("CategoriesPartial", categories);
         }
 
         [HttpPost]
@@ -135,15 +127,12 @@ namespace ShopTask.Controllers
         {
             try
             {
-                using (var unitOfWork = new UnitOfWork())
+                foreach (var category in categories)
                 {
-                    foreach (var category in categories)
-                    {
-                        AddOrUpdateCategory(category, unitOfWork.Categories);
-                    }
-                    unitOfWork.Save();
-                    return true;
+                    AddOrUpdateCategory(category, _categories);
                 }
+                _unitOfWork.Commit();
+                return true;
             }
             catch (DbUpdateConcurrencyException e)
             {
@@ -152,7 +141,7 @@ namespace ShopTask.Controllers
             }
         }
 
-        private void AddOrUpdateCategory(Category category, CategoriesRepository categories)
+        private void AddOrUpdateCategory(Category category, IRepository<Category> categories)
         {
             if (category.Id == 0)
             {
@@ -164,7 +153,7 @@ namespace ShopTask.Controllers
             }
         }
 
-        private void UpdateExistingCategory(Category existingCategory, CategoriesRepository categories)
+        private void UpdateExistingCategory(Category existingCategory, IRepository<Category> categories)
         {
 
             if (!string.IsNullOrEmpty(existingCategory.Name))
@@ -175,9 +164,9 @@ namespace ShopTask.Controllers
             {
                 categories.Delete(existingCategory);
             }
-        }      
-        
-        private void AddNewCategory(Category newCategory, CategoriesRepository categories)
+        }
+
+        private void AddNewCategory(Category newCategory, IRepository<Category> categories)
         {
 
             if (!string.IsNullOrEmpty(newCategory.Name))
@@ -188,26 +177,23 @@ namespace ShopTask.Controllers
 
         private bool DeleteProductInternal(int productId)
         {
-            using (var unitOfWork = new UnitOfWork())
+            try
             {
-                try
-                {
-                    var product = new Product { Id = productId };
-                    unitOfWork.Products.Delete(product);
-                    unitOfWork.Save();
-                    return true;
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    Logger.Default.Warn(e);
-                    return !unitOfWork.Products.Find(where: product => product.Id == productId, include: product => product.Category).Any();
-                }
+                var product = new Product { Id = productId };
+                _products.Delete(product);
+                _unitOfWork.Commit();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                Logger.Default.Warn(e);
+                return !_products.Find(where: product => product.Id == productId, include: product => product.Category).Any();
             }
         }
 
-        private SelectList GetCategorySelectList(CategoriesRepository categories, int currentCategory = 0)
+        private SelectList GetCategorySelectList(IRepository<Category> categories, int currentCategory = 0)
         {
-            if(currentCategory != 0)
+            if (currentCategory != 0)
             {
                 return new SelectList(categories.GetAll().ToList(), "Id", "Name", currentCategory);
             }

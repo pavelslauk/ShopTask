@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 
 namespace ShopTask.DataAccess.Repositories
 {
-    public class CategoriesRepository
+    public class CategoriesRepository : IRepository<Category>
     {
         private ShopContext _dbContext;
 
@@ -18,7 +18,7 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext = context;
         }
 
-        public IEnumerable<Category> GetAll()
+        public IEnumerable<Category> GetAll(Expression<Func<Category, object>> include = null)
         {
             return _dbContext.Categories;
         }
@@ -28,7 +28,7 @@ namespace ShopTask.DataAccess.Repositories
             return _dbContext.Categories.Find(id);
         }
 
-        public IEnumerable<Category> Find(Expression<Func<Category, bool>> where)
+        public IEnumerable<Category> Find(Expression<Func<Category, bool>> where, Expression<Func<Category, object>> include = null)
         {
             return _dbContext.Categories.Where(where);
         }

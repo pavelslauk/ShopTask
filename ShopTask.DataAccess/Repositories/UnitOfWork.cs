@@ -8,43 +8,20 @@ using ShopTask.Core.Utils;
 
 namespace ShopTask.DataAccess.Repositories
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
-        private ShopContext _dbContext = new ShopContext();
-        private CategoriesRepository _categoriesRepository;
-        private ProductsRepository _productsRepository;
+        private ShopContext _dbContext;
         private bool _disposed = false;
 
-        public UnitOfWork()
+        public UnitOfWork(ShopContext context)
         {
+            _dbContext = context;
             _dbContext.Database.Log = transaction => Logger.Default.Info(transaction);
         }
 
-        public CategoriesRepository Categories => _categoriesRepository ?? (_categoriesRepository = new CategoriesRepository(_dbContext));
-
-        public ProductsRepository Products => _productsRepository ?? (_productsRepository = new ProductsRepository(_dbContext));
-
-        public void Save()
-        {           
+        public void Commit()
+        {
             _dbContext.SaveChanges();
-        }
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    _dbContext.Dispose();
-                }
-                _disposed = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 
 namespace ShopTask.DataAccess.Repositories
 {
-    public class ProductsRepository
+    public class ProductsRepository : IRepository<Product>
     {
         private ShopContext _dbContext;
 
