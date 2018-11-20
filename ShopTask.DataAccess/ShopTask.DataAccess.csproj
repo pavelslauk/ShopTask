@@ -69,7 +69,7 @@
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
     <Compile Include="ShopContext.cs" />
-    <Compile Include="Utils\DataAccessInstaller.cs" />
+    <Compile Include="DataAccessInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

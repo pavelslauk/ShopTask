@@ -14,11 +14,10 @@ namespace ShopTask.Utils
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            var controllers = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.BaseType == typeof(Controller));
-            foreach (var controller in controllers)
-            {
-                container.Register(Component.For(controller).LifestyleTransient());
-            }
+            container.Register(Classes.FromThisAssembly()
+                .Pick().If(t => t.Name.EndsWith("Controller"))
+                .Configure(configurer => configurer.Named(configurer.Implementation.Name))
+                .LifestyleTransient());
         }
     }
 }

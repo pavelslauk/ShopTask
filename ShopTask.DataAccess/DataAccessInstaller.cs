@@ -7,9 +7,8 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using ShopTask.DataAccess.Entities;
 using ShopTask.DataAccess.Repositories;
-using ShopTask.DataAccess;
 
-namespace ShopTask.DataAccess.Utils
+namespace ShopTask.DataAccess
 {
     public class DataAccessInstaller : IWindsorInstaller
     {

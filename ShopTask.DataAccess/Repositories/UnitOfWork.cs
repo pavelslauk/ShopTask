@@ -23,23 +23,5 @@ namespace ShopTask.DataAccess.Repositories
         {
             _dbContext.SaveChanges();
         }
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    _dbContext.Dispose();
-                }
-                _disposed = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
     }
 }
