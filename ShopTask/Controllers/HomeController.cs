@@ -27,15 +27,18 @@ namespace ShopTask.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(int? filterCategoryId)
         {
-            return View();
+            ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categories.GetAll());
+
+            return View(filterCategoryId);
         }
 
         [HttpGet]
         public ActionResult CreateProduct()
         {
             var productModel = new ProductModel { Categories = GetCategorySelectList(_categories) };
+            ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categories.GetAll());
 
             return View("ProductView", productModel);
         }
@@ -61,6 +64,7 @@ namespace ShopTask.Controllers
         {
             var product = Mapper.Map<Product, ProductModel>(_products.GetById(productId));
             product.Categories = GetCategorySelectList(_categories, product.CategoryId);
+            ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categories.GetAll());
 
             return View("ProductView", product);
         }
@@ -98,8 +102,18 @@ namespace ShopTask.Controllers
         }
 
         [HttpGet]
+        public ActionResult FilteredProductsPartial(int filterCategoryId)
+        {
+            var products = _products.Find(where: product => product.CategoryId == filterCategoryId, include: product => product.Category).ToList();
+
+            return PartialView("ProductsPartial", products);
+        }
+
+        [HttpGet]
         public ActionResult Categories()
         {
+            ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categories.GetAll());
+
             return View();
         }
 
@@ -108,6 +122,7 @@ namespace ShopTask.Controllers
         {
             var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(_categories.GetAll());
             categories.Add(new CategoryModel());
+
             return PartialView("CategoriesPartial", categories);
         }
 

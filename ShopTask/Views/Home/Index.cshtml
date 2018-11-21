@@ -1,5 +1,13 @@
-﻿@{
+﻿@model int?
+@{
     ViewBag.Title = "Inventory";
 }
 
-@Html.Action("ProductsPartial")
+@if (Model == null)
+{
+    @Html.Action("ProductsPartial")
+}
+else
+{
+    @Html.Action("FilteredProductsPartial", new { filterCategoryId = Model })
+}
