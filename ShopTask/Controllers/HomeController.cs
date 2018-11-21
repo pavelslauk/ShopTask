@@ -92,15 +92,7 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult ProductsPartial(int? filterCategoryId)
         {
-            var products = new List<Product>();
-            if (filterCategoryId == null)
-            {
-                products = _products.GetAll(include: product => product.Category).ToList();
-            }
-            else
-            {
-                products = _products.Find(where: product => product.CategoryId == filterCategoryId, include: product => product.Category).ToList();
-            }
+            var products = _products.Find(where: product => (filterCategoryId != null) ? product.CategoryId == filterCategoryId : true, include: product => product.Category).ToList();
 
             return PartialView(products);
         }
