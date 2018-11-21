@@ -29,8 +29,6 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult Index(int? filterCategoryId)
         {
-            ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categories.GetAll());
-
             return View(filterCategoryId);
         }
 
@@ -38,7 +36,6 @@ namespace ShopTask.Controllers
         public ActionResult CreateProduct()
         {
             var productModel = new ProductModel { Categories = GetCategorySelectList(_categories) };
-            ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categories.GetAll());
 
             return View("ProductView", productModel);
         }
@@ -64,7 +61,6 @@ namespace ShopTask.Controllers
         {
             var product = Mapper.Map<Product, ProductModel>(_products.GetById(productId));
             product.Categories = GetCategorySelectList(_categories, product.CategoryId);
-            ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categories.GetAll());
 
             return View("ProductView", product);
         }
@@ -94,26 +90,24 @@ namespace ShopTask.Controllers
         }
 
         [HttpGet]
-        public ActionResult ProductsPartial()
+        public ActionResult ProductsPartial(int? filterCategoryId)
         {
-            var products = _products.GetAll(include: product => product.Category).ToList();
+            var products = new List<Product>();
+            if (filterCategoryId == null)
+            {
+                products = _products.GetAll(include: product => product.Category).ToList();
+            }
+            else
+            {
+                products = _products.Find(where: product => product.CategoryId == filterCategoryId, include: product => product.Category).ToList();
+            }
 
             return PartialView(products);
         }
 
         [HttpGet]
-        public ActionResult FilteredProductsPartial(int filterCategoryId)
-        {
-            var products = _products.Find(where: product => product.CategoryId == filterCategoryId, include: product => product.Category).ToList();
-
-            return PartialView("ProductsPartial", products);
-        }
-
-        [HttpGet]
         public ActionResult Categories()
         {
-            ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categories.GetAll());
-
             return View();
         }
 
@@ -136,6 +130,14 @@ namespace ShopTask.Controllers
                 ModelState.AddModelError("UpdateFailed", "There is some error");
             }
             return CategoriesPartial();
+        }
+
+        protected override void OnActionExecuted(ActionExecutedContext actionContext)
+        {
+            if (actionContext.Result is ViewResult)
+            {
+                ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categories.GetAll());
+            }
         }
 
         private bool UpdateCategoriesInternal(Category[] categories)
@@ -214,5 +216,6 @@ namespace ShopTask.Controllers
             }
             return new SelectList(categories.GetAll().ToList(), "Id", "Name");
         }
+
     }
 }
