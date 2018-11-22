@@ -16,17 +16,22 @@ namespace ShopTask
             routes.MapRoute(
                 name: "Categories",
                 url: "Categories",
-                defaults: new { controller = "Home", action = "Categories" });
+                defaults: new { controller = "Categories", action = "Categories" });
 
             routes.MapRoute(
                 name: "CreateProduct",
                 url: "Product",
-                defaults: new { controller = "Home", action = "CreateProduct" });
+                defaults: new { controller = "Products", action = "CreateProduct" });
 
             routes.MapRoute(
                 name: "EditProduct",
                 url: "Product/{productId}",
-                defaults: new { controller = "Home", action = "EditProduct" });
+                defaults: new { controller = "Products", action = "EditProduct" });
+
+            routes.MapRoute(
+                name: "Products",
+                url: "",
+                defaults: new { controller = "Products", action = "Products" });
 
             routes.MapRoute(
                 name: "Default",
