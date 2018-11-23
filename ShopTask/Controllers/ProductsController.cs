@@ -14,8 +14,8 @@ namespace ShopTask.Controllers
 {
     public class ProductsController : BaseController
     {
-        IUnitOfWork _unitOfWork;
-        IRepository<Product> _productsRepository;
+        private IUnitOfWork _unitOfWork;
+        private IRepository<Product> _productsRepository;
 
         public ProductsController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository)
         {
