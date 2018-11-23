@@ -1,9 +1,15 @@
-﻿@model IEnumerable<ShopTask.DataAccess.Entities.Product>
+﻿@using ShopTask.DataAccess.Entities;
+@model IEnumerable<ShopTask.DataAccess.Entities.Product>
+
+@{
+    var category = ViewBag.FilterCategory as Category;
+    ViewBag.Title = category != null ? $"Inventory - {category.Name}" : "Inventory";
+}
 
 @if (Model.Any())
 {
     <table id="productTable" class="product-table"
-           data-delete-url="@Url.Action("DeleteProduct", "Home")">
+           data-delete-url="@Url.Action("DeleteProduct")">
         <tr>
             <td>
                 Title
@@ -20,7 +26,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td class="js-table-product-title"><a href="@Url.Action("EditProduct", "Home", new { productId = item.Id})" class="edit-link">@item.Title</a></td>
+                <td class="js-table-product-title"><a href="@Url.Action("EditProduct", new { productId = item.Id})" class="edit-link">@item.Title</a></td>
                 <td class="table-product-category">@item.Category.Name</td>
                 <td class="table-product-price">@item.Price</td>
                 <td class="table-product-delete">

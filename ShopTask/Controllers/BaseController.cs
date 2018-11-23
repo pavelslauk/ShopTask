@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using ShopTask.DataAccess.Entities;
+using ShopTask.DataAccess.Repositories;
+using ShopTask.Models;
+using AutoMapper;
+using System.Threading.Tasks;
+
+namespace ShopTask.Controllers
+{
+    public class BaseController : Controller
+    {
+        protected IRepository<Category> _categoriesRepository;
+
+        public BaseController(IRepository<Category> categoriesRepository)
+        {
+            _categoriesRepository = categoriesRepository;
+        }
+
+        protected override void OnActionExecuted(ActionExecutedContext actionContext)
+        {
+            if (actionContext.Result is ViewResult)
+            {
+                ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(Task.Run(async () => await _categoriesRepository.GetAll()).Result);
+            }
+        }
+    }
+}
