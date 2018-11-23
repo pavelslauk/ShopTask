@@ -1,4 +1,5 @@
-﻿@helper AddActivePageClass(string action)
+﻿@using ShopTask.Models;
+@helper AddActivePageClass(string action)
 {
     if(action == ViewContext.RouteData.GetRequiredString("action"))
     {
@@ -6,6 +7,9 @@
     }
 }
 
+@{ 
+    CategoryModel[] categories = ViewBag.Categories;
+}
 
 <!DOCTYPE html>
 <html>
@@ -25,9 +29,20 @@
 
     <div class="navbar">
         <div class="navbar-body">
-            <a href="@Url.Action("CreateProduct", "Home")" class="navbar-link @AddActivePageClass("CreateProduct")">New product</a>
-            <a href="@Url.Action("Index", "Home")" class="navbar-link @AddActivePageClass("Index")">Inventory</a>
-            <a href="@Url.Action("Categories", "Home")" class="navbar-link @AddActivePageClass("Categories")">Categories</a>
+            <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct")">New product</a>
+            <div class="inventory-link">
+                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Products")">Inventory</a>
+                @if (categories.Any())
+                {
+                    <ul class="categories-filter">
+                        @foreach (var category in categories)
+                        {
+                            <li class="category-filter-link"><a href="@Url.Action("Index", "Products", new { filterCategoryId = category.Id})">@category.Name</a></li>
+                        }
+                    </ul>
+                }
+            </div>
+            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Categories")">Categories</a>
         </div>
     </div>
 

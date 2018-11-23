@@ -183,8 +183,6 @@ td {
     width: 100px;
 }
 
-
-
 .category-table {
     margin-top: 25px;
 }
@@ -200,4 +198,56 @@ td {
 .update-validation-message {
     color: red;
     margin-bottom: 5px;
+}
+
+.inventory-link {
+    position: relative;
+    display: inline;
+    padding-top: inherit;
+    padding-bottom: inherit;
+}
+
+.categories-filter {
+    display: none;
+    position: absolute;
+    min-width: 70px;
+    left: 0;
+    background-color: #d9d9d9;
+    border: 1px solid #2a2a2a;
+    margin: 9px 0px 0px 0px;
+    padding: 0;
+    list-style: none;
+}
+
+.categories-filter:after {
+    display: block;
+    content: ' ';
+    clear: both;
+    float: none;
+}
+
+.category-filter-link {
+    display: block;
+}
+
+.category-filter-link > a {
+    font-size: 14px;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.category-filter-link > a:link,
+.category-filter-link > a:visited {
+    color: black;
+    text-decoration: none;
+}
+
+.category-filter-link > a:hover,
+.category-filter-link > a:active {
+    background-color: #5e5e5e;
+}
+
+.inventory-link:hover > .categories-filter {
+    display: block;
 }
