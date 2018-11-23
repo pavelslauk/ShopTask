@@ -1,6 +1,9 @@
-﻿@model IEnumerable<ShopTask.DataAccess.Entities.Product>
+﻿@using ShopTask.DataAccess.Entities;
+@model IEnumerable<ShopTask.DataAccess.Entities.Product>
+
 @{
-    ViewBag.Title = "Inventory" + ViewBag.FilterSubtitle;
+    var category = ViewBag.FilterCategory as Category;
+    ViewBag.Title = category != null ? $"Inventory - {category.Name}" : "Inventory";
 }
 
 @if (Model.Any())

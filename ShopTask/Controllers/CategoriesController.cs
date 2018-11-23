@@ -12,19 +12,19 @@ using AutoMapper;
 
 namespace ShopTask.Controllers
 {
-    public class CategoriesController : Controller
+    public class CategoriesController : ShopController
     {
         IUnitOfWork _unitOfWork;
         IRepository<Category> _categoriesRepository;
 
-        public CategoriesController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, IRepository<Product> productsRepository)
+        public CategoriesController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository) : base (categoriesRepository)
         {
             _unitOfWork = unitOfWork;
             _categoriesRepository = categoriesRepository;
         }
 
         [HttpGet]
-        public ActionResult Categories()
+        public ActionResult Index()
         {
             return View();
         }
@@ -50,21 +50,13 @@ namespace ShopTask.Controllers
             return CategoriesPartial();
         }
 
-        protected override void OnActionExecuted(ActionExecutedContext actionContext)
-        {
-            if (actionContext.Result is ViewResult)
-            {
-                ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categoriesRepository.GetAll());
-            }
-        }
-
         private bool UpdateCategoriesInternal(Category[] categories)
         {
             try
             {
                 foreach (var category in categories)
                 {
-                    AddOrUpdateCategory(category, _categoriesRepository);
+                    AddOrUpdateCategory(category);
                 }
                 _unitOfWork.Commit();
                 return true;
@@ -76,39 +68,24 @@ namespace ShopTask.Controllers
             }
         }
 
-        private void AddOrUpdateCategory(Category category, IRepository<Category> categories)
+        private void AddOrUpdateCategory(Category category)
         {
             if (category.Id == 0)
             {
-                AddNewCategory(category, categories);
+                if (!string.IsNullOrEmpty(category.Name))
+                {
+                    _categoriesRepository.Add(category);
+                }
             }
-            else
-            {
-                UpdateExistingCategory(category, categories);
-            }
+            else 
+            if (!string.IsNullOrEmpty(category.Name))
+                {
+                    _categoriesRepository.Update(category);
+                }
+                else
+                {
+                    _categoriesRepository.Delete(category);
+                }           
         }
-
-        private void UpdateExistingCategory(Category existingCategory, IRepository<Category> categories)
-        {
-
-            if (!string.IsNullOrEmpty(existingCategory.Name))
-            {
-                categories.Update(existingCategory);
-            }
-            else
-            {
-                categories.Delete(existingCategory);
-            }
-        }
-
-        private void AddNewCategory(Category newCategory, IRepository<Category> categories)
-        {
-
-            if (!string.IsNullOrEmpty(newCategory.Name))
-            {
-                categories.Add(newCategory);
-            }
-        }
-
     }
 }

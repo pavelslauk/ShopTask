@@ -31,18 +31,18 @@
         <div class="navbar-body">
             <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct")">New product</a>
             <div class="inventory-link">
-                <a href="@Url.Action("Products", "Products")" class="navbar-link @AddActivePageClass("Products")">Inventory</a>
+                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Products")">Inventory</a>
                 @if (categories.Any())
                 {
                     <ul class="categories-filter">
                         @foreach (var category in categories)
                         {
-                            <li class="category-filter-link"><a href="@Url.Action("Products", "Products", new { filterCategoryId = category.Id})">@category.Name</a></li>
+                            <li class="category-filter-link"><a href="@Url.Action("Index", "Products", new { filterCategoryId = category.Id})">@category.Name</a></li>
                         }
                     </ul>
                 }
             </div>
-            <a href="@Url.Action("Categories", "Categories")" class="navbar-link @AddActivePageClass("Categories")">Categories</a>
+            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Categories")">Categories</a>
         </div>
     </div>
 

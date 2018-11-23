@@ -173,6 +173,7 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -220,11 +221,12 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Products\ProductView.cshtml" />
     <Content Include="Views\Categories\CategoriesPartial.cshtml" />
-    <Content Include="Views\Categories\Categories.cshtml" />
-    <Content Include="Views\Products\Products.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Products\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Shop\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
