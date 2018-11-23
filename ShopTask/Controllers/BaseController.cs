@@ -10,11 +10,11 @@ using AutoMapper;
 
 namespace ShopTask.Controllers
 {
-    public class ShopController : Controller
+    public class BaseController : Controller
     {
-        IRepository<Category> _categoriesRepository;
+        protected IRepository<Category> _categoriesRepository;
 
-        public ShopController(IRepository<Category> categoriesRepository)
+        public BaseController(IRepository<Category> categoriesRepository)
         {
             _categoriesRepository = categoriesRepository;
         }

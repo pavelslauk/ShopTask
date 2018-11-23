@@ -12,15 +12,13 @@ using AutoMapper;
 
 namespace ShopTask.Controllers
 {
-    public class CategoriesController : ShopController
+    public class CategoriesController : BaseController
     {
         IUnitOfWork _unitOfWork;
-        IRepository<Category> _categoriesRepository;
 
         public CategoriesController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository) : base (categoriesRepository)
         {
             _unitOfWork = unitOfWork;
-            _categoriesRepository = categoriesRepository;
         }
 
         [HttpGet]
@@ -77,15 +75,14 @@ namespace ShopTask.Controllers
                     _categoriesRepository.Add(category);
                 }
             }
-            else 
-            if (!string.IsNullOrEmpty(category.Name))
-                {
-                    _categoriesRepository.Update(category);
-                }
-                else
-                {
-                    _categoriesRepository.Delete(category);
-                }           
+            else if (!string.IsNullOrEmpty(category.Name))
+            {
+                _categoriesRepository.Update(category);
+            }
+            else
+            {
+                _categoriesRepository.Delete(category);
+            }           
         }
     }
 }

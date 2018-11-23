@@ -12,16 +12,14 @@ using AutoMapper;
 
 namespace ShopTask.Controllers
 {
-    public class ProductsController : ShopController
+    public class ProductsController : BaseController
     {
         IUnitOfWork _unitOfWork;
-        IRepository<Category> _categoriesRepository;
         IRepository<Product> _productsRepository;
 
         public ProductsController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository)
         {
             _unitOfWork = unitOfWork;
-            _categoriesRepository = categoriesRepository;
             _productsRepository = productsRepository;
         }
 
@@ -37,7 +35,7 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CreateProduct()
         {
-            var productModel = new ProductModel { Categories = GetCategorySelectList(null) };
+            var productModel = new ProductModel { Categories = GetCategorySelectList() };
 
             return View("ProductView", productModel);
         }
@@ -107,7 +105,7 @@ namespace ShopTask.Controllers
             }
         }
 
-        private SelectList GetCategorySelectList(int? currentCategory)
+        private SelectList GetCategorySelectList(int? currentCategory = null)
         {
             return new SelectList(_categoriesRepository.GetAll().ToList(), "Id", "Name", currentCategory);
         }
