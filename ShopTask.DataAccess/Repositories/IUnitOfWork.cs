@@ -8,6 +8,6 @@ namespace ShopTask.DataAccess.Repositories
 {
     public interface IUnitOfWork
     {
-        void Commit();
+        Task<int> CommitAsync();
     }
 }

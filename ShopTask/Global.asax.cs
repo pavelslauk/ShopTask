@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using ShopTask.Core.Utils;
 using ShopTask.Utils;
 

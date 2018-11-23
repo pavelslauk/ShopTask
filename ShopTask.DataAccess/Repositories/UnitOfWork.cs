@@ -11,7 +11,6 @@ namespace ShopTask.DataAccess.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private ShopContext _dbContext;
-        private bool _disposed = false;
 
         public UnitOfWork(ShopContext context)
         {
@@ -19,9 +18,9 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext.Database.Log = transaction => Logger.Default.Info(transaction);
         }
 
-        public void Commit()
+        public async Task<int> CommitAsync()
         {
-            _dbContext.SaveChanges();
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

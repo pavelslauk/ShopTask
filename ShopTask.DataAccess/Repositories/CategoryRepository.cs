@@ -18,19 +18,19 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext = context;
         }
 
-        public IEnumerable<Category> GetAll(Expression<Func<Category, object>> include = null)
+        public async Task<IEnumerable<Category>> GetAllAsync(Expression<Func<Category, object>> include = null)
         {
-            return _dbContext.Categories;
+            return await _dbContext.Categories.ToListAsync();
         }
 
-        public Category GetById(int id)
+        public async Task<Category> GetByIdAsync(int id)
         {
-            return _dbContext.Categories.Find(id);
+            return await _dbContext.Categories.FindAsync(id);
         }
 
-        public IEnumerable<Category> Find(Expression<Func<Category, bool>> where, Expression<Func<Category, object>> include = null)
+        public async Task<IEnumerable<Category>> FindAsync(Expression<Func<Category, bool>> where, Expression<Func<Category, object>> include = null)
         {
-            return _dbContext.Categories.Where(where);
+            return await _dbContext.Categories.Where(where).ToListAsync();
         }
 
         public void Add(Category category)
