@@ -97,11 +97,13 @@ namespace ShopTask.Controllers
                 var product = new Product { Id = productId };
                 _productsRepository.Delete(product);
                 await _unitOfWork.CommitAsync();
+
                 return true;
             }
             catch (DbUpdateConcurrencyException e)
             {
                 Logger.Default.Warn(e);
+
                 return !(await _productsRepository.FindAsync(where: product => product.Id == productId, include: product => product.Category)).Any();
             }
         }

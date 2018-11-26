@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ShopTask.DataAccess.Repositories
 {
     public interface IUnitOfWork
-    {
+    { 
         Task<int> CommitAsync();
     }
 }

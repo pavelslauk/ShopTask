@@ -34,7 +34,7 @@ namespace ShopTask.Controllers
         {
             var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(AsyncContext.Run(async () => await _categoriesRepository.GetAllAsync()));
             categories.Add(new CategoryModel());
-            
+
             return PartialView("CategoriesPartial", categories);
         }
 
@@ -68,6 +68,7 @@ namespace ShopTask.Controllers
                     AddOrUpdateCategory(category);
                 }
                 await _unitOfWork.CommitAsync();
+
                 return true;
             }
             catch (DbUpdateConcurrencyException e)
