@@ -7,6 +7,8 @@ using ShopTask.DataAccess.Entities;
 using ShopTask.DataAccess.Repositories;
 using ShopTask.Models;
 using AutoMapper;
+using System.Threading.Tasks;
+using Nito.AsyncEx;
 
 namespace ShopTask.Controllers
 {
@@ -23,7 +25,7 @@ namespace ShopTask.Controllers
         {
             if (actionContext.Result is ViewResult)
             {
-                ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categoriesRepository.GetAll());
+                ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(AsyncContext.Run(async () => await _categoriesRepository.GetAllAsync()));
             }
         }
     }

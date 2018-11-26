@@ -9,6 +9,8 @@ using ShopTask.Core.Utils;
 using ShopTask.DataAccess.Entities;
 using ShopTask.DataAccess.Repositories;
 using AutoMapper;
+using System.Threading.Tasks;
+using Nito.AsyncEx;
 
 namespace ShopTask.Controllers
 {
@@ -30,25 +32,34 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CategoriesPartial()
         {
-            var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(_categoriesRepository.GetAll());
+            var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(AsyncContext.Run(async () => await _categoriesRepository.GetAllAsync()));
+            categories.Add(new CategoryModel());
+
+            return PartialView("CategoriesPartial", categories);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> CategoriesPartialAsync()
+        {
+            var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(await _categoriesRepository.GetAllAsync());
             categories.Add(new CategoryModel());
 
             return PartialView("CategoriesPartial", categories);
         }
 
         [HttpPost]
-        public ActionResult UpdateCategories(Category[] categories)
+        public async Task<ActionResult> UpdateCategories(Category[] categories)
         {
             ModelState.Clear();
-            var isUpdated = UpdateCategoriesInternal(categories);
+            var isUpdated = await UpdateCategoriesInternal(categories);
             if (!isUpdated)
             {
                 ModelState.AddModelError("UpdateFailed", "There is some error");
             }
-            return CategoriesPartial();
+            return await CategoriesPartialAsync();
         }
 
-        private bool UpdateCategoriesInternal(Category[] categories)
+        private async Task<bool> UpdateCategoriesInternal(Category[] categories)
         {
             try
             {
@@ -56,7 +67,8 @@ namespace ShopTask.Controllers
                 {
                     AddOrUpdateCategory(category);
                 }
-                _unitOfWork.Commit();
+                await _unitOfWork.CommitAsync();
+
                 return true;
             }
             catch (DbUpdateConcurrencyException e)
