@@ -29,9 +29,9 @@
 
     <div class="navbar">
         <div class="navbar-body">
-            <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct")">New product</a>
+            <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct")">@Resources.Resource.CreateProductTitle</a>
             <div class="inventory-link">
-                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Products")">Inventory</a>
+                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Products")">@Resources.Resource.ProductsTitle</a>
                 @if (categories.Any())
                 {
                     <ul class="categories-filter">
@@ -42,7 +42,14 @@
                     </ul>
                 }
             </div>
-            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Categories")">Categories</a>
+            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Categories")">@Resources.Resource.CategoriesTitle</a>
+
+            <select class="js-culture-select" data-change-culture-url="@Url.Action("ChangeCulture", "Base")">
+                <option disabled selected>@Resources.Resource.DefaultCultureSelect</option>
+                <option value="ru">Русский</option>
+                <option value="en">English</option>
+            </select>
+
         </div>
     </div>
 

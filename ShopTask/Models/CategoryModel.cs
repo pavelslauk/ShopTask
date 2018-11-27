@@ -10,7 +10,7 @@ namespace ShopTask.Models
     {
         public int? Id { get; set; }
 
-        [Display(Name = "Category")]
+        [Display(Name = "CategoryModelName", ResourceType = typeof(Resources.Resource))]
         public string Name { get; set; }
     }
 }

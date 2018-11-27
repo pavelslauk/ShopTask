@@ -74,7 +74,7 @@ namespace ShopTask.Controllers
             {
                 return View("ProductView");
             }
-
+            
             var product = Mapper.Map<ProductModel, Product>(productModel);
             _productsRepository.Update(product);
             _unitOfWork.CommitAsync();

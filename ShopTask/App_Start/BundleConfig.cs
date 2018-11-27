@@ -27,7 +27,8 @@ namespace ShopTask
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/index").Include(
-                       "~/Scripts/products.js"));
+                       "~/Scripts/products.js",
+                       "~/Scripts/layout.js"));
         }
     }
 }

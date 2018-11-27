@@ -3,7 +3,7 @@
 
 @{
     var category = ViewBag.FilterCategory as Category;
-    ViewBag.Title = category != null ? $"Inventory - {category.Name}" : "Inventory";
+    ViewBag.Title = category != null ? $"{Resources.Resource.ProductsTitle} - {category.Name}" : Resources.Resource.ProductsTitle;
 }
 
 @if (Model.Any())
@@ -12,13 +12,13 @@
            data-delete-url="@Url.Action("DeleteProduct")">
         <tr>
             <td>
-                Title
+                @Resources.Resource.ProductModelTitle
             </td>
             <td>
-                Category
+                @Resources.Resource.CategoryModelName
             </td>
             <td>
-                Price
+                @Resources.Resource.ProductModelPrice
             </td>
             <td></td>
         </tr>
@@ -30,11 +30,11 @@
                 <td class="table-product-category">@item.Category.Name</td>
                 <td class="table-product-price">@item.Price</td>
                 <td class="table-product-delete">
-                    <a href="#" class="js-delete-link" data-id="@item.Id">Delete</a>
+                    <a href="#" class="js-delete-link" data-id="@item.Id">@Resources.Resource.DeleteLink</a>
                 </td>
             </tr>
         }
     </table>
 }
 
-<p class="@(Model.Any() ? "hidden " : "")js-empty-table-placeholder">No table</p>
+    <p class="@(Model.Any() ? "hidden " : "")js-empty-table-placeholder">@Resources.Resource.EmptyTablePlaceholder</p>

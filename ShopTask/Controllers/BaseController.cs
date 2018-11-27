@@ -21,12 +21,38 @@ namespace ShopTask.Controllers
             _categoriesRepository = categoriesRepository;
         }
 
+        [HttpGet]
+        public ActionResult ChangeCulture(string culture)
+        {
+            Response.Cookies.Add(GetCookie(culture));
+
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
+        }      
+
         protected override void OnActionExecuted(ActionExecutedContext actionContext)
         {
             if (actionContext.Result is ViewResult)
             {
                 ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(AsyncContext.Run(async () => await _categoriesRepository.GetAllAsync()));
             }
+        }
+
+        private HttpCookie GetCookie(string culture)
+        {
+            var cookie = Request.Cookies["lang"];
+            if (cookie != null)
+            {
+                cookie.Value = culture;
+            }
+            else
+            {
+                cookie = new HttpCookie("lang");
+                cookie.HttpOnly = false;
+                cookie.Value = culture;
+                cookie.Expires = DateTime.Now.AddYears(1);
+            }
+
+            return cookie;
         }
     }
 }

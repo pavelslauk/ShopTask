@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using ShopTask.Filters;
 
 namespace ShopTask
 {
@@ -8,6 +9,7 @@ namespace ShopTask
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new CultureAttribute());
         }
     }
 }

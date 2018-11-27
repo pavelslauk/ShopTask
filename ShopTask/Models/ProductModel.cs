@@ -12,14 +12,16 @@ namespace ShopTask.Models
         public int? Id { get; set; }
 
         [Required]
-        [Display(Name = "Title")]
+        [Display(Name = "ProductModelTitle", ResourceType = typeof(Resources.Resource))]
         public string Title { get; set; }
 
-        [Display(Name = "Price")]
-        [RegularExpression(@"(^[1-9][0-9]*(\.[0-9]*)?)|(^0\.(([0-9]*)?[1-9]([0-9]*)?))$", ErrorMessage = "Incorrect value")]
+        [Display(Name = "ProductModelPrice", ResourceType = typeof(Resources.Resource))]
+        [RegularExpression(@"(^[1-9][0-9]*(\.[0-9]*)?)|(^0\.(([0-9]*)?[1-9]([0-9]*)?))$", 
+            ErrorMessageResourceType = typeof(Resources.Resource), 
+            ErrorMessageResourceName = "IncorrectProductPrice")]
         public decimal Price { get; set; }
 
-        [Display(Name = "Description")]
+        [Display(Name = "ProductModelDescription", ResourceType = typeof(Resources.Resource))]
         public string Description { get; set; }
 
         public int CategoryId { get; set; }
