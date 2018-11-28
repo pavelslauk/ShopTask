@@ -1,13 +1,16 @@
 ﻿@using ShopTask.Models;
+@using ShopTask.Resources;
+@using System.Globalization;
+@using ShopTask.Utils;
 @helper AddActivePageClass(string action)
 {
-    if(action == ViewContext.RouteData.GetRequiredString("action"))
+    if (action == ViewContext.RouteData.GetRequiredString("action"))
     {
         @("active-page-link")
     }
 }
 
-@{ 
+@{
     CategoryModel[] categories = ViewBag.Categories;
 }
 
@@ -29,9 +32,9 @@
 
     <div class="navbar">
         <div class="navbar-body">
-            <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct")">@Resources.Resource.CreateProductTitle</a>
+            <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct")">@Res.CreateProductTitle</a>
             <div class="inventory-link">
-                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Products")">@Resources.Resource.ProductsTitle</a>
+                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Products")">@Res.ProductsTitle</a>
                 @if (categories.Any())
                 {
                     <ul class="categories-filter">
@@ -42,12 +45,14 @@
                     </ul>
                 }
             </div>
-            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Categories")">@Resources.Resource.CategoriesTitle</a>
+            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Categories")">@Res.CategoriesTitle</a>
 
             <select class="js-culture-select" data-change-culture-url="@Url.Action("ChangeCulture", "Base")">
-                <option disabled selected>@Resources.Resource.DefaultCultureSelect</option>
-                <option value="ru">Русский</option>
-                <option value="en">English</option>
+                <option disabled selected>@Res.DefaultCultureSelect</option>
+                @foreach (var culture in Locals.cultures)
+                {
+                    <option value="@culture">@CultureInfo.GetCultureInfo(culture).NativeName</option>
+                }
             </select>
 
         </div>

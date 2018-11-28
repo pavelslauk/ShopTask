@@ -1,9 +1,10 @@
 ﻿@using ShopTask.DataAccess.Entities;
+@using ShopTask.Resources;
 @model IEnumerable<ShopTask.DataAccess.Entities.Product>
 
 @{
     var category = ViewBag.FilterCategory as Category;
-    ViewBag.Title = category != null ? $"{Resources.Resource.ProductsTitle} - {category.Name}" : Resources.Resource.ProductsTitle;
+    ViewBag.Title = category != null ? $"{Res.ProductsTitle} - {category.Name}" : Res.ProductsTitle;
 }
 
 @if (Model.Any())
@@ -12,13 +13,13 @@
            data-delete-url="@Url.Action("DeleteProduct")">
         <tr>
             <td>
-                @Resources.Resource.ProductModelTitle
+                @Res.ProductModelTitle
             </td>
             <td>
-                @Resources.Resource.CategoryModelName
+                @Res.CategoryModelName
             </td>
             <td>
-                @Resources.Resource.ProductModelPrice
+                @Res.ProductModelPrice
             </td>
             <td></td>
         </tr>
@@ -30,11 +31,11 @@
                 <td class="table-product-category">@item.Category.Name</td>
                 <td class="table-product-price">@item.Price</td>
                 <td class="table-product-delete">
-                    <a href="#" class="js-delete-link" data-id="@item.Id">@Resources.Resource.DeleteLink</a>
+                    <a href="#" class="js-delete-link" data-id="@item.Id">@Res.DeleteLink</a>
                 </td>
             </tr>
         }
     </table>
 }
 
-    <p class="@(Model.Any() ? "hidden " : "")js-empty-table-placeholder">@Resources.Resource.EmptyTablePlaceholder</p>
+    <p class="@(Model.Any() ? "hidden " : "")js-empty-table-placeholder">@Res.EmptyTablePlaceholder</p>

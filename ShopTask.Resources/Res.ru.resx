@@ -118,48 +118,51 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CategoriesTitle" xml:space="preserve">
-    <value>Categories</value>
+    <value>Категории</value>
   </data>
   <data name="CategoryModelName" xml:space="preserve">
-    <value>Category</value>
+    <value>Категория</value>
   </data>
   <data name="CreateProductHeader" xml:space="preserve">
-    <value>Create new detail</value>
+    <value>Создать новую деталь</value>
   </data>
   <data name="CreateProductTitle" xml:space="preserve">
-    <value>New detail</value>
+    <value>Создать деталь</value>
   </data>
   <data name="DefaultCultureSelect" xml:space="preserve">
-    <value>Language</value>
+    <value>Язык</value>
   </data>
   <data name="DeleteLink" xml:space="preserve">
-    <value>Delete</value>
+    <value>Удалить</value>
   </data>
   <data name="EditProductTitle" xml:space="preserve">
-    <value>Edit detail</value>
+    <value>Редактировать деталь</value>
+  </data>
+  <data name="EmptyProductTitle" xml:space="preserve">
+    <value>Необходимо поле Название </value>
   </data>
   <data name="EmptyTablePlaceholder" xml:space="preserve">
-    <value>No details</value>
+    <value>Нет ни одной детали</value>
   </data>
   <data name="FormSaveButton" xml:space="preserve">
-    <value>Save</value>
+    <value>Сохранить</value>
   </data>
   <data name="IncorrectProductPrice" xml:space="preserve">
-    <value>Incorrect Value</value>
+    <value>Неверное значение</value>
   </data>
   <data name="NewCategoryInputPlaceholder" xml:space="preserve">
-    <value>New Category</value>
+    <value>Новая категория</value>
   </data>
   <data name="ProductModelDescription" xml:space="preserve">
-    <value>Description</value>
+    <value>Описание</value>
   </data>
   <data name="ProductModelPrice" xml:space="preserve">
-    <value>Price</value>
+    <value>Цена</value>
   </data>
   <data name="ProductModelTitle" xml:space="preserve">
-    <value>Title</value>
+    <value>Название</value>
   </data>
   <data name="ProductsTitle" xml:space="preserve">
-    <value>Inventory</value>
+    <value>Инвентарь</value>
   </data>
 </root>

@@ -43,7 +43,7 @@ namespace ShopTask.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateProduct(ProductModel productModel)
+        public async Task<ActionResult> CreateProduct(ProductModel productModel)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +52,7 @@ namespace ShopTask.Controllers
 
             var product = Mapper.Map<ProductModel, Product>(productModel);
             _productsRepository.Add(product);
-            _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync();
 
             return RedirectToAction("Index");
         }
@@ -68,7 +68,7 @@ namespace ShopTask.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProduct(ProductModel productModel)
+        public async Task<ActionResult> EditProduct(ProductModel productModel)
         {
             if (!ModelState.IsValid)
             {
@@ -77,7 +77,7 @@ namespace ShopTask.Controllers
             
             var product = Mapper.Map<ProductModel, Product>(productModel);
             _productsRepository.Update(product);
-            _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync();
 
             return RedirectToAction("Index");
         }

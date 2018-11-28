@@ -9,6 +9,7 @@ using ShopTask.Models;
 using AutoMapper;
 using System.Threading.Tasks;
 using Nito.AsyncEx;
+using ShopTask.Utils;
 
 namespace ShopTask.Controllers
 {
@@ -21,10 +22,10 @@ namespace ShopTask.Controllers
             _categoriesRepository = categoriesRepository;
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult ChangeCulture(string culture)
         {
-            Response.Cookies.Add(GetCookie(culture));
+            Response.Cookies.Add(CreateCookie(culture));
 
             return Redirect(Request.UrlReferrer.AbsoluteUri);
         }      
@@ -37,20 +38,12 @@ namespace ShopTask.Controllers
             }
         }
 
-        private HttpCookie GetCookie(string culture)
+        private HttpCookie CreateCookie(string culture)
         {
-            var cookie = Request.Cookies["lang"];
-            if (cookie != null)
-            {
-                cookie.Value = culture;
-            }
-            else
-            {
-                cookie = new HttpCookie("lang");
-                cookie.HttpOnly = false;
-                cookie.Value = culture;
-                cookie.Expires = DateTime.Now.AddYears(1);
-            }
+            var cookie = new HttpCookie(CookieKeys.cultureCookie);
+            cookie.HttpOnly = false;
+            cookie.Value = culture;
+            cookie.Expires = DateTime.Now.AddYears(1);
 
             return cookie;
         }

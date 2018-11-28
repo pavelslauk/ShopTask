@@ -1,17 +1,18 @@
 ﻿@using ShopTask.Models
+@using ShopTask.Resources;
 @model ProductModel
 
 @{
     string header;
     if (Model.Id != null)
     {
-        ViewBag.Title = Resources.Resource.EditProductTitle;
-        header = $"{Resources.Resource.EditProductTitle} {Model.Title}";
+        ViewBag.Title = Res.EditProductTitle;
+        header = $"{Res.EditProductTitle} {Model.Title}";
     }
     else
     {
-        ViewBag.Title = Resources.Resource.CreateProductTitle;
-        header = Resources.Resource.CreateProductHeader;
+        ViewBag.Title = Res.CreateProductTitle;
+        header = Res.CreateProductHeader;
     }
 }
 
@@ -35,7 +36,7 @@
 
             @Html.LabelFor(model => model.Category.Name, new { @class = "product-form-col1" })
             <div class="product-form-col2">
-                @Html.DropDownListFor(model => model.CategoryId, Model.Categories, new { @class = "product-dropdownlist"})
+                @Html.DropDownListFor(model => model.CategoryId, Model.Categories, new { @class = "product-dropdownlist" })
             </div>
 
             <div class="product-form-col2">
@@ -52,7 +53,7 @@
             </div>
 
             <div class="product-form-col2">
-                <input type="submit" class="form-save-button" value="@Resources.Resource.FormSaveButton" />
+                <input type="submit" class="form-save-button" value="@Res.FormSaveButton" />
             </div>
         </div>
     }
