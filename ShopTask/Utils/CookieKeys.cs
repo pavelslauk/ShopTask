@@ -7,6 +7,6 @@ namespace ShopTask.Utils
 {
     public class CookieKeys
     {
-        public static string cultureCookie = "lang"; 
+        public const string CultureCookie = "lang"; 
     }
 }

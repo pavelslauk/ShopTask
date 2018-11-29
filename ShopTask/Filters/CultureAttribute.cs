@@ -18,8 +18,8 @@ namespace ShopTask.Filters
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            HttpCookie cultureCookie = filterContext.HttpContext.Request.Cookies[CookieKeys.cultureCookie];
-            if (cultureCookie != null && Locals.cultures.Contains(cultureCookie.Value))
+            HttpCookie cultureCookie = filterContext.HttpContext.Request.Cookies[CookieKeys.CultureCookie];
+            if (cultureCookie != null && LocalizationConfig.SupportedCultures.Contains(cultureCookie.Value))
             {
                 Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(cultureCookie.Value);
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(cultureCookie.Value);

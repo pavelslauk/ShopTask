@@ -205,7 +205,7 @@
     <Compile Include="Utils\CastleWindsor\ApplicationInstaller.cs" />
     <Compile Include="Utils\CastleWindsor\CastleControllerFactory.cs" />
     <Compile Include="Utils\CookieKeys.cs" />
-    <Compile Include="Utils\Locals.cs" />
+    <Compile Include="Utils\LocalizationConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
@@ -272,6 +272,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

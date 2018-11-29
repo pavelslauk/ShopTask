@@ -41,6 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CulturesTitlesRes.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CulturesTitlesRes.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Res.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -54,6 +59,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CulturesTitlesRes.resx">
+      <CustomToolNamespace>ShopTask.Resources</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CulturesTitlesRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Res.resx">
       <CustomToolNamespace>ShopTask.Resources</CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -2,11 +2,11 @@
 @using ShopTask.Resources;
 @using System.Globalization;
 @using ShopTask.Utils;
-@helper AddActivePageClass(string action)
+@helper AddActivePageClass(string action, string controller)
 {
-    if (action == ViewContext.RouteData.GetRequiredString("action"))
+    if (action == ViewContext.RouteData.GetRequiredString("action") && (controller == ViewContext.RouteData.GetRequiredString("controller")))
     {
-        @("active-page-link")
+        @:active-page-link
     }
 }
 
@@ -32,9 +32,9 @@
 
     <div class="navbar">
         <div class="navbar-body">
-            <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct")">@Res.CreateProductTitle</a>
+            <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct", "Products")">@Res.CreateProductTitle</a>
             <div class="inventory-link">
-                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Products")">@Res.ProductsTitle</a>
+                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Index", "Products")">@Res.ProductsTitle</a>
                 @if (categories.Any())
                 {
                     <ul class="categories-filter">
@@ -45,13 +45,13 @@
                     </ul>
                 }
             </div>
-            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Categories")">@Res.CategoriesTitle</a>
+            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Index", "Categories")">@Res.CategoriesTitle</a>
 
             <select class="js-culture-select" data-change-culture-url="@Url.Action("ChangeCulture", "Base")">
                 <option disabled selected>@Res.DefaultCultureSelect</option>
-                @foreach (var culture in Locals.cultures)
+                @foreach (var culture in LocalizationConfig.SupportedCultures)
                 {
-                    <option value="@culture">@CultureInfo.GetCultureInfo(culture).NativeName</option>
+                    <option value="@culture">@CulturesTitlesRes.ResourceManager.GetString(culture)</option>
                 }
             </select>
 

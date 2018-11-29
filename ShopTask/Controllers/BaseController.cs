@@ -40,7 +40,7 @@ namespace ShopTask.Controllers
 
         private HttpCookie CreateCookie(string culture)
         {
-            var cookie = new HttpCookie(CookieKeys.cultureCookie);
+            var cookie = new HttpCookie(CookieKeys.CultureCookie);
             cookie.HttpOnly = false;
             cookie.Value = culture;
             cookie.Expires = DateTime.Now.AddYears(1);
