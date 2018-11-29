@@ -8,8 +8,6 @@ namespace ShopTask.Utils
 {
     public class LocalizationConfig
     {
-        public static readonly HashSet<string> SupportedCultures = new HashSet<string>(ConfigurationManager.AppSettings.AllKeys
-                             .Where(key => key.StartsWith("SupportedCulture"))
-                             .Select(key => ConfigurationManager.AppSettings[key]));      
+        public static readonly HashSet<string> SupportedCultures = new HashSet<string>(ConfigurationManager.AppSettings.Get("SupportedCultures").Split(','));      
     }
 }

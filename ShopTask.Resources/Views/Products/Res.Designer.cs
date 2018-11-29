@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ShopTask.Resources {
+namespace ShopTask.Resources.Products {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ShopTask.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ShopTask.Resources.Res", typeof(Res).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ShopTask.Resources.Views.Products.Res", typeof(Res).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,15 +57,6 @@ namespace ShopTask.Resources {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Categories.
-        /// </summary>
-        public static string CategoriesTitle {
-            get {
-                return ResourceManager.GetString("CategoriesTitle", resourceCulture);
             }
         }
         
@@ -93,15 +84,6 @@ namespace ShopTask.Resources {
         public static string CreateProductTitle {
             get {
                 return ResourceManager.GetString("CreateProductTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Language.
-        /// </summary>
-        public static string DefaultCultureSelect {
-            get {
-                return ResourceManager.GetString("DefaultCultureSelect", resourceCulture);
             }
         }
         
@@ -156,15 +138,6 @@ namespace ShopTask.Resources {
         public static string IncorrectProductPrice {
             get {
                 return ResourceManager.GetString("IncorrectProductPrice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New Category.
-        /// </summary>
-        public static string NewCategoryInputPlaceholder {
-            get {
-                return ResourceManager.GetString("NewCategoryInputPlaceholder", resourceCulture);
             }
         }
         
