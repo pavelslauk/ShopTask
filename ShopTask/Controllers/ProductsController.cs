@@ -27,8 +27,10 @@ namespace ShopTask.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(int? filterCategoryId)
         {
-            var products = (await _productsRepository.FindAsync(where: product => !filterCategoryId.HasValue || product.CategoryId == filterCategoryId, include: product => product.Category)).ToList();
-            ViewBag.FilterCategory = (await _categoriesRepository.FindAsync(where: category => category.Id == filterCategoryId)).FirstOrDefault();
+            var products = (await _productsRepository.FindAsync(where: product => !filterCategoryId.HasValue || product.CategoryId == filterCategoryId, include: product => product.Category))
+                .ToList();
+            ViewBag.FilterCategory = (await _categoriesRepository.FindAsync(where: category => category.Id == filterCategoryId))
+                .FirstOrDefault();
 
             return View(products);
         }
@@ -36,7 +38,7 @@ namespace ShopTask.Controllers
         [HttpGet]
         public async Task<ActionResult> CreateProduct()
         {
-            var productModel = new ProductModel { Categories = await GetCategorySelectList() };
+            var productModel = new ProductModel { Categories = await GetCategorySelectListAsync() };
 
             return View("ProductView", productModel);
         }
@@ -60,7 +62,7 @@ namespace ShopTask.Controllers
         public async Task<ActionResult> EditProduct(int productId)
         {
             var product = Mapper.Map<Product, ProductModel>(await _productsRepository.GetByIdAsync(productId));
-            product.Categories = await GetCategorySelectList(product.CategoryId);
+            product.Categories = await GetCategorySelectListAsync(product.CategoryId);
 
             return View("ProductView", product);
         }
@@ -107,7 +109,7 @@ namespace ShopTask.Controllers
             }
         }
 
-        private async Task<SelectList> GetCategorySelectList(int? currentCategory = null)
+        private async Task<SelectList> GetCategorySelectListAsync(int? currentCategory = null)
         {
             return new SelectList(await _categoriesRepository.GetAllAsync(), "Id", "Name", currentCategory);
         }

@@ -23,18 +23,17 @@ namespace ShopTask.Controllers
         }
 
         [HttpPost]
-        public ActionResult ChangeCulture(string culture)
+        public void ChangeCulture(string culture)
         {
             Response.Cookies.Add(CreateCookie(culture));
-
-            return Redirect(Request.UrlReferrer.AbsoluteUri);
         }      
 
         protected override void OnActionExecuted(ActionExecutedContext actionContext)
         {
             if (actionContext.Result is ViewResult)
             {
-                ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(AsyncContext.Run(async () => await _categoriesRepository.GetAllAsync()));
+                ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(AsyncContext
+                    .Run(async () => await _categoriesRepository.GetAllAsync()));
             }
         }
 
