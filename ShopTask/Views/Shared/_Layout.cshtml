@@ -1,13 +1,17 @@
 ﻿@using ShopTask.Models;
-@helper AddActivePageClass(string action)
+@using ShopTask.Resources;
+@using ShopTask.Resources.Shared;
+@using System.Globalization;
+@using ShopTask.Utils;
+@helper AddActivePageClass(string action, string controller)
 {
-    if(action == ViewContext.RouteData.GetRequiredString("action"))
+    if (action == ViewContext.RouteData.GetRequiredString("action") && (controller == ViewContext.RouteData.GetRequiredString("controller")))
     {
-        @("active-page-link")
+        @:active-page-link
     }
 }
 
-@{ 
+@{
     CategoryModel[] categories = ViewBag.Categories;
 }
 
@@ -22,16 +26,15 @@
 </head>
 <body>
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+    @Scripts.Render("~/scripts/libs/jquery.unobtrusive-ajax.js")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/index")
 
     <div class="navbar">
         <div class="navbar-body">
-            <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct")">New product</a>
+            <a href="@Url.Action("CreateProduct", "Products")" class="navbar-link @AddActivePageClass("CreateProduct", "Products")">@Res.CreateProductTitle</a>
             <div class="inventory-link">
-                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Products")">Inventory</a>
+                <a href="@Url.Action("Index", "Products")" class="navbar-link @AddActivePageClass("Index", "Products")">@Res.ProductsTitle</a>
                 @if (categories.Any())
                 {
                     <ul class="categories-filter">
@@ -42,7 +45,16 @@
                     </ul>
                 }
             </div>
-            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Categories")">Categories</a>
+            <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Index", "Categories")">@Res.CategoriesTitle</a>
+
+            <select class="js-culture-select" data-change-culture-url="@Url.Action("ChangeCulture", "Base")">
+                <option disabled selected>@Res.DefaultCultureSelect</option>
+                @foreach (var culture in LocalizationConfig.SupportedCultures)
+                {
+                    <option value="@culture">@CulturesTitlesRes.ResourceManager.GetString(culture)</option>
+                }
+            </select>
+
         </div>
     </div>
 

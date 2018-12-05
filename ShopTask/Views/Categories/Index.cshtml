@@ -1,15 +1,16 @@
-﻿@{
-    ViewBag.Title = "Categories";
+﻿@using ShopTask.Resources.Categories;
+@{
+    ViewBag.Title = Res.CategoriesTitle;
 }
 
 <div class="category-form">
     <div class="form-header">
-        <p class="form-header-text">Categories</p>
+        <p class="form-header-text">@Res.CategoriesTitle</p>
     </div>
     <div class="category-form-body">
         @using (Ajax.BeginForm("UpdateCategories", new AjaxOptions { UpdateTargetId = "categories" }))
         {
-            <input type="submit" class="form-save-button" value="Save" />
+            <input type="submit" class="form-save-button" value="@Res.FormSaveButton" />
 
             <div id="categories" class="category-table">
                 @Html.Action("CategoriesPartial")
