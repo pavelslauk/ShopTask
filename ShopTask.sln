@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopTask.DataAccess", "Shop
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopTask.Core", "ShopTask.Core\ShopTask.Core.csproj", "{1FDE4069-DB16-4620-8E4E-E5E59A6398CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopTask.Resources", "ShopTask.Resources\ShopTask.Resources.csproj", "{0E1FAEA2-D0A7-46F4-A8FF-AD401B397176}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1FDE4069-DB16-4620-8E4E-E5E59A6398CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FDE4069-DB16-4620-8E4E-E5E59A6398CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FDE4069-DB16-4620-8E4E-E5E59A6398CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E1FAEA2-D0A7-46F4-A8FF-AD401B397176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E1FAEA2-D0A7-46F4-A8FF-AD401B397176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E1FAEA2-D0A7-46F4-A8FF-AD401B397176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E1FAEA2-D0A7-46F4-A8FF-AD401B397176}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,9 +18,9 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext.Database.Log = transaction => Logger.Default.Info(transaction);
         }
 
-        public async Task<int> CommitAsync()
+        public async Task CommitAsync()
         {
-            return await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ShopTask.DataAccess.Entities
         [Required]
         public string Title { get; set; }
 
-        [RegularExpression(@"(^[1-9][0-9]*(\.[0-9]*)?)|(^0\.(([0-9]*)?[1-9]([0-9]*)?))$", ErrorMessage = "Incorrect value")]
+        [RegularExpression(@"(^[1-9][0-9]*(((\.)|(\,))[0-9]*)?)|(^0((\.)|(\,))(([0-9]*)?[1-9]([0-9]*)?))$")]
         public decimal Price { get; set; }
 
         public string Description { get; set; }

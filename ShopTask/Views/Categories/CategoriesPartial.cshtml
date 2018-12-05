@@ -1,14 +1,15 @@
-﻿@model List<ShopTask.Models.CategoryModel>
+﻿@using ShopTask.Resources.Categories;
+@model List<ShopTask.Models.CategoryModel>
 
-@{ 
+@{
     int newCategoryIndex = Model.IndexOf(Model.Single(category => category.Id == null));
 }
 
 <div class="update-validation-message">@Html.ValidationMessage("UpdateFailed")</div>
 
-@Html.TextBoxFor(model => Model[newCategoryIndex].Name, new { @class = "new-category-input", placeholder = "New Category" })
+@Html.TextBoxFor(model => Model[newCategoryIndex].Name, new { @class = "new-category-input", placeholder = Res.NewCategoryInputPlaceholder })
 
-@for (int i =0; i < Model.Count(); i++)
+@for (int i = 0; i < Model.Count(); i++)
 {
     if (Model[i].Id != null)
     {

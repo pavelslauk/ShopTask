@@ -191,41 +191,55 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Filters\CultureAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CategoryModel.cs" />
+    <Compile Include="Models\JSONProductModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\AutoMapperConfig.cs" />
     <Compile Include="Utils\CastleWindsorInitializer.cs" />
     <Compile Include="Utils\CastleWindsor\ApplicationInstaller.cs" />
     <Compile Include="Utils\CastleWindsor\CastleControllerFactory.cs" />
+    <Compile Include="Utils\CookieKeys.cs" />
+    <Compile Include="Utils\LocalizationConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
+    <Content Include="Frontend\Build\orders.js" />
+    <Content Include="Frontend\gulpfile.js" />
+    <Content Include="Frontend\js\Models\product.js" />
+    <Content Include="Frontend\js\orders.js" />
+    <Content Include="Frontend\js\ViewModels\cart.js" />
+    <Content Include="Frontend\js\ViewModels\productsList.js" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.3.1.js" />
-    <Content Include="Scripts\jquery-3.3.1.min.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.placeholder.js" />
-    <Content Include="Scripts\jquery.placeholder.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <None Include="Scripts\Libs\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\Libs\knockout-3.4.2.debug.js" />
+    <Content Include="Scripts\Libs\knockout-3.4.2.js" />
+    <Content Include="Scripts\Libs\jquery-3.3.1.js" />
+    <Content Include="Scripts\Libs\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\Libs\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\Libs\jquery-3.3.1.slim.min.js" />
+    <None Include="Scripts\Libs\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\Libs\jquery.placeholder.js" />
+    <Content Include="Scripts\Libs\jquery.placeholder.min.js" />
+    <Content Include="Scripts\Libs\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\Libs\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\Libs\jquery.validate.js" />
+    <Content Include="Scripts\Libs\jquery.validate.min.js" />
+    <Content Include="Scripts\Libs\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\Libs\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\layout.js" />
+    <Content Include="Scripts\Libs\modernizr-2.8.3.js" />
     <Content Include="Scripts\products.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -242,15 +256,15 @@
     <Content Include="Views\Categories\CategoriesPartial.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\Products\Index.cshtml" />
+    <Content Include="Views\Orders\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Shop\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Scripts\Libs\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\Libs\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShopTask.Core\ShopTask.Core.csproj">
@@ -261,10 +275,17 @@
       <Project>{0472960F-81AB-487E-90D3-285777766D73}</Project>
       <Name>ShopTask.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShopTask.Resources\ShopTask.Resources.csproj">
+      <Project>{0e1faea2-d0a7-46f4-a8ff-ad401b397176}</Project>
+      <Name>ShopTask.Resources</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
