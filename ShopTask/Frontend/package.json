@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "github:gulpjs/gulp#v4.0.0-alpha.3",
+    "gulp-uglify": "^3.0.1",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^5.2.1"
   }

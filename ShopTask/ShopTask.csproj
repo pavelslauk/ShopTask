@@ -199,7 +199,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CategoryModel.cs" />
-    <Compile Include="Models\JSONProductModel.cs" />
+    <Compile Include="Models\ProductOrderModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\AutoMapperConfig.cs" />
@@ -211,12 +211,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
-    <Content Include="Frontend\Build\orders.js" />
+    <Content Include="Frontend\build\orders.js" />
+    <Content Include="Frontend\build\orders.min.js" />
     <Content Include="Frontend\gulpfile.js" />
-    <Content Include="Frontend\js\Models\product.js" />
+    <Content Include="Frontend\js\orders\cart-view-model.js" />
+    <Content Include="Frontend\js\orders\product-model.js" />
+    <Content Include="Frontend\js\orders\products-list-view-model.js" />
     <Content Include="Frontend\js\orders.js" />
-    <Content Include="Frontend\js\ViewModels\cart.js" />
-    <Content Include="Frontend\js\ViewModels\productsList.js" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="ApplicationInsights.config">

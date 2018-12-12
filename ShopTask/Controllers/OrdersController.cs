@@ -15,7 +15,7 @@ namespace ShopTask.Controllers
     {
         private IRepository<Product> _productsRepository;
 
-        public OrdersController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository)
+        public OrdersController(IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository)
         {
             _productsRepository = productsRepository;
         }
@@ -29,7 +29,7 @@ namespace ShopTask.Controllers
         [HttpGet]
         public async Task<JsonResult> GetProductsAsync()
         {
-            var products = Mapper.Map<Product[], JSONProductModel[]>((await _productsRepository
+            var products = Mapper.Map<Product[], ProductOrderModel[]>((await _productsRepository
                 .GetAllAsync(include: product => product.Category)).ToArray());
             return Json(products, JsonRequestBehavior.AllowGet);
         }
