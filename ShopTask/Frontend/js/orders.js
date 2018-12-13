@@ -4,7 +4,8 @@
 };
 
 var ProductsList = require('./orders/products-list-view-model');
-var productsList = new ProductsList()
+var Cart = require('./orders/cart-view-model');
+var cart = new Cart();
 
-ko.applyBindings(productsList, $(selectors.productsListBody)[0]);
-ko.applyBindings(productsList.cart, $(selectors.cartBody)[0]);
+ko.applyBindings(cart, $(selectors.cartBody)[0]);
+ko.applyBindings(new ProductsList(cart), $(selectors.productsListBody)[0]);

@@ -15,7 +15,7 @@ namespace ShopTask
                         "~/Scripts/Libs/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-                        "~/Scripts/Libs/knockout*"));
+                        "~/Scripts/Libs/knockout-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/orders").Include(
                         "~/Frontend/build/orders*"));

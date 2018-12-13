@@ -2,9 +2,8 @@
 var Cart = require('./cart-view-model');
 getProductsUrl = $('.js-order-products-body').attr('data-products-url');
 
-module.exports = function () {
+module.exports = function (cart) {
     var self = this;
-    self.cart = new Cart();
     self.productsList = ko.observableArray([]);
 
     $.getJSON(getProductsUrl, function (allData) {
@@ -13,6 +12,6 @@ module.exports = function () {
     });
 
     self.addToCart = function (product) {
-        self.cart.addToCart(product);
+        cart.addToCart(product);
     };
 };

@@ -81,73 +81,11 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(1);
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-﻿var selectors = {
-    cartBody: '.js-cart-body',
-    productsListBody: '.js-order-products-body'
-};
-
-var ProductsList = __webpack_require__(2);
-var productsList = new ProductsList()
-
-ko.applyBindings(productsList, $(selectors.productsListBody)[0]);
-ko.applyBindings(productsList.cart, $(selectors.cartBody)[0]);
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-﻿var ProductItem = __webpack_require__(3);
-var Cart = __webpack_require__(4);
-getProductsUrl = $('.js-order-products-body').attr('data-products-url');
-
-module.exports = function () {
-    var self = this;
-    self.cart = new Cart();
-    self.productsList = ko.observableArray([]);
-
-    $.getJSON(getProductsUrl, function (allData) {
-        var mappedProducts = $.map(allData, function (item) { return new ProductItem(item) });
-        self.productsList(mappedProducts);
-    });
-
-    self.addToCart = function (product) {
-        self.cart.addToCart(product);
-    };
-};
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-﻿module.exports = function (data) {
-    var self = this;
-    self.title = data.Title;
-    self.productPrice = data.Price;
-    self.description = data.Description;
-    self.category = data.Category;
-    self.productsCount = ko.observable(1);
-    self.totalPrice = ko.computed(function () {
-        return Number((self.productPrice * self.productsCount()).toFixed(2));
-    });
-};
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports) {
 
 ﻿module.exports = function () {
@@ -190,6 +128,67 @@ module.exports = function () {
 };
 
 
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(2);
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+﻿var selectors = {
+    cartBody: '.js-cart-body',
+    productsListBody: '.js-order-products-body'
+};
+
+var ProductsList = __webpack_require__(3);
+var Cart = __webpack_require__(0);
+var cart = new Cart();
+
+ko.applyBindings(cart, $(selectors.cartBody)[0]);
+ko.applyBindings(new ProductsList(cart), $(selectors.productsListBody)[0]);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+﻿var ProductItem = __webpack_require__(4);
+var Cart = __webpack_require__(0);
+getProductsUrl = $('.js-order-products-body').attr('data-products-url');
+
+module.exports = function (cart) {
+    var self = this;
+    self.productsList = ko.observableArray([]);
+
+    $.getJSON(getProductsUrl, function (allData) {
+        var mappedProducts = $.map(allData, function (item) { return new ProductItem(item) });
+        self.productsList(mappedProducts);
+    });
+
+    self.addToCart = function (product) {
+        cart.addToCart(product);
+    };
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+﻿module.exports = function (data) {
+    var self = this;
+    self.title = data.Title;
+    self.productPrice = data.Price;
+    self.description = data.Description;
+    self.category = data.Category;
+    self.productsCount = ko.observable(1);
+    self.totalPrice = ko.computed(function () {
+        return Number((self.productPrice * self.productsCount()).toFixed(2));
+    });
+};
 
 /***/ })
 /******/ ]);
