@@ -117,19 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CategoriesTitle" xml:space="preserve">
-    <value>Categories</value>
-  </data>
-  <data name="CreateProductTitle" xml:space="preserve">
-    <value>New detail</value>
-  </data>
-  <data name="DefaultCultureSelect" xml:space="preserve">
-    <value>Language</value>
+  <data name="AddToCartButton" xml:space="preserve">
+    <value>Add</value>
   </data>
   <data name="OrdersTitle" xml:space="preserve">
     <value>Orders</value>
   </data>
-  <data name="ProductsTitle" xml:space="preserve">
-    <value>Inventory</value>
+  <data name="ProductPrice" xml:space="preserve">
+    <value>Price:</value>
+  </data>
+  <data name="RemoveFromCartButton" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="TotalCartPrice" xml:space="preserve">
+    <value>Total price:</value>
   </data>
 </root>

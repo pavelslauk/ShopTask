@@ -1,0 +1,33 @@
+﻿@using ShopTask.Resources.Orders;
+@{
+    ViewBag.Title = Res.OrdersTitle;
+}
+
+<div class="orders-body">
+    <div class="js-cart-body" data-bind="visible: cartItems().length != 0">
+        <p class="cart-title">Cart</p>
+        <div class="cart-total-price">@Res.TotalCartPrice <div class="cart-total-price-value" data-bind="text: totalCartPrice"></div></div>
+        <div data-bind="foreach: cartItems">
+            <div class="cart-product-form">
+                <div class="cart-product-title" data-bind="text: title"></div>
+                <button class="remove-product-but" data-bind="click: $parent.decreaseItemCount">-</button>
+                <label class="product-count" data-bind="text: productsCount"></label>
+                <button class="add-product-but" data-bind="click: $parent.increaseItemCount">+</button>
+                <div class="cart-product-price">@Res.ProductPrice <div class="cart-product-price-value" data-bind="text: totalPrice"></div></div>
+                <button class="remove-from-cart-but" data-bind="click: $parent.removeFromCart">@Res.RemoveFromCartButton</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="js-order-products-body" data-bind="foreach: productsList, visible: productsList().length != 0" data-products-url="@Url.Action("GetProductsAsync", "Orders")">
+        <div class="order-product-form">
+            <div class="order-product-title" data-bind="text: title"></div>
+            <div class="order-product-category" data-bind="text: category"></div>
+            <div class="order-product-description" data-bind="text: description"></div>
+            <div class="order-product-price">@Res.ProductPrice <div class="order-product-price-value" data-bind="text: productPrice"></div></div>
+            <button class="add-to-cart-but" data-bind="click: $parent.addToCart">@Res.AddToCartButton</button>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/orders")

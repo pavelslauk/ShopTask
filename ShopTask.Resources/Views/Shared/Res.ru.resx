@@ -126,6 +126,9 @@
   <data name="DefaultCultureSelect" xml:space="preserve">
     <value>Язык</value>
   </data>
+  <data name="OrdersTitle" xml:space="preserve">
+    <value>Заказы</value>
+  </data>
   <data name="ProductsTitle" xml:space="preserve">
     <value>Инвентарь</value>
   </data>

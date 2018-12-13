@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ShopTask.Resources.Shared {
+namespace ShopTask.Resources.Orders {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ShopTask.Resources.Shared {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ShopTask.Resources.Views.Shared.Res", typeof(Res).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ShopTask.Resources.Views.Orders.Res", typeof(Res).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,11 @@ namespace ShopTask.Resources.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categories.
+        ///   Looks up a localized string similar to Add.
         /// </summary>
-        public static string CategoriesTitle {
+        public static string AddToCartButton {
             get {
-                return ResourceManager.GetString("CategoriesTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New detail.
-        /// </summary>
-        public static string CreateProductTitle {
-            get {
-                return ResourceManager.GetString("CreateProductTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Language.
-        /// </summary>
-        public static string DefaultCultureSelect {
-            get {
-                return ResourceManager.GetString("DefaultCultureSelect", resourceCulture);
+                return ResourceManager.GetString("AddToCartButton", resourceCulture);
             }
         }
         
@@ -97,11 +79,29 @@ namespace ShopTask.Resources.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inventory.
+        ///   Looks up a localized string similar to Price:.
         /// </summary>
-        public static string ProductsTitle {
+        public static string ProductPrice {
             get {
-                return ResourceManager.GetString("ProductsTitle", resourceCulture);
+                return ResourceManager.GetString("ProductPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string RemoveFromCartButton {
+            get {
+                return ResourceManager.GetString("RemoveFromCartButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total price:.
+        /// </summary>
+        public static string TotalCartPrice {
+            get {
+                return ResourceManager.GetString("TotalCartPrice", resourceCulture);
             }
         }
     }
