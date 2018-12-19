@@ -1,0 +1,16 @@
+<div class="orders-body">
+    <div class="js-cart-body" *ngIf="cartItems.length != 0">
+        <p class="cart-title">Cart</p>
+        <div class="cart-total-price">Total Price: {{totalCartPrice()}}</div>
+            <div class="cart-product-form" *ngFor="let item of cartItems">
+                <div class="cart-product-title">{{ item._title }}</div>
+                <button class="remove-product-but" (click)="decreaseItemCount(item)">-</button>
+                <label class="product-count">{{ item._productsCount }}</label>
+                <button class="add-product-but" (click)="increaseItemCount(item)">+</button>
+                <div class="cart-product-price">Price: {{ item._totalPrice }}</div>
+                <button class="remove-from-cart-but" (click)="removeFromCart(item)">Remove</button>
+            </div>
+    </div>
+
+    <product-list (addToCartClick)="addToCart($event)"></product-list>
+</div>

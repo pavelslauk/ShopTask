@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ShopTask.Resources.Orders {
+namespace ShopTask.Resources.Order {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ShopTask.Resources.Orders {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ShopTask.Resources.Views.Orders.Res", typeof(Res).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ShopTask.Resources.Views.Order.Res", typeof(Res).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -70,7 +70,7 @@ namespace ShopTask.Resources.Orders {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Orders.
+        ///   Looks up a localized string similar to Order.
         /// </summary>
         public static string OrdersTitle {
             get {

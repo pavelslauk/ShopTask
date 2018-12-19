@@ -29,7 +29,6 @@
     @Scripts.Render("~/scripts/libs/jquery.unobtrusive-ajax.js")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/index")
-    @Scripts.Render("~/bundles/knockout")
 
     <div class="navbar">
         <div class="navbar-body">
@@ -46,7 +45,7 @@
                     </ul>
                 }
             </div>
-            <a href="@Url.Action("Index", "Orders")" class="navbar-link @AddActivePageClass("Index", "Orders")">@Res.OrdersTitle</a>
+            <a href="@Url.Action("Index", "Order")" class="navbar-link @AddActivePageClass("Index", "Order")">@Res.OrdersTitle</a>
             <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Index", "Categories")">@Res.CategoriesTitle</a>
 
             <select class="js-culture-select" data-change-culture-url="@Url.Action("ChangeCulture", "Base")">
