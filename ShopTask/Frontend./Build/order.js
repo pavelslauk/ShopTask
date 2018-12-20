@@ -638,8 +638,8 @@ function __importDefault(mod) {
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(61);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(309);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(308);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(310);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(309);
 /**
  * @license Angular v7.0.4
  * (c) 2010-2018 Google, Inc. https://angular.io/
@@ -53305,7 +53305,7 @@ function from(input, scheduler) {
 /* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(307);
+module.exports = __webpack_require__(308);
 
 
 /***/ }),
@@ -60228,16 +60228,22 @@ Zone.__load_patch('PromiseRejectionEvent', function (global, Zone) {
 /* 305 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"js-order-products-body\">\r\n    <div class=\"order-product-form\" *ngFor=\"let item of products\">\r\n        <div class=\"order-product-title\">{{ item._title }}</div>\r\n        <div class=\"order-product-category\">{{ item._category }}</div>\r\n        <div class=\"order-product-description\">{{ item._description }}</div>\r\n        <div class=\"order-product-price\">Price: {{ item._productPrice }}</div>\r\n        <button class=\"add-to-cart-but\" (click)=\"addToCart(item)\">Add</button>\r\n    </div>\r\n</div>";
+module.exports = "<div class=\"js-order-products-body\">\r\n    <div class=\"order-product-form\" *ngFor=\"let item of products\">\r\n        <div class=\"order-product-title\">{{ item.title }}</div>\r\n        <div class=\"order-product-category\">{{ item.category }}</div>\r\n        <div class=\"order-product-description\">{{ item.description }}</div>\r\n        <div class=\"order-product-price\">Price: {{ item.price }}</div>\r\n        <button class=\"add-to-cart-but\" (click)=\"addToCart(item)\">Add</button>\r\n    </div>\r\n</div>";
 
 /***/ }),
 /* 306 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"orders-body\">\r\n    <div class=\"js-cart-body\" *ngIf=\"cartItems.length != 0\">\r\n        <p class=\"cart-title\">Cart</p>\r\n        <div class=\"cart-total-price\">Total Price: {{totalCartPrice()}}</div>\r\n            <div class=\"cart-product-form\" *ngFor=\"let item of cartItems\">\r\n                <div class=\"cart-product-title\">{{ item._title }}</div>\r\n                <button class=\"remove-product-but\" (click)=\"decreaseItemCount(item)\">-</button>\r\n                <label class=\"product-count\">{{ item._productsCount }}</label>\r\n                <button class=\"add-product-but\" (click)=\"increaseItemCount(item)\">+</button>\r\n                <div class=\"cart-product-price\">Price: {{ item._totalPrice }}</div>\r\n                <button class=\"remove-from-cart-but\" (click)=\"removeFromCart(item)\">Remove</button>\r\n            </div>\r\n    </div>\r\n\r\n    <product-list (addToCartClick)=\"addToCart($event)\"></product-list>\r\n</div>";
+module.exports = "<div class=\"orders-body\">   \r\n    <cart></cart>\r\n\r\n    <product-list></product-list>\r\n</div>";
 
 /***/ }),
 /* 307 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"js-cart-body\" *ngIf=\"cartItems.length != 0\">\r\n    <p class=\"cart-title\">Cart</p>\r\n    <div class=\"cart-total-price\">Total Price: {{totalCartPrice()}}</div>\r\n        <div class=\"cart-product-form\" *ngFor=\"let item of cartItems\">\r\n            <div class=\"cart-product-title\">{{ item.title }}</div>\r\n            <button class=\"remove-product-but\" (click)=\"decreaseItemCount(item)\">-</button>\r\n            <label class=\"product-count\">{{ item.productsCount }}</label>\r\n            <button class=\"add-product-but\" (click)=\"increaseItemCount(item)\">+</button>\r\n            <div class=\"cart-product-price\">Price: {{ item.totalPrice }}</div>\r\n            <button class=\"remove-from-cart-but\" (click)=\"removeFromCart(item)\">Remove</button>\r\n        </div>\r\n</div>";
+
+/***/ }),
+/* 308 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -77489,40 +77495,48 @@ var http_HttpClientJsonpModule = /** @class */ (function () {
 
 //# sourceMappingURL=http.js.map
 
-// CONCATENATED MODULE: ./app/order/models/cart-item.model.ts
-var CartItem = /** @class */ (function () {
-    function CartItem(data) {
-        this._title = data.Title;
-        this._productPrice = data.Price;
-        this._description = data.Description;
-        this._category = data.Category;
-        this._productsCount = 1;
-        this._totalPrice = data.Price;
+// CONCATENATED MODULE: ./app/order/models/product.model.ts
+var Product = /** @class */ (function () {
+    function Product(data) {
+        this._title = data.Title || data.title;
+        this._price = data.Price || data.price;
+        this._description = data.Description || data.description;
+        this._category = data.Category || data.category;
     }
-    Object.defineProperty(CartItem.prototype, "productsCount", {
+    Object.defineProperty(Product.prototype, "title", {
         get: function () {
-            return this._productsCount;
-        },
-        set: function (c) {
-            this._productsCount = c;
-            this._totalPrice = Number((this._productPrice * this._productsCount).toFixed(2));
+            return this._title;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CartItem.prototype, "totalPrice", {
+    Object.defineProperty(Product.prototype, "price", {
         get: function () {
-            return this._totalPrice;
+            return this._price;
         },
         enumerable: true,
         configurable: true
     });
-    return CartItem;
+    Object.defineProperty(Product.prototype, "description", {
+        get: function () {
+            return this._description;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Product.prototype, "category", {
+        get: function () {
+            return this._category;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Product;
 }());
 
 ;
 
-// CONCATENATED MODULE: ./app/order/services/items.service.ts
+// CONCATENATED MODULE: ./app/order/services/products.service.ts
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -77536,23 +77550,117 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-var items_service_ItemsService = /** @class */ (function () {
-    function ItemsService(_http) {
+var products_service_ProductsService = /** @class */ (function () {
+    function ProductsService(_http) {
         this._http = _http;
     }
-    ItemsService.prototype.getAll = function () {
+    ProductsService.prototype.getAll = function () {
         return this._http.get('/Order/GetProductsAsync').pipe(Object(operators_map["a" /* map */])(function (data) {
-            var cartItems = data;
-            return cartItems.map(function (item) {
-                return new CartItem(item);
+            var products = data;
+            return products.map(function (item) {
+                return new Product(item);
             });
         }));
     };
-    ItemsService = __decorate([
+    ProductsService = __decorate([
         Object(core["w" /* Injectable */])(),
         __metadata("design:paramtypes", [http_HttpClient])
-    ], ItemsService);
-    return ItemsService;
+    ], ProductsService);
+    return ProductsService;
+}());
+
+
+// CONCATENATED MODULE: ./app/order/models/cart-item.model.ts
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+var CartItem = /** @class */ (function (_super) {
+    __extends(CartItem, _super);
+    function CartItem(product) {
+        var _this = _super.call(this, product) || this;
+        _this._productsCount = 1;
+        _this._totalPrice = product.price;
+        return _this;
+    }
+    Object.defineProperty(CartItem.prototype, "productsCount", {
+        get: function () {
+            return this._productsCount;
+        },
+        set: function (c) {
+            this._productsCount = c;
+            this._totalPrice = Number((this.price * this._productsCount).toFixed(2));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CartItem.prototype, "totalPrice", {
+        get: function () {
+            return this._totalPrice;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return CartItem;
+}(Product));
+
+;
+
+// CONCATENATED MODULE: ./app/order/services/cart.service.ts
+var cart_service_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var cart_service_metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var cart_service_CartService = /** @class */ (function () {
+    function CartService() {
+        this._cartItems = [];
+    }
+    Object.defineProperty(CartService.prototype, "cartItems", {
+        get: function () {
+            return this._cartItems;
+        },
+        set: function (value) {
+            this._cartItems = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CartService.prototype.addToCart = function (product) {
+        var cartItem = this.cartItems.find(function (item) { return item.title == product.title; });
+        if (!cartItem) {
+            cartItem = new CartItem(product);
+            this.cartItems.push(cartItem);
+        }
+        else {
+            cartItem.productsCount++;
+        }
+    };
+    CartService.prototype.removeFromCart = function (cartItem) {
+        this.cartItems = this.cartItems.filter(function (item) { return item != cartItem; });
+    };
+    ;
+    CartService = cart_service_decorate([
+        Object(core["w" /* Injectable */])(),
+        cart_service_metadata("design:paramtypes", [])
+    ], CartService);
+    return CartService;
 }());
 
 
@@ -77568,28 +77676,25 @@ var product_list_component_metadata = (undefined && undefined.__metadata) || fun
 };
 
 
+
 var product_list_component_ProductListComponent = /** @class */ (function () {
-    function ProductListComponent(cartItems) {
-        this.cartItems = cartItems;
-        this.addToCartClick = new core["t" /* EventEmitter */]();
+    function ProductListComponent(productItems, cart) {
+        this.productItems = productItems;
+        this.cart = cart;
     }
     ProductListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.cartItems.getAll().subscribe(function (data) { return _this.products = data; });
+        this.productItems.getAll().subscribe(function (data) { return _this.products = data; });
     };
     ProductListComponent.prototype.addToCart = function (product) {
-        this.addToCartClick.emit(product);
+        this.cart.addToCart(product);
     };
-    product_list_component_decorate([
-        Object(core["K" /* Output */])(),
-        product_list_component_metadata("design:type", Object)
-    ], ProductListComponent.prototype, "addToCartClick", void 0);
     ProductListComponent = product_list_component_decorate([
         Object(core["m" /* Component */])({
             selector: 'product-list',
             template: __webpack_require__(305)
         }),
-        product_list_component_metadata("design:paramtypes", [items_service_ItemsService])
+        product_list_component_metadata("design:paramtypes", [products_service_ProductsService, cart_service_CartService])
     ], ProductListComponent);
     return ProductListComponent;
 }());
@@ -77608,38 +77713,8 @@ var order_component_metadata = (undefined && undefined.__metadata) || function (
 
 var order_component_OrderComponent = /** @class */ (function () {
     function OrderComponent() {
-        this.cartItems = [];
     }
     OrderComponent.prototype.ngOnInit = function () { };
-    OrderComponent.prototype.addToCart = function (cartItem) {
-        if (this.cartItems.indexOf(cartItem) == -1) {
-            this.cartItems.push(cartItem);
-        }
-        else {
-            this.increaseItemCount(cartItem);
-        }
-    };
-    OrderComponent.prototype.removeFromCart = function (cartItem) {
-        this.cartItems = this.cartItems.filter(function (item) { return item != cartItem; });
-        cartItem.productsCount = 1;
-    };
-    ;
-    OrderComponent.prototype.increaseItemCount = function (cartItem) {
-        cartItem.productsCount++;
-    };
-    ;
-    OrderComponent.prototype.decreaseItemCount = function (cartItem) {
-        cartItem.productsCount--;
-        if (cartItem.productsCount == 0) {
-            this.removeFromCart(cartItem);
-        }
-    };
-    ;
-    OrderComponent.prototype.totalCartPrice = function () {
-        var total = 0;
-        this.cartItems.forEach(function (item) { return total += item.totalPrice; });
-        return total.toFixed(2);
-    };
     OrderComponent = order_component_decorate([
         Object(core["m" /* Component */])({
             selector: 'order',
@@ -77648,6 +77723,56 @@ var order_component_OrderComponent = /** @class */ (function () {
         order_component_metadata("design:paramtypes", [])
     ], OrderComponent);
     return OrderComponent;
+}());
+
+
+// CONCATENATED MODULE: ./app/order/cart/cart.component.ts
+var cart_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var cart_component_metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var cart_component_CartComponent = /** @class */ (function () {
+    function CartComponent(cart) {
+        this.cart = cart;
+        this.cartItems = [];
+        this.cartItems = cart.cartItems;
+    }
+    CartComponent.prototype.ngOnInit = function () { };
+    CartComponent.prototype.removeFromCart = function (cartItem) {
+        this.cart.removeFromCart(cartItem);
+        this.cartItems = this.cart.cartItems;
+    };
+    ;
+    CartComponent.prototype.increaseItemCount = function (cartItem) {
+        cartItem.productsCount++;
+    };
+    ;
+    CartComponent.prototype.decreaseItemCount = function (cartItem) {
+        if (--cartItem.productsCount == 0) {
+            this.removeFromCart(cartItem);
+        }
+    };
+    ;
+    CartComponent.prototype.totalCartPrice = function () {
+        var total = 0;
+        this.cartItems.forEach(function (item) { return total += item.totalPrice; });
+        return total.toFixed(2);
+    };
+    CartComponent = cart_component_decorate([
+        Object(core["m" /* Component */])({
+            selector: 'cart',
+            template: __webpack_require__(307)
+        }),
+        cart_component_metadata("design:paramtypes", [cart_service_CartService])
+    ], CartComponent);
+    return CartComponent;
 }());
 
 
@@ -77665,15 +77790,17 @@ var app_module_decorate = (undefined && undefined.__decorate) || function (decor
 
 
 
+
+
 var app_module_AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = app_module_decorate([
         Object(core["E" /* NgModule */])({
             imports: [platform_browser_BrowserModule, forms_FormsModule, http_HttpClientModule],
-            declarations: [product_list_component_ProductListComponent, order_component_OrderComponent],
+            declarations: [product_list_component_ProductListComponent, order_component_OrderComponent, cart_component_CartComponent],
             bootstrap: [order_component_OrderComponent],
-            providers: [items_service_ItemsService]
+            providers: [products_service_ProductsService, cart_service_CartService]
         })
     ], AppModule);
     return AppModule;
@@ -77691,7 +77818,7 @@ platform.bootstrapModule(app_module_AppModule);
 
 
 /***/ }),
-/* 308 */
+/* 309 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -77972,7 +78099,7 @@ function share() {
 
 
 /***/ }),
-/* 309 */
+/* 310 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -1,19 +1,19 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CartItem } from '../models/cart-item.model';
+import { Product } from '../models/product.model';
 
 @Injectable()
-export class ItemsService {
+export class ProductsService {
 
     constructor(private _http: HttpClient) { }
 
-    public getAll() : Observable<CartItem[]> {
+    public getAll() : Observable<Product[]> {
         return this._http.get('/Order/GetProductsAsync').pipe(map(data=>{
-            var cartItems = data as object[];
-            return cartItems.map(function(item: object) {
-                return new CartItem(item);
+            var products = data as object[];
+            return products.map(function(item: object) {
+                return new Product(item);
               });
         }));
     }
