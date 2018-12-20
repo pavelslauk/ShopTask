@@ -1,0 +1,9 @@
+<div class="js-order-products-body">
+    <div class="order-product-form" *ngFor="let item of products">
+        <div class="order-product-title">{{ item.title }}</div>
+        <div class="order-product-category">{{ item.category }}</div>
+        <div class="order-product-description">{{ item.description }}</div>
+        <div class="order-product-price">Price: {{ item.price }}</div>
+        <button class="add-to-cart-but" (click)="addToCart(item)">Add</button>
+    </div>
+</div>
