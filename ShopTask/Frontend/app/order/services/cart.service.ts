@@ -1,16 +1,16 @@
 import { Injectable } from "@angular/core";
 import { Product } from '../models/product.model';
 import { CartItem } from '../models/cart-item.model';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class CartService {
 
     private _cartItems: CartItem[] = [];
-    private _cartItemsObservable = of(this._cartItems);
+    private _cartItemsBehaviorSubject = new BehaviorSubject(this.cartItems);
 
-    public get cartItemsObservable(): Observable<CartItem[]> {
-        return this._cartItemsObservable;
+    public get cartItemsBehaviorSubject(): BehaviorSubject<CartItem[]> {
+        return this._cartItemsBehaviorSubject;
     }
 
     public get cartItems(): CartItem[] {
@@ -30,7 +30,8 @@ export class CartService {
     }
 
     public removeFromCart(cartItem: CartItem) {
-        this._cartItems.splice(this._cartItems.indexOf(cartItem), 1);
+        this._cartItems = this.cartItems.filter(item => item != cartItem);
+        this.cartItemsBehaviorSubject.next(this.cartItems);
     };
 
     public totalCartPrice(){
