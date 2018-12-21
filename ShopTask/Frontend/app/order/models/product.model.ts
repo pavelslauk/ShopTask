@@ -22,9 +22,9 @@ export class Product {
     }
 
     constructor(data: any){
-        this._title = data.Title || data.title;
-        this._price = data.Price || data.price;
-        this._description = data.Description || data.description;
-        this._category = data.Category || data.category;
+        this._title = data.Title;
+        this._price = data.Price;
+        this._description = data.Description;
+        this._category = data.Category;
     }
 };
