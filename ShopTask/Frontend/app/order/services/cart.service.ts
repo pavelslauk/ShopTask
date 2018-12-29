@@ -34,6 +34,11 @@ export class CartService {
         this.cartItemsBehaviorSubject.next(this.cartItems);
     };
 
+    public clearCart() {
+        this._cartItems = [];
+        this.cartItemsBehaviorSubject.next(this.cartItems);
+    }
+
     public totalCartPrice(){
         var total = 0;
         this.cartItems.forEach(item => total += item.totalPrice);

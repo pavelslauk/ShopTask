@@ -1,0 +1,41 @@
+<div class="input-form">
+    <div class="form-header">
+        <p class="form-header-text">Input your data</p>
+    </div>
+    <div class="input-form-body" [formGroup]="orderDetailsControl">
+        <p class="order-details-error-message">{{errorMessage}}</p>
+        <label class="input-form-col1">Name</label>
+        <div class="input-form-col2">
+            <input class="input-text-box" formControlName="name"/>
+        </div>
+
+        <label class="input-form-col1">Surname</label>
+        <div class="input-form-col2">
+            <input class="input-text-box" formControlName="surname"/>
+        </div>
+
+        <label class="input-form-col1">Address</label>
+        <div class="input-form-col2">
+            <input class="input-text-box" formControlName="address"/>
+        </div>
+
+        <label class="input-form-col1">Phone</label>
+        <div class="input-form-col2">
+            <input class="input-text-box" formControlName="phone"/>
+        </div>
+
+        <label class="input-form-col1">Comments</label>
+        <div class="input-form-col2">
+            <textarea class="input-textarea" cols="20" rows="6" formControlName="comments"></textarea>
+        </div>
+
+        <div class="input-form-col2">
+            <button class="form-save-button" (click)="saveData()">Save</button>
+        </div>
+
+        <div class="input-form-col2">
+            <div class="input-back-link"><a routerLink="/shoptask/Order">Back</a></div>     
+        </div>
+    </div>
+    
+</div>

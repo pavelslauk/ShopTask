@@ -73,7 +73,7 @@ textarea {
     outline: none;
 }
 
-.product-form,
+.input-form,
 .category-form {
     padding: 5px;
     padding-bottom: 100px;
@@ -93,7 +93,7 @@ textarea {
     margin-top: 12px;
 }
 
-.product-form-body,
+.input-form-body,
 .category-form-body {
     margin-top: 30px;
 }
@@ -103,40 +103,44 @@ textarea {
     margin-right: 10px;
 }
 
-.product-form-col1 {
+.input-form-col1 {
     float: left;
     width: 30%;
     text-align: right;
 }
 
-.product-form-col2 {
+.input-form-col2 {
     margin-left: 35%;
 }
 
-.product-textarea {
+.input-textarea {
     width: 165px;
     padding: 2px;
     resize: none;
     overflow: auto;
 }
 
-.product-text-box {
+.input-text-box {
     width: 169px;
 }
 
-.product-dropdownlist {
+.input-dropdownlist {
     width: 171px;
     height: 19px;
 }
 
-.product-text-box,
-.product-textarea,
-.product-dropdownlist,
+.input-text-box,
+.input-textarea,
+.input-dropdownlist,
 .category-input,
 .new-category-input {
     border-radius: 4px;
     border: 1px solid #a7a7a7;
     margin-bottom: 40px;
+}
+
+.input-back-link {
+    margin-top: 50px;
 }
 
 .form-save-button {
@@ -267,7 +271,7 @@ td {
     position: relative;
 }
 
-.js-order-products-body {
+.order-products-body {
     margin-top: 30px;
 }
 
@@ -275,25 +279,42 @@ td {
     position: relative;
     padding: 5px;
     margin: 4px;
-    height: 253px;
-    width: 253px;
+    height: 100px;
+    width: 195px;
     float: left;
     border: 2px solid #686868;
 }
 
 .order-product-title {
+    position: relative;
     font-size: 26px;
     text-align: center;
+    cursor: pointer;
 }
 
 .order-product-category {
-    font-size: 12px;
+    font-size: 16px;
     text-align: center;
 }
 
 .order-product-description {
-    margin-top: 10px;
+    visibility: hidden;
+    width: 120px;
+    min-height: 30px;
+    left: 36px;
+    background-color: #555;
+    color: #fff;
+    border-radius: 8px;
+    border: 2px solid #555;
+    position: absolute;
+    z-index: 1;
     text-align: center;
+    font-size: 12px;
+    align-self: center;
+}
+
+.show {
+    visibility: visible;
 }
 
 .order-product-price {
@@ -313,7 +334,7 @@ td {
     bottom: 5px;
 }
 
-.js-cart-body {
+.cart-body {
     position: absolute;
     left: 1100px;
     padding: 5px;
@@ -365,3 +386,10 @@ td {
     top: 35%;
 }
 
+.order-delivery-button {
+    margin-left: 83px;
+}
+
+.order-details-error-message {
+    color: red;
+}

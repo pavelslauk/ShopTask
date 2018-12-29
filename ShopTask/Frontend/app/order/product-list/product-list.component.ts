@@ -20,4 +20,12 @@ export class ProductListComponent implements OnInit {
     private addToCart(product: Product){
         this.cartService.addToCart(product);
     }
+
+    private togglePopup(popup: Element, popupNotEmpty: boolean){
+        if(popupNotEmpty){
+            popup.classList.toggle('show');
+        }      
+    }
+
+    
 }
