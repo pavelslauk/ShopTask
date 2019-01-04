@@ -1,4 +1,4 @@
-export class OrdserDetails {
+export class OrderDetails {
 
     private _name:string = '';
     private _surname:string = '';

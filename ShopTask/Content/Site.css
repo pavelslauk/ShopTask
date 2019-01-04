@@ -391,5 +391,8 @@ td {
 }
 
 .order-details-error-message {
+    margin-left: 140px;
+    margin-top: 20px;
+    position: absolute;
     color: red;
 }

@@ -3,6 +3,7 @@
 @using ShopTask.Resources.Shared;
 @using System.Globalization;
 @using ShopTask.Utils;
+
 @helper AddActivePageClass(string action, string controller)
 {
     if (action == ViewContext.RouteData.GetRequiredString("action") && (controller == ViewContext.RouteData.GetRequiredString("controller")))
@@ -25,6 +26,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    <div class="js-api-root-url" data-api-root-url="@HttpContext.Current.Request.ApplicationPath"></div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/scripts/libs/jquery.unobtrusive-ajax.js")
     @Scripts.Render("~/bundles/jqueryval")

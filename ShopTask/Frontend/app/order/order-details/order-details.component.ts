@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderDetailsService } from '../services/order-details.service';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { OrdserDetails } from '../models/order-details.model';
-import { CartService } from '../services/cart.service';
+import { OrderDetails } from '../models/order-details.model';
+import { OrderService } from '../services/order.service';
 import { Router } from '@angular/router';
      
 @Component({
@@ -12,28 +11,28 @@ import { Router } from '@angular/router';
 export class OrderDetailsComponent implements OnInit { 
 
     private _orderDetailsControl: FormGroup;
-    private _orderDetails: OrdserDetails;
-    private _errorMessage: string = '';
+    private _orderDetails: OrderDetails;
+    private _showErrors: boolean = false;
 
-    public get errorMessage(): string {
-        return this._errorMessage;
+    public get showErrors(): boolean {
+        return this._showErrors;
     }
 
-    public set errorMessage(val : string) {
-        this._errorMessage = val;
+    public set showErrors(val : boolean) {
+        this._showErrors = val;
     }
 
     public get orderDetailsControl(): FormGroup {
         return this._orderDetailsControl;
     }
 
-    public get orderDetails(): OrdserDetails {
+    public get orderDetails(): OrderDetails {
         return this._orderDetails;
     }
 
-    constructor(private _orderDetailsService: OrderDetailsService, private _cartService: CartService, private _router: Router) {
-        this._orderDetails = _orderDetailsService.orderDetails;
-        if(this._cartService.cartItems.length == 0){
+    constructor(private _orderService: OrderService, private _router: Router) {
+        this._orderDetails = _orderService.orderDetails;
+        if(this._orderService.cartItems.length == 0){
             this._router.navigate(['/shoptask/Order']);
         }
     }
@@ -52,12 +51,12 @@ export class OrderDetailsComponent implements OnInit {
 
     public saveData() {
         if(this._orderDetailsControl.valid) {
-            this._orderDetailsService.clearOrderDetails();
-            this._cartService.clearCart();
+            this._orderService.clearOrderDetails();
+            this._orderService.clearCart();
             this._router.navigate(['/shoptask/Order']);
         }
         else {
-            this.errorMessage = "Fields Name, Surname, Address, Phone are requred";
+            this._showErrors = true;
         }
     }
 

@@ -3,22 +3,25 @@
         <p class="form-header-text">Input your data</p>
     </div>
     <div class="input-form-body" [formGroup]="orderDetailsControl">
-        <p class="order-details-error-message">{{errorMessage}}</p>
+        <p class="order-details-error-message" *ngIf="orderDetailsControl.controls['name'].invalid && showErrors" >Field Name is requred</p>
         <label class="input-form-col1">Name</label>
         <div class="input-form-col2">
             <input class="input-text-box" formControlName="name"/>
         </div>
 
+        <p class="order-details-error-message" *ngIf="orderDetailsControl.controls['surname'].invalid && showErrors" >Field Surname is requred</p>
         <label class="input-form-col1">Surname</label>
         <div class="input-form-col2">
             <input class="input-text-box" formControlName="surname"/>
         </div>
 
+        <p class="order-details-error-message" *ngIf="orderDetailsControl.controls['address'].invalid && showErrors" >Field Address is requred</p>
         <label class="input-form-col1">Address</label>
         <div class="input-form-col2">
             <input class="input-text-box" formControlName="address"/>
         </div>
 
+        <p class="order-details-error-message" *ngIf="orderDetailsControl.controls['phone'].invalid && showErrors" >Field Phone is requred</p>
         <label class="input-form-col1">Phone</label>
         <div class="input-form-col2">
             <input class="input-text-box" formControlName="phone"/>
