@@ -1,11 +1,17 @@
+<div class="description-modal" #descriptionModal>
+    <div class="description-modal-content">
+      <span class="description-modal-close" (click)="descriptionModal.classList.remove('description-modal-show')">&times;</span>
+      <p #descriptionContent></p>
+    </div>
+</div>
+
 <div class="order-products-body">
     <div class="order-product-form" *ngFor="let item of products">
-        <div class="order-product-title" (click)="togglePopup(descriptionPopup, item.description != null)">
+        <div class="order-product-title" (click)="ShowDescription(descriptionModal, descriptionContent, item.description)">     <!-- modal.style.display = 'block' -->
             {{ item.title }}
-            <div class="order-product-description" #descriptionPopup>{{ item.description }}</div>
         </div>
-        <div class="order-product-category">{{ item.category }}</div>
-        
+        <div class="order-product-description">{{ item.description }}</div>
+        <div class="order-product-category">{{ item.category }}</div>       
         <div class="order-product-price">Price: {{ item.price }}</div>
         <button class="add-to-cart-but" (click)="addToCart(item)">Add</button>
     </div>

@@ -12,6 +12,15 @@ export class OrderDetailsComponent implements OnInit {
 
     private _orderDetailsControl: FormGroup;
     private _orderDetails: OrderDetails;
+    private _formSubmitAttempted: boolean = false;
+
+    public get formSubmitAttempted(): boolean {
+        return this._formSubmitAttempted;
+    }
+
+    public set formSubmitAttempted(val : boolean) {
+        this._formSubmitAttempted = val;
+    }
 
     public get orderDetailsControl(): FormGroup {
         return this._orderDetailsControl;
@@ -58,6 +67,9 @@ export class OrderDetailsComponent implements OnInit {
             this._orderService.clearOrderDetails();
             this._orderService.clearCart();
             this._router.navigate(['/shoptask/Order']);
+        }
+        else {
+            this._formSubmitAttempted = true;
         }
     }
 

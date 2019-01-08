@@ -60287,7 +60287,7 @@ Zone.__load_patch('PromiseRejectionEvent', function (global, Zone) {
 /* 310 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"order-products-body\">\r\n    <div class=\"order-product-form\" *ngFor=\"let item of products\">\r\n        <div class=\"order-product-title\" (click)=\"togglePopup(descriptionPopup, item.description != null)\">\r\n            {{ item.title }}\r\n            <div class=\"order-product-description\" #descriptionPopup>{{ item.description }}</div>\r\n        </div>\r\n        <div class=\"order-product-category\">{{ item.category }}</div>\r\n        \r\n        <div class=\"order-product-price\">Price: {{ item.price }}</div>\r\n        <button class=\"add-to-cart-but\" (click)=\"addToCart(item)\">Add</button>\r\n    </div>\r\n</div>";
+module.exports = "<div class=\"description-modal\" #descriptionModal>\r\n    <div class=\"description-modal-content\">\r\n      <span class=\"description-modal-close\" (click)=\"descriptionModal.classList.remove('description-modal-show')\">&times;</span>\r\n      <p #descriptionContent></p>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"order-products-body\">\r\n    <div class=\"order-product-form\" *ngFor=\"let item of products\">\r\n        <div class=\"order-product-title\" (click)=\"ShowDescription(descriptionModal, descriptionContent, item.description)\">     <!-- modal.style.display = 'block' -->\r\n            {{ item.title }}\r\n        </div>\r\n        <div class=\"order-product-description\">{{ item.description }}</div>\r\n        <div class=\"order-product-category\">{{ item.category }}</div>       \r\n        <div class=\"order-product-price\">Price: {{ item.price }}</div>\r\n        <button class=\"add-to-cart-but\" (click)=\"addToCart(item)\">Add</button>\r\n    </div>\r\n</div>";
 
 /***/ }),
 /* 311 */
@@ -60311,7 +60311,7 @@ module.exports = "<div class=\"orders-body\">   \r\n    <cart></cart>\r\n    <pr
 /* 314 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"input-form\">\r\n    <div class=\"form-header\">\r\n        <p class=\"form-header-text\">Input your data</p>\r\n    </div>\r\n    <div class=\"input-form-body\" [formGroup]=\"orderDetailsControl\">\r\n        <p class=\"order-details-error-message\" *ngIf=\"(name.dirty || name.touched) && name.invalid && name.errors.required\" >Field Name is requred</p>\r\n        <label class=\"input-form-col1\">Name</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"name\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"(surname.dirty || surname.touched) && surname.invalid && surname.errors.required\" >Field Surname is requred</p>\r\n        <label class=\"input-form-col1\">Surname</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"surname\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"(address.dirty || address.touched) && address.invalid && address.errors.required\" >Field Address is requred</p>\r\n        <label class=\"input-form-col1\">Address</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"address\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"(phone.dirty || phone.touched) && phone.invalid && phone.errors.required\" >Field Phone is requred</p>\r\n        <label class=\"input-form-col1\">Phone</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"phone\"/>\r\n        </div>\r\n\r\n        <label class=\"input-form-col1\">Comments</label>\r\n        <div class=\"input-form-col2\">\r\n            <textarea class=\"input-textarea\" cols=\"20\" rows=\"6\" formControlName=\"comments\"></textarea>\r\n        </div>\r\n\r\n        <div class=\"input-form-col2\">\r\n            <button class=\"form-save-button\" (click)=\"saveData()\">Save</button>\r\n        </div>\r\n\r\n        <div class=\"input-form-col2\">\r\n            <div class=\"input-back-link\"><a routerLink=\"/shoptask/Order\">Back</a></div>     \r\n        </div>\r\n    </div>\r\n    \r\n</div>\r\n";
+module.exports = "<div class=\"input-form\">\r\n    <div class=\"form-header\">\r\n        <p class=\"form-header-text\">Input your data</p>\r\n    </div>\r\n    <div class=\"input-form-body\" [formGroup]=\"orderDetailsControl\">\r\n        <p class=\"order-details-error-message\" *ngIf=\"(name.dirty || name.touched || formSubmitAttempted) && name.invalid && name.errors.required\" >Field Name is requred</p>\r\n        <label class=\"input-form-col1\">Name <span class=\"required-symbol\">*</span></label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"name\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"(surname.dirty || surname.touched || formSubmitAttempted) && surname.invalid && surname.errors.required\" >Field Surname is requred</p>\r\n        <label class=\"input-form-col1\">Surname <span class=\"required-symbol\">*</span></label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"surname\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"(address.dirty || address.touched || formSubmitAttempted) && address.invalid && address.errors.required\" >Field Address is requred</p>\r\n        <label class=\"input-form-col1\">Address <span class=\"required-symbol\">*</span></label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"address\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"(phone.dirty || phone.touched || formSubmitAttempted) && phone.invalid && phone.errors.required\" >Field Phone is requred</p>\r\n        <label class=\"input-form-col1\">Phone <span class=\"required-symbol\">*</span></label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"phone\"/>\r\n        </div>\r\n\r\n        <label class=\"input-form-col1\">Comments</label>\r\n        <div class=\"input-form-col2\">\r\n            <textarea class=\"input-textarea\" cols=\"20\" rows=\"6\" formControlName=\"comments\"></textarea>\r\n        </div>\r\n\r\n        <div class=\"input-form-col2\">\r\n            <button class=\"form-save-button\" (click)=\"saveData()\">Save</button>\r\n        </div>\r\n\r\n        <div class=\"input-form-col2\">\r\n            <div class=\"input-back-link\"><a routerLink=\"/shoptask/Order\">Back</a></div>     \r\n        </div>\r\n    </div>\r\n    \r\n</div>\r\n";
 
 /***/ }),
 /* 315 */
@@ -84117,9 +84117,13 @@ var product_list_component_ProductListComponent = /** @class */ (function () {
     ProductListComponent.prototype.addToCart = function (product) {
         this.orderService.addToCart(product);
     };
-    ProductListComponent.prototype.togglePopup = function (popup, popupNotEmpty) {
-        if (popupNotEmpty) {
-            popup.classList.toggle('show');
+    ProductListComponent.prototype.ShowDescription = function (descriptionModal, descriptionContent, description) {
+        descriptionModal.classList.add('description-modal-show');
+        if (description != null) {
+            descriptionContent.textContent = description;
+        }
+        else {
+            descriptionContent.textContent = 'No descreption!';
         }
     };
     ProductListComponent = product_list_component_decorate([
@@ -84250,8 +84254,19 @@ var order_details_component_OrderDetailsComponent = /** @class */ (function () {
     function OrderDetailsComponent(_orderService, _router) {
         this._orderService = _orderService;
         this._router = _router;
+        this._formSubmitAttempted = false;
         this._orderDetails = _orderService.orderDetails;
     }
+    Object.defineProperty(OrderDetailsComponent.prototype, "formSubmitAttempted", {
+        get: function () {
+            return this._formSubmitAttempted;
+        },
+        set: function (val) {
+            this._formSubmitAttempted = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(OrderDetailsComponent.prototype, "orderDetailsControl", {
         get: function () {
             return this._orderDetailsControl;
@@ -84310,6 +84325,9 @@ var order_details_component_OrderDetailsComponent = /** @class */ (function () {
             this._orderService.clearOrderDetails();
             this._orderService.clearCart();
             this._router.navigate(['/shoptask/Order']);
+        }
+        else {
+            this._formSubmitAttempted = true;
         }
     };
     OrderDetailsComponent = order_details_component_decorate([

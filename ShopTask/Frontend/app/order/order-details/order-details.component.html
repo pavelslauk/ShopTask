@@ -3,26 +3,26 @@
         <p class="form-header-text">Input your data</p>
     </div>
     <div class="input-form-body" [formGroup]="orderDetailsControl">
-        <p class="order-details-error-message" *ngIf="(name.dirty || name.touched) && name.invalid && name.errors.required" >Field Name is requred</p>
-        <label class="input-form-col1">Name</label>
+        <p class="order-details-error-message" *ngIf="(name.dirty || name.touched || formSubmitAttempted) && name.invalid && name.errors.required" >Field Name is requred</p>
+        <label class="input-form-col1">Name <span class="required-symbol">*</span></label>
         <div class="input-form-col2">
             <input class="input-text-box" formControlName="name"/>
         </div>
 
-        <p class="order-details-error-message" *ngIf="(surname.dirty || surname.touched) && surname.invalid && surname.errors.required" >Field Surname is requred</p>
-        <label class="input-form-col1">Surname</label>
+        <p class="order-details-error-message" *ngIf="(surname.dirty || surname.touched || formSubmitAttempted) && surname.invalid && surname.errors.required" >Field Surname is requred</p>
+        <label class="input-form-col1">Surname <span class="required-symbol">*</span></label>
         <div class="input-form-col2">
             <input class="input-text-box" formControlName="surname"/>
         </div>
 
-        <p class="order-details-error-message" *ngIf="(address.dirty || address.touched) && address.invalid && address.errors.required" >Field Address is requred</p>
-        <label class="input-form-col1">Address</label>
+        <p class="order-details-error-message" *ngIf="(address.dirty || address.touched || formSubmitAttempted) && address.invalid && address.errors.required" >Field Address is requred</p>
+        <label class="input-form-col1">Address <span class="required-symbol">*</span></label>
         <div class="input-form-col2">
             <input class="input-text-box" formControlName="address"/>
         </div>
 
-        <p class="order-details-error-message" *ngIf="(phone.dirty || phone.touched) && phone.invalid && phone.errors.required" >Field Phone is requred</p>
-        <label class="input-form-col1">Phone</label>
+        <p class="order-details-error-message" *ngIf="(phone.dirty || phone.touched || formSubmitAttempted) && phone.invalid && phone.errors.required" >Field Phone is requred</p>
+        <label class="input-form-col1">Phone <span class="required-symbol">*</span></label>
         <div class="input-form-col2">
             <input class="input-text-box" formControlName="phone"/>
         </div>

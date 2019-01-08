@@ -23,11 +23,13 @@ export class ProductListComponent implements OnInit {
         this.orderService.addToCart(product);
     }
 
-    private togglePopup(popup: Element, popupNotEmpty: boolean){
-        if(popupNotEmpty){
-            popup.classList.toggle('show');
-        }      
+    private ShowDescription(descriptionModal: Element, descriptionContent: Element, description: string){
+        descriptionModal.classList.add('description-modal-show');
+        if(description != null){
+            descriptionContent.textContent = description;
+        }
+        else {
+            descriptionContent.textContent = 'No descreption!';
+        }
     }
-
-    
 }
