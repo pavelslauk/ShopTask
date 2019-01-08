@@ -60311,7 +60311,7 @@ module.exports = "<div class=\"orders-body\">   \r\n    <cart></cart>\r\n    <pr
 /* 314 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"input-form\">\r\n    <div class=\"form-header\">\r\n        <p class=\"form-header-text\">Input your data</p>\r\n    </div>\r\n    <div class=\"input-form-body\" [formGroup]=\"orderDetailsControl\">\r\n        <p class=\"order-details-error-message\" *ngIf=\"orderDetailsControl.controls['name'].invalid && showErrors\" >Field Name is requred</p>\r\n        <label class=\"input-form-col1\">Name</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"name\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"orderDetailsControl.controls['surname'].invalid && showErrors\" >Field Surname is requred</p>\r\n        <label class=\"input-form-col1\">Surname</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"surname\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"orderDetailsControl.controls['address'].invalid && showErrors\" >Field Address is requred</p>\r\n        <label class=\"input-form-col1\">Address</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"address\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"orderDetailsControl.controls['phone'].invalid && showErrors\" >Field Phone is requred</p>\r\n        <label class=\"input-form-col1\">Phone</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"phone\"/>\r\n        </div>\r\n\r\n        <label class=\"input-form-col1\">Comments</label>\r\n        <div class=\"input-form-col2\">\r\n            <textarea class=\"input-textarea\" cols=\"20\" rows=\"6\" formControlName=\"comments\"></textarea>\r\n        </div>\r\n\r\n        <div class=\"input-form-col2\">\r\n            <button class=\"form-save-button\" (click)=\"saveData()\">Save</button>\r\n        </div>\r\n\r\n        <div class=\"input-form-col2\">\r\n            <div class=\"input-back-link\"><a routerLink=\"/shoptask/Order\">Back</a></div>     \r\n        </div>\r\n    </div>\r\n    \r\n</div>\r\n";
+module.exports = "<div class=\"input-form\">\r\n    <div class=\"form-header\">\r\n        <p class=\"form-header-text\">Input your data</p>\r\n    </div>\r\n    <div class=\"input-form-body\" [formGroup]=\"orderDetailsControl\">\r\n        <p class=\"order-details-error-message\" *ngIf=\"(name.dirty || name.touched) && name.invalid && name.errors.required\" >Field Name is requred</p>\r\n        <label class=\"input-form-col1\">Name</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"name\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"(surname.dirty || surname.touched) && surname.invalid && surname.errors.required\" >Field Surname is requred</p>\r\n        <label class=\"input-form-col1\">Surname</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"surname\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"(address.dirty || address.touched) && address.invalid && address.errors.required\" >Field Address is requred</p>\r\n        <label class=\"input-form-col1\">Address</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"address\"/>\r\n        </div>\r\n\r\n        <p class=\"order-details-error-message\" *ngIf=\"(phone.dirty || phone.touched) && phone.invalid && phone.errors.required\" >Field Phone is requred</p>\r\n        <label class=\"input-form-col1\">Phone</label>\r\n        <div class=\"input-form-col2\">\r\n            <input class=\"input-text-box\" formControlName=\"phone\"/>\r\n        </div>\r\n\r\n        <label class=\"input-form-col1\">Comments</label>\r\n        <div class=\"input-form-col2\">\r\n            <textarea class=\"input-textarea\" cols=\"20\" rows=\"6\" formControlName=\"comments\"></textarea>\r\n        </div>\r\n\r\n        <div class=\"input-form-col2\">\r\n            <button class=\"form-save-button\" (click)=\"saveData()\">Save</button>\r\n        </div>\r\n\r\n        <div class=\"input-form-col2\">\r\n            <div class=\"input-back-link\"><a routerLink=\"/shoptask/Order\">Back</a></div>     \r\n        </div>\r\n    </div>\r\n    \r\n</div>\r\n";
 
 /***/ }),
 /* 315 */
@@ -84250,22 +84250,8 @@ var order_details_component_OrderDetailsComponent = /** @class */ (function () {
     function OrderDetailsComponent(_orderService, _router) {
         this._orderService = _orderService;
         this._router = _router;
-        this._showErrors = false;
         this._orderDetails = _orderService.orderDetails;
-        if (this._orderService.cartItems.length == 0) {
-            this._router.navigate(['/shoptask/Order']);
-        }
     }
-    Object.defineProperty(OrderDetailsComponent.prototype, "showErrors", {
-        get: function () {
-            return this._showErrors;
-        },
-        set: function (val) {
-            this._showErrors = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(OrderDetailsComponent.prototype, "orderDetailsControl", {
         get: function () {
             return this._orderDetailsControl;
@@ -84276,6 +84262,34 @@ var order_details_component_OrderDetailsComponent = /** @class */ (function () {
     Object.defineProperty(OrderDetailsComponent.prototype, "orderDetails", {
         get: function () {
             return this._orderDetails;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(OrderDetailsComponent.prototype, "name", {
+        get: function () {
+            return this._orderDetailsControl.get('name');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(OrderDetailsComponent.prototype, "surname", {
+        get: function () {
+            return this._orderDetailsControl.get('surname');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(OrderDetailsComponent.prototype, "address", {
+        get: function () {
+            return this._orderDetailsControl.get('address');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(OrderDetailsComponent.prototype, "phone", {
+        get: function () {
+            return this._orderDetailsControl.get('phone');
         },
         enumerable: true,
         configurable: true
@@ -84296,9 +84310,6 @@ var order_details_component_OrderDetailsComponent = /** @class */ (function () {
             this._orderService.clearOrderDetails();
             this._orderService.clearCart();
             this._router.navigate(['/shoptask/Order']);
-        }
-        else {
-            this._showErrors = true;
         }
     };
     OrderDetailsComponent = order_details_component_decorate([

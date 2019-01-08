@@ -26,7 +26,9 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="js-api-root-url" data-api-root-url="@HttpContext.Current.Request.ApplicationPath"></div>
+    <script>
+        var apiRootUrl = '@HttpContext.Current.Request.ApplicationPath';
+    </script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/scripts/libs/jquery.unobtrusive-ajax.js")
     @Scripts.Render("~/bundles/jqueryval")

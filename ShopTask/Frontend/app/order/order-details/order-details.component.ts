@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl, Validators, AbstractControl } from "@angular/forms";
 import { OrderDetails } from '../models/order-details.model';
 import { OrderService } from '../services/order.service';
 import { Router } from '@angular/router';
@@ -12,15 +12,6 @@ export class OrderDetailsComponent implements OnInit {
 
     private _orderDetailsControl: FormGroup;
     private _orderDetails: OrderDetails;
-    private _showErrors: boolean = false;
-
-    public get showErrors(): boolean {
-        return this._showErrors;
-    }
-
-    public set showErrors(val : boolean) {
-        this._showErrors = val;
-    }
 
     public get orderDetailsControl(): FormGroup {
         return this._orderDetailsControl;
@@ -30,11 +21,24 @@ export class OrderDetailsComponent implements OnInit {
         return this._orderDetails;
     }
 
+    public get name(): AbstractControl {
+        return this._orderDetailsControl.get('name');
+    }
+
+    public get surname(): AbstractControl {
+        return this._orderDetailsControl.get('surname');
+    }
+
+    public get address(): AbstractControl {
+        return this._orderDetailsControl.get('address');
+    }
+
+    public get phone(): AbstractControl {
+        return this._orderDetailsControl.get('phone');
+    }
+
     constructor(private _orderService: OrderService, private _router: Router) {
         this._orderDetails = _orderService.orderDetails;
-        if(this._orderService.cartItems.length == 0){
-            this._router.navigate(['/shoptask/Order']);
-        }
     }
 
     ngOnInit() {
@@ -54,9 +58,6 @@ export class OrderDetailsComponent implements OnInit {
             this._orderService.clearOrderDetails();
             this._orderService.clearCart();
             this._router.navigate(['/shoptask/Order']);
-        }
-        else {
-            this._showErrors = true;
         }
     }
 
