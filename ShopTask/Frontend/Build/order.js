@@ -84148,8 +84148,18 @@ var order_component_metadata = (undefined && undefined.__metadata) || function (
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var order_component_OrderComponent = /** @class */ (function () {
-    function OrderComponent() {
+    function OrderComponent(router) {
+        this.router = router;
+        router.events.subscribe(function (event) {
+            if (event instanceof router_GuardsCheckEnd) {
+                console.log(event);
+                if (!event.shouldActivate) {
+                    router.navigateByUrl('/shoptask/Order');
+                }
+            }
+        });
     }
     OrderComponent.prototype.ngOnInit = function () { };
     OrderComponent = order_component_decorate([
@@ -84157,7 +84167,7 @@ var order_component_OrderComponent = /** @class */ (function () {
             selector: 'order',
             template: __webpack_require__(311)
         }),
-        order_component_metadata("design:paramtypes", [])
+        order_component_metadata("design:paramtypes", [router_Router])
     ], OrderComponent);
     return OrderComponent;
 }());
@@ -84324,7 +84334,7 @@ var order_details_component_OrderDetailsComponent = /** @class */ (function () {
         if (this._orderDetailsControl.valid) {
             this._orderService.clearOrderDetails();
             this._orderService.clearCart();
-            this._router.navigate(['/shoptask/Order']);
+            this._router.navigateByUrl('/shoptask/Order');
         }
         else {
             this._formSubmitAttempted = true;
@@ -84392,7 +84402,8 @@ var app_module_decorate = (undefined && undefined.__decorate) || function (decor
 
 var app_module_routes = [
     { path: 'shoptask/Order', component: order_creation_component_OrderCreationComponent },
-    { path: 'shoptask/Order/OrderDetail', canActivate: [order_details_guard_OrderDetailsGuard], component: order_details_component_OrderDetailsComponent }
+    { path: 'shoptask/Order/OrderDetail', canActivate: [order_details_guard_OrderDetailsGuard], component: order_details_component_OrderDetailsComponent },
+    { path: 'shoptask/Order/:optionalPath', redirectTo: 'shoptask/Order' }
 ];
 var app_module_AppModule = /** @class */ (function () {
     function AppModule() {

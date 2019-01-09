@@ -17,7 +17,8 @@ import { WindowRef } from './services/windowRef';
 
 const routes = [
     { path: 'shoptask/Order', component: OrderCreationComponent},
-    { path: 'shoptask/Order/OrderDetail', canActivate: [OrderDetailsGuard], component: OrderDetailsComponent}
+    { path: 'shoptask/Order/OrderDetail', canActivate: [OrderDetailsGuard], component: OrderDetailsComponent},
+    { path: 'shoptask/Order/:optionalPath', redirectTo: 'shoptask/Order'}
 ]
 
 @NgModule({

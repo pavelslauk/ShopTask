@@ -66,7 +66,7 @@ export class OrderDetailsComponent implements OnInit {
         if(this._orderDetailsControl.valid) {
             this._orderService.clearOrderDetails();
             this._orderService.clearCart();
-            this._router.navigate(['/shoptask/Order']);
+            this._router.navigateByUrl('/shoptask/Order');
         }
         else {
             this._formSubmitAttempted = true;

@@ -29,6 +29,16 @@ namespace ShopTask
                 defaults: new { action = "EditProduct" });
 
             routes.MapRoute(
+                name: "GetProductsAsync",
+                url: "Order/GetProductsAsync",
+                defaults: new { controller = "Order", action = "GetProductsAsync" });
+
+            routes.MapRoute(
+                name: "Order",
+                url: "Order/{page}",
+                defaults: new { controller = "Order", action = "Index", page = UrlParameter.Optional });
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Products", action = "Index", id = UrlParameter.Optional });
