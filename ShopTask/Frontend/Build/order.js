@@ -83908,7 +83908,7 @@ var products_service_ProductsService = /** @class */ (function () {
         this.windowRef = windowRef;
     }
     ProductsService.prototype.getAll = function () {
-        return this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetProductsAsync').pipe(Object(operators_map["a" /* map */])(function (data) {
+        return this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetProducts').pipe(Object(operators_map["a" /* map */])(function (data) {
             var products = data;
             return products.map(function (item) {
                 return new Product(item);
@@ -84030,11 +84030,14 @@ var order_service_metadata = (undefined && undefined.__metadata) || function (k,
 
 
 
+
 var order_service_OrderService = /** @class */ (function () {
     function OrderService() {
         this._cartItems = [];
         this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
         this._orderDetails = new OrderDetails();
+        this._cartItems = this.GetCartItemsFromSession();
+        this.cartItemsBehaviorSubject.next(this.cartItems);
     }
     Object.defineProperty(OrderService.prototype, "cartItemsBehaviorSubject", {
         get: function () {
@@ -84066,15 +84069,18 @@ var order_service_OrderService = /** @class */ (function () {
         else {
             cartItem.productsCount++;
         }
+        this.saveCartItemsToSession();
     };
     OrderService.prototype.removeFromCart = function (cartItem) {
         this._cartItems = this.cartItems.filter(function (item) { return item != cartItem; });
         this.cartItemsBehaviorSubject.next(this.cartItems);
+        this.saveCartItemsToSession();
     };
     ;
     OrderService.prototype.clearCart = function () {
         this._cartItems = [];
         this.cartItemsBehaviorSubject.next(this.cartItems);
+        this.saveCartItemsToSession();
     };
     OrderService.prototype.totalCartPrice = function () {
         var total = 0;
@@ -84083,6 +84089,28 @@ var order_service_OrderService = /** @class */ (function () {
     };
     OrderService.prototype.clearOrderDetails = function () {
         this._orderDetails = new OrderDetails();
+    };
+    OrderService.prototype.saveCartItemsToSession = function () {
+        sessionStorage.setItem('CartItems', JSON.stringify(this._cartItems));
+    };
+    OrderService.prototype.GetCartItemsFromSession = function () {
+        var cartItems = JSON.parse(sessionStorage.getItem('CartItems'));
+        if (cartItems) {
+            return cartItems.map(function (data) {
+                var product = new Product({
+                    Title: data._product._title,
+                    Price: data._product._price,
+                    Category: data._product._category,
+                    Description: data._product._description
+                });
+                var cartItem = new CartItem(product);
+                cartItem.productsCount = data._productsCount;
+                return cartItem;
+            });
+        }
+        else {
+            return [];
+        }
     };
     OrderService = order_service_decorate([
         Object(core["A" /* Injectable */])(),
@@ -84148,18 +84176,8 @@ var order_component_metadata = (undefined && undefined.__metadata) || function (
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-
 var order_component_OrderComponent = /** @class */ (function () {
-    function OrderComponent(router) {
-        this.router = router;
-        router.events.subscribe(function (event) {
-            if (event instanceof router_GuardsCheckEnd) {
-                console.log(event);
-                if (!event.shouldActivate) {
-                    router.navigateByUrl('/shoptask/Order');
-                }
-            }
-        });
+    function OrderComponent() {
     }
     OrderComponent.prototype.ngOnInit = function () { };
     OrderComponent = order_component_decorate([
@@ -84167,7 +84185,7 @@ var order_component_OrderComponent = /** @class */ (function () {
             selector: 'order',
             template: __webpack_require__(311)
         }),
-        order_component_metadata("design:paramtypes", [router_Router])
+        order_component_metadata("design:paramtypes", [])
     ], OrderComponent);
     return OrderComponent;
 }());
@@ -84198,12 +84216,14 @@ var cart_component_CartComponent = /** @class */ (function () {
     ;
     CartComponent.prototype.increaseItemCount = function (cartItem) {
         cartItem.productsCount++;
+        this.orderService.saveCartItemsToSession();
     };
     ;
     CartComponent.prototype.decreaseItemCount = function (cartItem) {
         if (--cartItem.productsCount == 0) {
             this.removeFromCart(cartItem);
         }
+        this.orderService.saveCartItemsToSession();
     };
     ;
     CartComponent.prototype.totalCartPrice = function () {
@@ -84231,8 +84251,10 @@ var order_creation_component_metadata = (undefined && undefined.__metadata) || f
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var order_creation_component_OrderCreationComponent = /** @class */ (function () {
-    function OrderCreationComponent() {
+    function OrderCreationComponent(orderService) {
+        this.orderService = orderService;
     }
     OrderCreationComponent.prototype.ngOnInit = function () { };
     OrderCreationComponent = order_creation_component_decorate([
@@ -84240,7 +84262,7 @@ var order_creation_component_OrderCreationComponent = /** @class */ (function ()
             selector: 'order-creation',
             template: __webpack_require__(313)
         }),
-        order_creation_component_metadata("design:paramtypes", [])
+        order_creation_component_metadata("design:paramtypes", [order_service_OrderService])
     ], OrderCreationComponent);
     return OrderCreationComponent;
 }());
@@ -84363,16 +84385,24 @@ var order_details_guard_metadata = (undefined && undefined.__metadata) || functi
 };
 
 
+
 var order_details_guard_OrderDetailsGuard = /** @class */ (function () {
-    function OrderDetailsGuard(_orderService) {
+    function OrderDetailsGuard(_orderService, router) {
         this._orderService = _orderService;
+        this.router = router;
     }
     OrderDetailsGuard.prototype.canActivate = function (next, state) {
-        return this._orderService.cartItems.length != 0;
+        if (this._orderService.cartItems.length != 0) {
+            return true;
+        }
+        else {
+            this.router.navigateByUrl('/shoptask/Order');
+        }
+        return false;
     };
     OrderDetailsGuard = order_details_guard_decorate([
         Object(core["A" /* Injectable */])(),
-        order_details_guard_metadata("design:paramtypes", [order_service_OrderService])
+        order_details_guard_metadata("design:paramtypes", [order_service_OrderService, router_Router])
     ], OrderDetailsGuard);
     return OrderDetailsGuard;
 }());

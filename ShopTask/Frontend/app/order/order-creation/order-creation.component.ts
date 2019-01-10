@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { OrderService } from '../services/order.service';
      
 @Component({
     selector: 'order-creation',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderCreationComponent implements OnInit { 
 
-    constructor() { }
+    constructor(private orderService: OrderService) { }
 
     ngOnInit() { }  
 }

@@ -11,7 +11,7 @@ export class ProductsService {
     constructor(private _http: HttpClient, private windowRef: WindowRef) { }
 
     public getAll() : Observable<Product[]> {
-        return this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetProductsAsync').pipe(map(data=>{
+        return this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetProducts').pipe(map(data=>{
             var products = data as object[];
             return products.map(function(item: object) {
                 return new Product(item);

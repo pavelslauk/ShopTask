@@ -23,12 +23,14 @@ export class CartComponent implements OnInit {
 
     private increaseItemCount(cartItem: CartItem) {
         cartItem.productsCount++;
+        this.orderService.saveCartItemsToSession();
     };
 
     private decreaseItemCount (cartItem: CartItem) {
         if (--cartItem.productsCount == 0) {
             this.removeFromCart(cartItem);
         }
+        this.orderService.saveCartItemsToSession();
     };
 
     private totalCartPrice(){

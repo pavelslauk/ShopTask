@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, Event, GuardsCheckEnd } from '@angular/router';
      
 @Component({
     selector: 'order',
@@ -7,17 +6,7 @@ import { Router, Event, GuardsCheckEnd } from '@angular/router';
 })
 export class OrderComponent implements OnInit { 
 
-    constructor(private router: Router) { 
-        router.events.subscribe((event: Event) => {
-            if (event instanceof GuardsCheckEnd)
-            {
-                console.log(event);
-                if (!event.shouldActivate) {
-                    router.navigateByUrl('/shoptask/Order');
-                }
-            }
-        })
-    }
+    constructor() { }
 
     ngOnInit() { }  
 }
