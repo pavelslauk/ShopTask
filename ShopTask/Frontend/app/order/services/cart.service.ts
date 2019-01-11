@@ -2,15 +2,12 @@ import { Injectable } from "@angular/core";
 import { Product } from '../models/product.model';
 import { CartItem } from '../models/cart-item.model';
 import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { OrderDetails } from "../models/order-details.model";
 
 @Injectable()
-export class OrderService {
+export class CartService {
 
     private _cartItems: CartItem[] = [];
     private _cartItemsBehaviorSubject = new BehaviorSubject(this.cartItems);
-    private _orderDetails: OrderDetails = new OrderDetails();
 
     public get cartItemsBehaviorSubject(): BehaviorSubject<CartItem[]> {
         return this._cartItemsBehaviorSubject;
@@ -20,13 +17,8 @@ export class OrderService {
         return this._cartItems;
     }
 
-    public get orderDetails(): OrderDetails {
-        return this._orderDetails;
-    }
-
     constructor() { 
         this._cartItems = this.GetCartItemsFromSession();
-
         this.cartItemsBehaviorSubject.next(this.cartItems);
     }
 
@@ -47,6 +39,18 @@ export class OrderService {
         this.saveCartItemsToSession();
     };
 
+    public increaseItemCount(cartItem: CartItem) {
+        cartItem.productsCount++;
+        this.saveCartItemsToSession();
+    };
+
+    public decreaseItemCount (cartItem: CartItem) {
+        if (--cartItem.productsCount == 0) {
+            this.removeFromCart(cartItem);
+        }
+        this.saveCartItemsToSession();
+    };
+
     public clearCart() {
         this._cartItems = [];
         this.cartItemsBehaviorSubject.next(this.cartItems);
@@ -57,10 +61,6 @@ export class OrderService {
         var total = 0;
         this.cartItems.forEach(item => total += item.totalPrice);
         return total.toFixed(2);
-    }
-
-    public clearOrderDetails() {
-        this._orderDetails = new OrderDetails();
     }
 
     public saveCartItemsToSession() {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from "@angular/forms";
 import { OrderDetails } from '../models/order-details.model';
-import { OrderService } from '../services/order.service';
+import { CartService } from '../services/cart.service';
 import { Router } from '@angular/router';
      
 @Component({
@@ -46,8 +46,8 @@ export class OrderDetailsComponent implements OnInit {
         return this._orderDetailsControl.get('phone');
     }
 
-    constructor(private _orderService: OrderService, private _router: Router) {
-        this._orderDetails = _orderService.orderDetails;
+    constructor(private _cartService: CartService, private _router: Router) {
+        this._orderDetails = this.GetOrderDetailsLocal();
     }
 
     ngOnInit() {
@@ -59,13 +59,12 @@ export class OrderDetailsComponent implements OnInit {
             comments: new FormControl(this.orderDetails.comments)
         })
 
-        this._orderDetailsControl.valueChanges.subscribe((value) => this.orderDetails.SetData(value));
+        this._orderDetailsControl.valueChanges.subscribe((value) => this.SaveOrderDetailsLocal(value));
     }
 
     public saveData() {
         if(this._orderDetailsControl.valid) {
-            this._orderService.clearOrderDetails();
-            this._orderService.clearCart();
+            this._cartService.clearCart();
             this._router.navigateByUrl('/shoptask/Order');
         }
         else {
@@ -73,4 +72,23 @@ export class OrderDetailsComponent implements OnInit {
         }
     }
 
+    private SaveOrderDetailsLocal(value: any) {
+        this.orderDetails.SetData(value);
+        localStorage.setItem('OrderDetails', JSON.stringify(this.orderDetails));
+    }
+
+    private GetOrderDetailsLocal() {
+        var orderDetails = new OrderDetails();
+        var orderDetailsJSON = JSON.parse(localStorage.getItem('OrderDetails'));
+        if(orderDetailsJSON){
+            orderDetails.SetData({
+                name: orderDetailsJSON._name,
+                surname: orderDetailsJSON._surname,
+                address: orderDetailsJSON._address,
+                phone: orderDetailsJSON._phone,
+                comments: orderDetailsJSON._comments
+            });
+        }
+        return orderDetails;
+    }
 }

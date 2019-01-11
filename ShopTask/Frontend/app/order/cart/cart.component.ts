@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CartItem } from '../models/cart-item.model';
-import { OrderService } from '../services/order.service';
+import { CartService } from '../services/cart.service';
 import { Observable } from 'rxjs';
      
 @Component({
@@ -11,29 +11,25 @@ export class CartComponent implements OnInit {
 
     private cartItems: Observable<CartItem[]>;
 
-    constructor(private orderService: OrderService) { }
+    constructor(private cartService: CartService) { }
 
     ngOnInit() {
-        this.cartItems = this.orderService.cartItemsBehaviorSubject.asObservable();
+        this.cartItems = this.cartService.cartItemsBehaviorSubject.asObservable();
     }
 
     private removeFromCart(cartItem: CartItem) {
-        this.orderService.removeFromCart(cartItem);
+        this.cartService.removeFromCart(cartItem);
     };
 
     private increaseItemCount(cartItem: CartItem) {
-        cartItem.productsCount++;
-        this.orderService.saveCartItemsToSession();
+        this.cartService.increaseItemCount(cartItem);
     };
 
     private decreaseItemCount (cartItem: CartItem) {
-        if (--cartItem.productsCount == 0) {
-            this.removeFromCart(cartItem);
-        }
-        this.orderService.saveCartItemsToSession();
+        this.cartService.decreaseItemCount(cartItem);
     };
 
     private totalCartPrice(){
-        return this.orderService.totalCartPrice();
+        return this.cartService.totalCartPrice();
     }
 }

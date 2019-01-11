@@ -83960,6 +83960,252 @@ var CartItem = /** @class */ (function () {
 
 ;
 
+// CONCATENATED MODULE: ./app/order/services/cart.service.ts
+var cart_service_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var cart_service_metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var cart_service_CartService = /** @class */ (function () {
+    function CartService() {
+        this._cartItems = [];
+        this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
+        this._cartItems = this.GetCartItemsFromSession();
+        this.cartItemsBehaviorSubject.next(this.cartItems);
+    }
+    Object.defineProperty(CartService.prototype, "cartItemsBehaviorSubject", {
+        get: function () {
+            return this._cartItemsBehaviorSubject;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CartService.prototype, "cartItems", {
+        get: function () {
+            return this._cartItems;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CartService.prototype.addToCart = function (product) {
+        var cartItem = this.cartItems.find(function (item) { return item.product == product; });
+        if (!cartItem) {
+            cartItem = new CartItem(product);
+            this.cartItems.push(cartItem);
+        }
+        else {
+            cartItem.productsCount++;
+        }
+        this.saveCartItemsToSession();
+    };
+    CartService.prototype.removeFromCart = function (cartItem) {
+        this._cartItems = this.cartItems.filter(function (item) { return item != cartItem; });
+        this.cartItemsBehaviorSubject.next(this.cartItems);
+        this.saveCartItemsToSession();
+    };
+    ;
+    CartService.prototype.increaseItemCount = function (cartItem) {
+        cartItem.productsCount++;
+        this.saveCartItemsToSession();
+    };
+    ;
+    CartService.prototype.decreaseItemCount = function (cartItem) {
+        if (--cartItem.productsCount == 0) {
+            this.removeFromCart(cartItem);
+        }
+        this.saveCartItemsToSession();
+    };
+    ;
+    CartService.prototype.clearCart = function () {
+        this._cartItems = [];
+        this.cartItemsBehaviorSubject.next(this.cartItems);
+        this.saveCartItemsToSession();
+    };
+    CartService.prototype.totalCartPrice = function () {
+        var total = 0;
+        this.cartItems.forEach(function (item) { return total += item.totalPrice; });
+        return total.toFixed(2);
+    };
+    CartService.prototype.saveCartItemsToSession = function () {
+        sessionStorage.setItem('CartItems', JSON.stringify(this._cartItems));
+    };
+    CartService.prototype.GetCartItemsFromSession = function () {
+        var cartItems = JSON.parse(sessionStorage.getItem('CartItems'));
+        if (cartItems) {
+            return cartItems.map(function (data) {
+                var product = new Product({
+                    Title: data._product._title,
+                    Price: data._product._price,
+                    Category: data._product._category,
+                    Description: data._product._description
+                });
+                var cartItem = new CartItem(product);
+                cartItem.productsCount = data._productsCount;
+                return cartItem;
+            });
+        }
+        else {
+            return [];
+        }
+    };
+    CartService = cart_service_decorate([
+        Object(core["A" /* Injectable */])(),
+        cart_service_metadata("design:paramtypes", [])
+    ], CartService);
+    return CartService;
+}());
+
+
+// CONCATENATED MODULE: ./app/order/product-list/product-list.component.ts
+var product_list_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var product_list_component_metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var product_list_component_ProductListComponent = /** @class */ (function () {
+    function ProductListComponent(productsService, cartService) {
+        this.productsService = productsService;
+        this.cartService = cartService;
+    }
+    ProductListComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.productsService.getAll().subscribe(function (data) { return _this.products = data; });
+    };
+    ProductListComponent.prototype.addToCart = function (product) {
+        this.cartService.addToCart(product);
+    };
+    ProductListComponent.prototype.ShowDescription = function (descriptionModal, descriptionContent, description) {
+        descriptionModal.classList.add('description-modal-show');
+        if (description != null) {
+            descriptionContent.textContent = description;
+        }
+        else {
+            descriptionContent.textContent = 'No descreption!';
+        }
+    };
+    ProductListComponent = product_list_component_decorate([
+        Object(core["n" /* Component */])({
+            selector: 'product-list',
+            template: __webpack_require__(310)
+        }),
+        product_list_component_metadata("design:paramtypes", [products_service_ProductsService, cart_service_CartService])
+    ], ProductListComponent);
+    return ProductListComponent;
+}());
+
+
+// CONCATENATED MODULE: ./app/order/order.component.ts
+var order_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var order_component_metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var order_component_OrderComponent = /** @class */ (function () {
+    function OrderComponent() {
+    }
+    OrderComponent.prototype.ngOnInit = function () { };
+    OrderComponent = order_component_decorate([
+        Object(core["n" /* Component */])({
+            selector: 'order',
+            template: __webpack_require__(311)
+        }),
+        order_component_metadata("design:paramtypes", [])
+    ], OrderComponent);
+    return OrderComponent;
+}());
+
+
+// CONCATENATED MODULE: ./app/order/cart/cart.component.ts
+var cart_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var cart_component_metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var cart_component_CartComponent = /** @class */ (function () {
+    function CartComponent(cartService) {
+        this.cartService = cartService;
+    }
+    CartComponent.prototype.ngOnInit = function () {
+        this.cartItems = this.cartService.cartItemsBehaviorSubject.asObservable();
+    };
+    CartComponent.prototype.removeFromCart = function (cartItem) {
+        this.cartService.removeFromCart(cartItem);
+    };
+    ;
+    CartComponent.prototype.increaseItemCount = function (cartItem) {
+        this.cartService.increaseItemCount(cartItem);
+    };
+    ;
+    CartComponent.prototype.decreaseItemCount = function (cartItem) {
+        this.cartService.decreaseItemCount(cartItem);
+    };
+    ;
+    CartComponent.prototype.totalCartPrice = function () {
+        return this.cartService.totalCartPrice();
+    };
+    CartComponent = cart_component_decorate([
+        Object(core["n" /* Component */])({
+            selector: 'cart',
+            template: __webpack_require__(312)
+        }),
+        cart_component_metadata("design:paramtypes", [cart_service_CartService])
+    ], CartComponent);
+    return CartComponent;
+}());
+
+
+// CONCATENATED MODULE: ./app/order/order-creation/order-creation.component.ts
+var order_creation_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var order_creation_component_metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var order_creation_component_OrderCreationComponent = /** @class */ (function () {
+    function OrderCreationComponent() {
+    }
+    OrderCreationComponent.prototype.ngOnInit = function () { };
+    OrderCreationComponent = order_creation_component_decorate([
+        Object(core["n" /* Component */])({
+            selector: 'order-creation',
+            template: __webpack_require__(313)
+        }),
+        order_creation_component_metadata("design:paramtypes", [])
+    ], OrderCreationComponent);
+    return OrderCreationComponent;
+}());
+
+
 // CONCATENATED MODULE: ./app/order/models/order-details.model.ts
 var OrderDetails = /** @class */ (function () {
     function OrderDetails() {
@@ -84016,258 +84262,6 @@ var OrderDetails = /** @class */ (function () {
 
 ;
 
-// CONCATENATED MODULE: ./app/order/services/order.service.ts
-var order_service_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var order_service_metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-var order_service_OrderService = /** @class */ (function () {
-    function OrderService() {
-        this._cartItems = [];
-        this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
-        this._orderDetails = new OrderDetails();
-        this._cartItems = this.GetCartItemsFromSession();
-        this.cartItemsBehaviorSubject.next(this.cartItems);
-    }
-    Object.defineProperty(OrderService.prototype, "cartItemsBehaviorSubject", {
-        get: function () {
-            return this._cartItemsBehaviorSubject;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(OrderService.prototype, "cartItems", {
-        get: function () {
-            return this._cartItems;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(OrderService.prototype, "orderDetails", {
-        get: function () {
-            return this._orderDetails;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    OrderService.prototype.addToCart = function (product) {
-        var cartItem = this.cartItems.find(function (item) { return item.product == product; });
-        if (!cartItem) {
-            cartItem = new CartItem(product);
-            this.cartItems.push(cartItem);
-        }
-        else {
-            cartItem.productsCount++;
-        }
-        this.saveCartItemsToSession();
-    };
-    OrderService.prototype.removeFromCart = function (cartItem) {
-        this._cartItems = this.cartItems.filter(function (item) { return item != cartItem; });
-        this.cartItemsBehaviorSubject.next(this.cartItems);
-        this.saveCartItemsToSession();
-    };
-    ;
-    OrderService.prototype.clearCart = function () {
-        this._cartItems = [];
-        this.cartItemsBehaviorSubject.next(this.cartItems);
-        this.saveCartItemsToSession();
-    };
-    OrderService.prototype.totalCartPrice = function () {
-        var total = 0;
-        this.cartItems.forEach(function (item) { return total += item.totalPrice; });
-        return total.toFixed(2);
-    };
-    OrderService.prototype.clearOrderDetails = function () {
-        this._orderDetails = new OrderDetails();
-    };
-    OrderService.prototype.saveCartItemsToSession = function () {
-        sessionStorage.setItem('CartItems', JSON.stringify(this._cartItems));
-    };
-    OrderService.prototype.GetCartItemsFromSession = function () {
-        var cartItems = JSON.parse(sessionStorage.getItem('CartItems'));
-        if (cartItems) {
-            return cartItems.map(function (data) {
-                var product = new Product({
-                    Title: data._product._title,
-                    Price: data._product._price,
-                    Category: data._product._category,
-                    Description: data._product._description
-                });
-                var cartItem = new CartItem(product);
-                cartItem.productsCount = data._productsCount;
-                return cartItem;
-            });
-        }
-        else {
-            return [];
-        }
-    };
-    OrderService = order_service_decorate([
-        Object(core["A" /* Injectable */])(),
-        order_service_metadata("design:paramtypes", [])
-    ], OrderService);
-    return OrderService;
-}());
-
-
-// CONCATENATED MODULE: ./app/order/product-list/product-list.component.ts
-var product_list_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var product_list_component_metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var product_list_component_ProductListComponent = /** @class */ (function () {
-    function ProductListComponent(productsService, orderService) {
-        this.productsService = productsService;
-        this.orderService = orderService;
-    }
-    ProductListComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.productsService.getAll().subscribe(function (data) { return _this.products = data; });
-    };
-    ProductListComponent.prototype.addToCart = function (product) {
-        this.orderService.addToCart(product);
-    };
-    ProductListComponent.prototype.ShowDescription = function (descriptionModal, descriptionContent, description) {
-        descriptionModal.classList.add('description-modal-show');
-        if (description != null) {
-            descriptionContent.textContent = description;
-        }
-        else {
-            descriptionContent.textContent = 'No descreption!';
-        }
-    };
-    ProductListComponent = product_list_component_decorate([
-        Object(core["n" /* Component */])({
-            selector: 'product-list',
-            template: __webpack_require__(310)
-        }),
-        product_list_component_metadata("design:paramtypes", [products_service_ProductsService, order_service_OrderService])
-    ], ProductListComponent);
-    return ProductListComponent;
-}());
-
-
-// CONCATENATED MODULE: ./app/order/order.component.ts
-var order_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var order_component_metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var order_component_OrderComponent = /** @class */ (function () {
-    function OrderComponent() {
-    }
-    OrderComponent.prototype.ngOnInit = function () { };
-    OrderComponent = order_component_decorate([
-        Object(core["n" /* Component */])({
-            selector: 'order',
-            template: __webpack_require__(311)
-        }),
-        order_component_metadata("design:paramtypes", [])
-    ], OrderComponent);
-    return OrderComponent;
-}());
-
-
-// CONCATENATED MODULE: ./app/order/cart/cart.component.ts
-var cart_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var cart_component_metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var cart_component_CartComponent = /** @class */ (function () {
-    function CartComponent(orderService) {
-        this.orderService = orderService;
-    }
-    CartComponent.prototype.ngOnInit = function () {
-        this.cartItems = this.orderService.cartItemsBehaviorSubject.asObservable();
-    };
-    CartComponent.prototype.removeFromCart = function (cartItem) {
-        this.orderService.removeFromCart(cartItem);
-    };
-    ;
-    CartComponent.prototype.increaseItemCount = function (cartItem) {
-        cartItem.productsCount++;
-        this.orderService.saveCartItemsToSession();
-    };
-    ;
-    CartComponent.prototype.decreaseItemCount = function (cartItem) {
-        if (--cartItem.productsCount == 0) {
-            this.removeFromCart(cartItem);
-        }
-        this.orderService.saveCartItemsToSession();
-    };
-    ;
-    CartComponent.prototype.totalCartPrice = function () {
-        return this.orderService.totalCartPrice();
-    };
-    CartComponent = cart_component_decorate([
-        Object(core["n" /* Component */])({
-            selector: 'cart',
-            template: __webpack_require__(312)
-        }),
-        cart_component_metadata("design:paramtypes", [order_service_OrderService])
-    ], CartComponent);
-    return CartComponent;
-}());
-
-
-// CONCATENATED MODULE: ./app/order/order-creation/order-creation.component.ts
-var order_creation_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var order_creation_component_metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var order_creation_component_OrderCreationComponent = /** @class */ (function () {
-    function OrderCreationComponent(orderService) {
-        this.orderService = orderService;
-    }
-    OrderCreationComponent.prototype.ngOnInit = function () { };
-    OrderCreationComponent = order_creation_component_decorate([
-        Object(core["n" /* Component */])({
-            selector: 'order-creation',
-            template: __webpack_require__(313)
-        }),
-        order_creation_component_metadata("design:paramtypes", [order_service_OrderService])
-    ], OrderCreationComponent);
-    return OrderCreationComponent;
-}());
-
-
 // CONCATENATED MODULE: ./app/order/order-details/order-details.component.ts
 var order_details_component_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84282,12 +84276,13 @@ var order_details_component_metadata = (undefined && undefined.__metadata) || fu
 
 
 
+
 var order_details_component_OrderDetailsComponent = /** @class */ (function () {
-    function OrderDetailsComponent(_orderService, _router) {
-        this._orderService = _orderService;
+    function OrderDetailsComponent(_cartService, _router) {
+        this._cartService = _cartService;
         this._router = _router;
         this._formSubmitAttempted = false;
-        this._orderDetails = _orderService.orderDetails;
+        this._orderDetails = this.GetOrderDetailsLocal();
     }
     Object.defineProperty(OrderDetailsComponent.prototype, "formSubmitAttempted", {
         get: function () {
@@ -84350,24 +84345,41 @@ var order_details_component_OrderDetailsComponent = /** @class */ (function () {
             phone: new forms_FormControl(this.orderDetails.phone, forms_Validators.required),
             comments: new forms_FormControl(this.orderDetails.comments)
         });
-        this._orderDetailsControl.valueChanges.subscribe(function (value) { return _this.orderDetails.SetData(value); });
+        this._orderDetailsControl.valueChanges.subscribe(function (value) { return _this.SaveOrderDetailsLocal(value); });
     };
     OrderDetailsComponent.prototype.saveData = function () {
         if (this._orderDetailsControl.valid) {
-            this._orderService.clearOrderDetails();
-            this._orderService.clearCart();
+            this._cartService.clearCart();
             this._router.navigateByUrl('/shoptask/Order');
         }
         else {
             this._formSubmitAttempted = true;
         }
     };
+    OrderDetailsComponent.prototype.SaveOrderDetailsLocal = function (value) {
+        this.orderDetails.SetData(value);
+        localStorage.setItem('OrderDetails', JSON.stringify(this.orderDetails));
+    };
+    OrderDetailsComponent.prototype.GetOrderDetailsLocal = function () {
+        var orderDetails = new OrderDetails();
+        var orderDetailsJSON = JSON.parse(localStorage.getItem('OrderDetails'));
+        if (orderDetailsJSON) {
+            orderDetails.SetData({
+                name: orderDetailsJSON._name,
+                surname: orderDetailsJSON._surname,
+                address: orderDetailsJSON._address,
+                phone: orderDetailsJSON._phone,
+                comments: orderDetailsJSON._comments
+            });
+        }
+        return orderDetails;
+    };
     OrderDetailsComponent = order_details_component_decorate([
         Object(core["n" /* Component */])({
             selector: 'customer-data',
             template: __webpack_require__(314)
         }),
-        order_details_component_metadata("design:paramtypes", [order_service_OrderService, router_Router])
+        order_details_component_metadata("design:paramtypes", [cart_service_CartService, router_Router])
     ], OrderDetailsComponent);
     return OrderDetailsComponent;
 }());
@@ -84387,12 +84399,12 @@ var order_details_guard_metadata = (undefined && undefined.__metadata) || functi
 
 
 var order_details_guard_OrderDetailsGuard = /** @class */ (function () {
-    function OrderDetailsGuard(_orderService, router) {
-        this._orderService = _orderService;
+    function OrderDetailsGuard(_cartService, router) {
+        this._cartService = _cartService;
         this.router = router;
     }
     OrderDetailsGuard.prototype.canActivate = function (next, state) {
-        if (this._orderService.cartItems.length != 0) {
+        if (this._cartService.cartItems.length != 0) {
             return true;
         }
         else {
@@ -84402,7 +84414,7 @@ var order_details_guard_OrderDetailsGuard = /** @class */ (function () {
     };
     OrderDetailsGuard = order_details_guard_decorate([
         Object(core["A" /* Injectable */])(),
-        order_details_guard_metadata("design:paramtypes", [order_service_OrderService, router_Router])
+        order_details_guard_metadata("design:paramtypes", [cart_service_CartService, router_Router])
     ], OrderDetailsGuard);
     return OrderDetailsGuard;
 }());
@@ -84443,7 +84455,7 @@ var app_module_AppModule = /** @class */ (function () {
             imports: [platform_browser_BrowserModule, forms_FormsModule, http_HttpClientModule, router_RouterModule.forRoot(app_module_routes), forms_FormsModule, forms_ReactiveFormsModule],
             declarations: [product_list_component_ProductListComponent, order_component_OrderComponent, cart_component_CartComponent, order_creation_component_OrderCreationComponent, order_details_component_OrderDetailsComponent],
             bootstrap: [order_component_OrderComponent],
-            providers: [products_service_ProductsService, order_service_OrderService, order_details_guard_OrderDetailsGuard, windowRef_WindowRef, { provide: APP_BASE_HREF, useValue: '' }]
+            providers: [products_service_ProductsService, cart_service_CartService, order_details_guard_OrderDetailsGuard, windowRef_WindowRef, { provide: APP_BASE_HREF, useValue: '' }]
         })
     ], AppModule);
     return AppModule;
