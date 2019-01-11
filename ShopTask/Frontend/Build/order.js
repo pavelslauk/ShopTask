@@ -83974,12 +83974,15 @@ var cart_service_metadata = (undefined && undefined.__metadata) || function (k, 
 
 
 
+
+
 var cart_service_CartService = /** @class */ (function () {
-    function CartService() {
+    function CartService(_http, windowRef) {
+        this._http = _http;
+        this.windowRef = windowRef;
         this._cartItems = [];
         this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
-        this._cartItems = this.GetCartItemsFromSession();
-        this.cartItemsBehaviorSubject.next(this.cartItems);
+        this.GetCartItemsFromSession();
     }
     Object.defineProperty(CartService.prototype, "cartItemsBehaviorSubject", {
         get: function () {
@@ -84035,12 +84038,17 @@ var cart_service_CartService = /** @class */ (function () {
         return total.toFixed(2);
     };
     CartService.prototype.saveCartItemsToSession = function () {
-        sessionStorage.setItem('CartItems', JSON.stringify(this._cartItems));
+        this._http.post(this.windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart', { cart: JSON.stringify(this._cartItems) }).subscribe();
     };
     CartService.prototype.GetCartItemsFromSession = function () {
-        var cartItems = JSON.parse(sessionStorage.getItem('CartItems'));
-        if (cartItems) {
-            return cartItems.map(function (data) {
+        var _this = this;
+        this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
+            .subscribe(function (data) { return _this.OnCartGetted(data); });
+    };
+    CartService.prototype.OnCartGetted = function (data) {
+        var cartItemsJSON = data;
+        if (cartItemsJSON) {
+            this._cartItems = cartItemsJSON.map(function (data) {
                 var product = new Product({
                     Title: data._product._title,
                     Price: data._product._price,
@@ -84053,12 +84061,13 @@ var cart_service_CartService = /** @class */ (function () {
             });
         }
         else {
-            return [];
+            this._cartItems = [];
         }
+        this.cartItemsBehaviorSubject.next(this.cartItems);
     };
     CartService = cart_service_decorate([
         Object(core["A" /* Injectable */])(),
-        cart_service_metadata("design:paramtypes", [])
+        cart_service_metadata("design:paramtypes", [http_HttpClient, windowRef_WindowRef])
     ], CartService);
     return CartService;
 }());

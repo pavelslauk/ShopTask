@@ -34,6 +34,16 @@ namespace ShopTask
                 defaults: new { controller = "Order", action = "GetProductsAsync" });
 
             routes.MapRoute(
+                name: "GetCart",
+                url: "Order/GetCart",
+                defaults: new { controller = "Order", action = "GetCartFromSession" });
+
+            routes.MapRoute(
+                name: "SaveCart",
+                url: "Order/SaveCart",
+                defaults: new { controller = "Order", action = "SaveCartToSession" });
+
+            routes.MapRoute(
                 name: "Order",
                 url: "Order/{param}",
                 defaults: new { controller = "Order", action = "Index", param = UrlParameter.Optional });

@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { Product } from '../models/product.model';
 import { CartItem } from '../models/cart-item.model';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
+import { WindowRef } from "./windowRef";
 
 @Injectable()
 export class CartService {
@@ -17,9 +19,8 @@ export class CartService {
         return this._cartItems;
     }
 
-    constructor() { 
-        this._cartItems = this.GetCartItemsFromSession();
-        this.cartItemsBehaviorSubject.next(this.cartItems);
+    constructor(private _http: HttpClient, private windowRef: WindowRef) {         
+        this.GetCartItemsFromSession();
     }
 
     public addToCart(product: Product){
@@ -64,16 +65,22 @@ export class CartService {
     }
 
     public saveCartItemsToSession() {
-        sessionStorage.setItem('CartItems', JSON.stringify(this._cartItems));
+        this._http.post(this.windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart',
+            {cart: JSON.stringify(this._cartItems)}).subscribe();
     }
 
     private GetCartItemsFromSession() {
-        var cartItems = JSON.parse(sessionStorage.getItem('CartItems')) as Array<any>;
-        if(cartItems){
-            return cartItems.map(data=>{
+        this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
+        .subscribe(data => this.OnCartGetted(data));      
+    }
+
+    private OnCartGetted(data: object) {
+        var cartItemsJSON = data as Array<any>;
+        if(cartItemsJSON){
+            this._cartItems = cartItemsJSON.map(data=>{
                 var product = new Product({
-                    Title: data._product._title, 
-                    Price: data._product._price, 
+                    Title: data._product._title,
+                    Price: data._product._price,
                     Category: data._product._category,
                     Description: data._product._description
                 })
@@ -83,7 +90,8 @@ export class CartService {
             });
         }
         else {
-            return [];
+            this._cartItems = [];
         }
+        this.cartItemsBehaviorSubject.next(this.cartItems);
     }
 }

@@ -27,11 +27,25 @@ namespace ShopTask.Controllers
         }
 
         [HttpGet]
+        public object GetCartFromSession()
+        {
+            return Session["Cart"];
+        }
+
+        [HttpPost]
+        public void SaveCartToSession(string cart)
+        {
+            Session["Cart"] = cart;
+        }
+
+        [HttpGet]
         public async Task<JsonResult> GetProductsAsync()
         {
             var products = Mapper.Map<Product[], ProductOrderModel[]>((await _productsRepository
                 .GetAllAsync(include: product => product.Category)).ToArray());
             return Json(products, JsonRequestBehavior.AllowGet);
         }
+
+
     }
 }
