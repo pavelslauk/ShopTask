@@ -20,7 +20,7 @@ export class CartService {
     }
 
     constructor(private _http: HttpClient, private windowRef: WindowRef) {         
-        this.GetCartItemsFromSession();
+        this._getCart();
     }
 
     public addToCart(product: Product){
@@ -31,31 +31,29 @@ export class CartService {
         } else {
             cartItem.productsCount++;
         }
-        this.saveCartItemsToSession();
+        this._saveCart();
     }
 
     public removeFromCart(cartItem: CartItem) {
-        this._cartItems = this.cartItems.filter(item => item != cartItem);
-        this.cartItemsBehaviorSubject.next(this.cartItems);
-        this.saveCartItemsToSession();
+        this._setCartItems(this.cartItems.filter(item => item != cartItem));
+        this._saveCart();
     };
 
     public increaseItemCount(cartItem: CartItem) {
         cartItem.productsCount++;
-        this.saveCartItemsToSession();
+        this._saveCart();
     };
 
     public decreaseItemCount (cartItem: CartItem) {
         if (--cartItem.productsCount == 0) {
             this.removeFromCart(cartItem);
         }
-        this.saveCartItemsToSession();
+        this._saveCart();
     };
 
     public clearCart() {
-        this._cartItems = [];
-        this.cartItemsBehaviorSubject.next(this.cartItems);
-        this.saveCartItemsToSession();
+        this._setCartItems([]);
+        this._saveCart();
     }
 
     public totalCartPrice(){
@@ -64,20 +62,25 @@ export class CartService {
         return total.toFixed(2);
     }
 
-    public saveCartItemsToSession() {
+    private _saveCart() {
         this._http.post(this.windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart',
             {cart: JSON.stringify(this._cartItems)}).subscribe();
     }
 
-    private GetCartItemsFromSession() {
+    private _getCart() {
         this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
-        .subscribe(data => this.OnCartGetted(data));      
+        .subscribe(data => this._setCartItems(this._parseCartItems(data)));      
     }
 
-    private OnCartGetted(data: object) {
+    private _setCartItems(cart: CartItem[]) {
+        this._cartItems = cart;
+        this.cartItemsBehaviorSubject.next(this._cartItems);
+    }
+
+    private _parseCartItems(data: object) {
         var cartItemsJSON = data as Array<any>;
         if(cartItemsJSON){
-            this._cartItems = cartItemsJSON.map(data=>{
+            return cartItemsJSON.map(data=>{
                 var product = new Product({
                     Title: data._product._title,
                     Price: data._product._price,
@@ -90,8 +93,7 @@ export class CartService {
             });
         }
         else {
-            this._cartItems = [];
+            return [];
         }
-        this.cartItemsBehaviorSubject.next(this.cartItems);
     }
 }

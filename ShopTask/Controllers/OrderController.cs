@@ -27,13 +27,13 @@ namespace ShopTask.Controllers
         }
 
         [HttpGet]
-        public object GetCartFromSession()
+        public object GetCart()
         {
             return Session["Cart"];
         }
 
         [HttpPost]
-        public void SaveCartToSession(string cart)
+        public void SaveCart(string cart)
         {
             Session["Cart"] = cart;
         }

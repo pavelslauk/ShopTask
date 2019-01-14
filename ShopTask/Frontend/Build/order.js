@@ -83982,7 +83982,7 @@ var cart_service_CartService = /** @class */ (function () {
         this.windowRef = windowRef;
         this._cartItems = [];
         this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
-        this.GetCartItemsFromSession();
+        this._getCart();
     }
     Object.defineProperty(CartService.prototype, "cartItemsBehaviorSubject", {
         get: function () {
@@ -84007,48 +84007,50 @@ var cart_service_CartService = /** @class */ (function () {
         else {
             cartItem.productsCount++;
         }
-        this.saveCartItemsToSession();
+        this._saveCart();
     };
     CartService.prototype.removeFromCart = function (cartItem) {
-        this._cartItems = this.cartItems.filter(function (item) { return item != cartItem; });
-        this.cartItemsBehaviorSubject.next(this.cartItems);
-        this.saveCartItemsToSession();
+        this._setCartItems(this.cartItems.filter(function (item) { return item != cartItem; }));
+        this._saveCart();
     };
     ;
     CartService.prototype.increaseItemCount = function (cartItem) {
         cartItem.productsCount++;
-        this.saveCartItemsToSession();
+        this._saveCart();
     };
     ;
     CartService.prototype.decreaseItemCount = function (cartItem) {
         if (--cartItem.productsCount == 0) {
             this.removeFromCart(cartItem);
         }
-        this.saveCartItemsToSession();
+        this._saveCart();
     };
     ;
     CartService.prototype.clearCart = function () {
-        this._cartItems = [];
-        this.cartItemsBehaviorSubject.next(this.cartItems);
-        this.saveCartItemsToSession();
+        this._setCartItems([]);
+        this._saveCart();
     };
     CartService.prototype.totalCartPrice = function () {
         var total = 0;
         this.cartItems.forEach(function (item) { return total += item.totalPrice; });
         return total.toFixed(2);
     };
-    CartService.prototype.saveCartItemsToSession = function () {
+    CartService.prototype._saveCart = function () {
         this._http.post(this.windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart', { cart: JSON.stringify(this._cartItems) }).subscribe();
     };
-    CartService.prototype.GetCartItemsFromSession = function () {
+    CartService.prototype._getCart = function () {
         var _this = this;
         this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
-            .subscribe(function (data) { return _this.OnCartGetted(data); });
+            .subscribe(function (data) { return _this._setCartItems(_this._parseCartItems(data)); });
     };
-    CartService.prototype.OnCartGetted = function (data) {
+    CartService.prototype._setCartItems = function (cart) {
+        this._cartItems = cart;
+        this.cartItemsBehaviorSubject.next(this._cartItems);
+    };
+    CartService.prototype._parseCartItems = function (data) {
         var cartItemsJSON = data;
         if (cartItemsJSON) {
-            this._cartItems = cartItemsJSON.map(function (data) {
+            return cartItemsJSON.map(function (data) {
                 var product = new Product({
                     Title: data._product._title,
                     Price: data._product._price,
@@ -84061,9 +84063,8 @@ var cart_service_CartService = /** @class */ (function () {
             });
         }
         else {
-            this._cartItems = [];
+            return [];
         }
-        this.cartItemsBehaviorSubject.next(this.cartItems);
     };
     CartService = cart_service_decorate([
         Object(core["A" /* Injectable */])(),

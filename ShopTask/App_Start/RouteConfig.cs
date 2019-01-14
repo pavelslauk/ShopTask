@@ -36,12 +36,12 @@ namespace ShopTask
             routes.MapRoute(
                 name: "GetCart",
                 url: "Order/GetCart",
-                defaults: new { controller = "Order", action = "GetCartFromSession" });
+                defaults: new { controller = "Order", action = "GetCart" });
 
             routes.MapRoute(
                 name: "SaveCart",
                 url: "Order/SaveCart",
-                defaults: new { controller = "Order", action = "SaveCartToSession" });
+                defaults: new { controller = "Order", action = "SaveCart" });
 
             routes.MapRoute(
                 name: "Order",
