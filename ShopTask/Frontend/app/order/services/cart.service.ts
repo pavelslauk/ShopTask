@@ -76,24 +76,4 @@ export class CartService {
         this._cartItems = cart;
         this.cartItemsBehaviorSubject.next(this._cartItems);
     }
-
-    private _parseCartItems(data: object) {
-        var cartItemsJSON = data as Array<any>;
-        if(cartItemsJSON){
-            return cartItemsJSON.map(data=>{
-                var product = new Product({
-                    Title: data._product._title,
-                    Price: data._product._price,
-                    Category: data._product._category,
-                    Description: data._product._description
-                })
-                var cartItem = new CartItem(product);
-                cartItem.productsCount = data._productsCount;
-                return cartItem;
-            });
-        }
-        else {
-            return [];
-        }
-    }
 }
