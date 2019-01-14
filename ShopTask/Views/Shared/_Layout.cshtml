@@ -3,6 +3,7 @@
 @using ShopTask.Resources.Shared;
 @using System.Globalization;
 @using ShopTask.Utils;
+
 @helper AddActivePageClass(string action, string controller)
 {
     if (action == ViewContext.RouteData.GetRequiredString("action") && (controller == ViewContext.RouteData.GetRequiredString("controller")))
@@ -25,11 +26,13 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    <script type="text/javascript">
+        var apiRootUrl = '@HttpContext.Current.Request.ApplicationPath';
+    </script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/scripts/libs/jquery.unobtrusive-ajax.js")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/index")
-    @Scripts.Render("~/bundles/knockout")
 
     <div class="navbar">
         <div class="navbar-body">
@@ -46,7 +49,7 @@
                     </ul>
                 }
             </div>
-            <a href="@Url.Action("Index", "Orders")" class="navbar-link @AddActivePageClass("Index", "Orders")">@Res.OrdersTitle</a>
+            <a href="@Url.Action("Index", "Order")" class="navbar-link @AddActivePageClass("Index", "Order")">@Res.OrdersTitle</a>
             <a href="@Url.Action("Index", "Categories")" class="navbar-link @AddActivePageClass("Index", "Categories")">@Res.CategoriesTitle</a>
 
             <select class="js-culture-select" data-change-culture-url="@Url.Action("ChangeCulture", "Base")">

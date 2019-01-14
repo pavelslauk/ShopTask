@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddToCartButton" xml:space="preserve">
-    <value>Add</value>
+    <value>Добавить</value>
   </data>
   <data name="OrdersTitle" xml:space="preserve">
-    <value>Orders</value>
+    <value>Заказ</value>
   </data>
   <data name="ProductPrice" xml:space="preserve">
-    <value>Price:</value>
+    <value>Цена:</value>
   </data>
   <data name="RemoveFromCartButton" xml:space="preserve">
-    <value>Remove</value>
+    <value>Удалить</value>
   </data>
   <data name="TotalCartPrice" xml:space="preserve">
-    <value>Total price:</value>
+    <value>Сумма:</value>
   </data>
 </root>

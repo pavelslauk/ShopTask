@@ -5,12 +5,36 @@ const gulp = require("gulp");
 gulp.task('build-js', function ()
 {
     let options = {
+        output:{
+            path: __dirname + '/build',
+            filename: "[name].js"
+        },
+        resolve: {
+            extensions: ['.ts', '.js']
+        },
+        module:{
+            rules:[
+            {
+               test: /\.ts$/,
+               use: [
+                {
+                    loader: 'awesome-typescript-loader',
+                    options: { configFileName: __dirname + '/tsconfig.json' }
+                },
+                'angular2-template-loader'
+                ]
+            },
+            {
+                test: /\.html$/,
+                loader: 'html-loader'
+            }]
+        },
         optimization: {
             minimize: false
         }
     };
 
-    return gulp.src('./js/*.js')        
+    return gulp.src('./app/*.ts')        
         .pipe(named())
         .pipe(webpackStream(options))
         .pipe(gulp.dest('build'));
@@ -20,13 +44,33 @@ gulp.task('build-js', function ()
 gulp.task('build-js-minify', function () 
 {
     let options = {
-        output: {
-            path: __dirname + "/build",
+        output:{
+            path: __dirname + '/build',
             filename: "[name].min.js"
         },
+        resolve: {
+            extensions: ['.ts', '.js']
+        },
+        module:{
+            rules:[
+            {
+               test: /\.ts$/,
+               use: [
+                {
+                    loader: 'awesome-typescript-loader',
+                    options: { configFileName: __dirname + '/tsconfig.json' }
+                },
+                'angular2-template-loader'
+                ]
+            },
+            {
+                test: /\.html$/,
+                loader: 'html-loader'
+            }]
+        }
     };
 
-    return gulp.src('./js/*.js')        
+    return gulp.src('./app/*.ts')        
         .pipe(named())
         .pipe(webpackStream(options))
         .pipe(gulp.dest('build'));
@@ -34,4 +78,4 @@ gulp.task('build-js-minify', function ()
 
 gulp.task('build', gulp.series('build-js', 'build-js-minify'));
 
-gulp.watch(['orders.js', './js'], gulp.series('build'));
+gulp.watch('./app', gulp.series('build-js'));

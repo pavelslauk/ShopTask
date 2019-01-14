@@ -11,11 +11,11 @@ using ShopTask.Models;
 
 namespace ShopTask.Controllers
 {
-    public class OrdersController : BaseController
+    public class OrderController : BaseController
     {
         private IRepository<Product> _productsRepository;
 
-        public OrdersController(IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository)
+        public OrderController(IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository)
         {
             _productsRepository = productsRepository;
         }
@@ -27,11 +27,25 @@ namespace ShopTask.Controllers
         }
 
         [HttpGet]
+        public object GetCart()
+        {
+            return Session["Cart"];
+        }
+
+        [HttpPost]
+        public void SaveCart(string cart)
+        {
+            Session["Cart"] = cart;
+        }
+
+        [HttpGet]
         public async Task<JsonResult> GetProductsAsync()
         {
             var products = Mapper.Map<Product[], ProductOrderModel[]>((await _productsRepository
                 .GetAllAsync(include: product => product.Category)).ToArray());
             return Json(products, JsonRequestBehavior.AllowGet);
         }
+
+
     }
 }

@@ -88,7 +88,7 @@ namespace ShopTask.Resources.Shared {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Orders.
+        ///   Looks up a localized string similar to Order.
         /// </summary>
         public static string OrdersTitle {
             get {
