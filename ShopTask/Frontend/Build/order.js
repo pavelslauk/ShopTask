@@ -84049,22 +84049,20 @@ var cart_service_CartService = /** @class */ (function () {
     };
     CartService.prototype._parseCartItems = function (data) {
         var cartItemsJSON = data;
-        if (cartItemsJSON) {
-            return cartItemsJSON.map(function (data) {
-                var product = new Product({
-                    Title: data._product._title,
-                    Price: data._product._price,
-                    Category: data._product._category,
-                    Description: data._product._description
-                });
-                var cartItem = new CartItem(product);
-                cartItem.productsCount = data._productsCount;
-                return cartItem;
-            });
-        }
-        else {
+        if (!cartItemsJSON) {
             return [];
         }
+        return cartItemsJSON.map(function (data) {
+            var product = new Product({
+                Title: data._product._title,
+                Price: data._product._price,
+                Category: data._product._category,
+                Description: data._product._description
+            });
+            var cartItem = new CartItem(product);
+            cartItem.productsCount = data._productsCount;
+            return cartItem;
+        });
     };
     CartService = cart_service_decorate([
         Object(core["A" /* Injectable */])(),
