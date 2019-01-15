@@ -83983,7 +83983,7 @@ var cart_service_CartService = /** @class */ (function () {
         this.windowRef = windowRef;
         this._cartItems = [];
         this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
-        setInterval(function () { _this._getCart(); }, 500);
+        setInterval(function () { return _this._getCart(); }, 500);
     }
     Object.defineProperty(CartService.prototype, "cartItemsBehaviorSubject", {
         get: function () {
@@ -84000,7 +84000,9 @@ var cart_service_CartService = /** @class */ (function () {
         configurable: true
     });
     CartService.prototype.addToCart = function (product) {
-        var cartItem = this.cartItems.find(function (item) { return item.product == product; });
+        var cartItem = this.cartItems.find(function (item) {
+            return (item.product.title == product.title) && (item.product.category == product.category);
+        });
         if (!cartItem) {
             cartItem = new CartItem(product);
             this.cartItems.push(cartItem);
