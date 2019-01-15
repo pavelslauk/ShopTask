@@ -83978,11 +83978,12 @@ var cart_service_metadata = (undefined && undefined.__metadata) || function (k, 
 
 var cart_service_CartService = /** @class */ (function () {
     function CartService(_http, windowRef) {
+        var _this = this;
         this._http = _http;
         this.windowRef = windowRef;
         this._cartItems = [];
         this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
-        this._getCart();
+        setInterval(function () { _this._getCart(); }, 500);
     }
     Object.defineProperty(CartService.prototype, "cartItemsBehaviorSubject", {
         get: function () {

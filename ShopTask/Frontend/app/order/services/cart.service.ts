@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Product } from '../models/product.model';
 import { CartItem } from '../models/cart-item.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, timer } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { WindowRef } from "./windowRef";
 
@@ -20,10 +20,10 @@ export class CartService {
     }
 
     constructor(private _http: HttpClient, private windowRef: WindowRef) {         
-        this._getCart();
+        setInterval(() => {this._getCart();}, 500);
     }
 
-    public addToCart(product: Product){
+    public addToCart(product: Product) {
         var cartItem = this.cartItems.find(item => item.product == product);
         if (!cartItem){
             cartItem = new CartItem(product);
@@ -82,7 +82,7 @@ export class CartService {
         if(!cartItemsJSON){
             return [];
         }
-        return cartItemsJSON.map(data=>{
+        return cartItemsJSON.map(data => {
             var product = new Product({
                 Title: data._product._title,
                 Price: data._product._price,
