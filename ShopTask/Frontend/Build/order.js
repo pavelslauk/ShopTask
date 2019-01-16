@@ -60287,7 +60287,7 @@ Zone.__load_patch('PromiseRejectionEvent', function (global, Zone) {
 /* 310 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"description-modal\" #descriptionModal>\r\n    <div class=\"description-modal-content\">\r\n      <span class=\"description-modal-close\" (click)=\"descriptionModal.classList.remove('description-modal-show')\">&times;</span>\r\n      <p #descriptionContent></p>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"order-products-body\">\r\n    <div class=\"order-product-form\" *ngFor=\"let item of products\">\r\n        <div class=\"order-product-title\" (click)=\"ShowDescription(descriptionModal, descriptionContent, item.description)\">     <!-- modal.style.display = 'block' -->\r\n            {{ item.title }}\r\n        </div>\r\n        <div class=\"order-product-description\">{{ item.description }}</div>\r\n        <div class=\"order-product-category\">{{ item.category }}</div>       \r\n        <div class=\"order-product-price\">Price: {{ item.price }}</div>\r\n        <button class=\"add-to-cart-but\" (click)=\"addToCart(item)\">Add</button>\r\n    </div>\r\n</div>";
+module.exports = "<div class=\"description-modal\" #descriptionModal>\r\n    <div class=\"description-modal-content\">\r\n      <span class=\"description-modal-close\" (click)=\"descriptionModal.classList.remove('description-modal-show')\">&times;</span>\r\n      <p #descriptionContent></p>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"order-products-body\">\r\n    <div class=\"order-product-form\" *ngFor=\"let item of products\">      \r\n        <div class=\"order-product-title\" (click)=\"ShowDescription(descriptionModal, descriptionContent, item.description)\">     <!-- modal.style.display = 'block' -->\r\n            {{ item.title }}\r\n        </div>\r\n        <div class=\"order-product-description\">{{ item.description }}</div>\r\n        <div class=\"order-product-category\">{{ item.category }}</div>       \r\n        <div class=\"order-product-price\">Price: {{ item.price }}</div>\r\n        <button class=\"add-to-cart-but\" (click)=\"addToCart(item)\">Add</button>\r\n    </div>\r\n</div>";
 
 /***/ }),
 /* 311 */
@@ -83820,11 +83820,19 @@ var http_HttpClientJsonpModule = /** @class */ (function () {
 // CONCATENATED MODULE: ./app/order/models/product.model.ts
 var Product = /** @class */ (function () {
     function Product(data) {
+        this._id = data.Id;
         this._title = data.Title;
         this._price = data.Price;
         this._description = data.Description;
         this._category = data.Category;
     }
+    Object.defineProperty(Product.prototype, "id", {
+        get: function () {
+            return this._id;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(Product.prototype, "title", {
         get: function () {
             return this._title;
@@ -83867,7 +83875,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 };
 
 function _window() {
-    // return the global native browser window object
     return window;
 }
 var windowRef_WindowRef = /** @class */ (function () {
@@ -83983,7 +83990,7 @@ var cart_service_CartService = /** @class */ (function () {
         this.windowRef = windowRef;
         this._cartItems = [];
         this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
-        setInterval(function () { return _this._getCart(); }, 500);
+        setInterval(function () { return _this._refreshCart(); }, 500);
     }
     Object.defineProperty(CartService.prototype, "cartItemsBehaviorSubject", {
         get: function () {
@@ -84000,9 +84007,7 @@ var cart_service_CartService = /** @class */ (function () {
         configurable: true
     });
     CartService.prototype.addToCart = function (product) {
-        var cartItem = this.cartItems.find(function (item) {
-            return (item.product.title == product.title) && (item.product.category == product.category);
-        });
+        var cartItem = this.cartItems.find(function (item) { return item.product.id == product.id; });
         if (!cartItem) {
             cartItem = new CartItem(product);
             this.cartItems.push(cartItem);
@@ -84041,7 +84046,7 @@ var cart_service_CartService = /** @class */ (function () {
     CartService.prototype._saveCart = function () {
         this._http.post(this.windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart', { cart: JSON.stringify(this._cartItems) }).subscribe();
     };
-    CartService.prototype._getCart = function () {
+    CartService.prototype._refreshCart = function () {
         var _this = this;
         this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
             .subscribe(function (data) { return _this._setCartItems(_this._parseCartItems(data)); });
@@ -84057,6 +84062,7 @@ var cart_service_CartService = /** @class */ (function () {
         }
         return cartItemsJSON.map(function (data) {
             var product = new Product({
+                Id: data._product._id,
                 Title: data._product._title,
                 Price: data._product._price,
                 Category: data._product._category,

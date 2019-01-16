@@ -20,12 +20,11 @@ export class CartService {
     }
 
     constructor(private _http: HttpClient, private windowRef: WindowRef) {         
-        setInterval(() => this._getCart(), 500);
+        setInterval(() => this._refreshCart(), 500);
     }
 
     public addToCart(product: Product) {
-        var cartItem = this.cartItems.find(item => 
-            (item.product.title == product.title)&&(item.product.category == product.category));
+        var cartItem = this.cartItems.find(item => item.product.id == product.id);
         if (!cartItem){
             cartItem = new CartItem(product);
             this.cartItems.push(cartItem);
@@ -68,7 +67,7 @@ export class CartService {
             {cart: JSON.stringify(this._cartItems)}).subscribe();
     }
 
-    private _getCart() {
+    private _refreshCart() {
         this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
         .subscribe(data => this._setCartItems(this._parseCartItems(data)));      
     }
@@ -85,6 +84,7 @@ export class CartService {
         }
         return cartItemsJSON.map(data => {
             var product = new Product({
+                Id: data._product._id,
                 Title: data._product._title,
                 Price: data._product._price,
                 Category: data._product._category,
