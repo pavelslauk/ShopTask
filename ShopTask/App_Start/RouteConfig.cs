@@ -44,6 +44,11 @@ namespace ShopTask
                 defaults: new { controller = "Order", action = "SaveCart" });
 
             routes.MapRoute(
+                name: "SaveOrder",
+                url: "Order/SaveOrder",
+                defaults: new { controller = "Order", action = "SaveOrder" });
+
+            routes.MapRoute(
                 name: "Order",
                 url: "Order/{param}",
                 defaults: new { controller = "Order", action = "Index", param = UrlParameter.Optional });

@@ -8,6 +8,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { ProductListComponent }   from './product-list/product-list.component';
 import { ProductsService } from './services/products.service';
 import { OrderComponent } from './order.component';
+import { OrderService } from './services/order.service';
 import { CartService } from './services/cart.service';
 import { CartComponent } from './cart/cart.component';
 import { OrderCreationComponent } from './order-creation/order-creation.component';
@@ -25,6 +26,6 @@ const routes = [
     imports:      [ BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(routes), FormsModule, ReactiveFormsModule],
     declarations: [ ProductListComponent, OrderComponent, CartComponent, OrderCreationComponent, OrderDetailsComponent ],
     bootstrap:    [ OrderComponent ],
-    providers:    [ ProductsService, CartService, OrderDetailsGuard, WindowRef, {provide: APP_BASE_HREF, useValue : '' } ]
+    providers:    [ ProductsService, CartService, OrderService, OrderDetailsGuard, WindowRef, {provide: APP_BASE_HREF, useValue : '' } ]
 })
 export class AppModule { }

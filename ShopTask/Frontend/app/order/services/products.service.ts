@@ -8,10 +8,10 @@ import { WindowRef } from "./windowRef";
 @Injectable()
 export class ProductsService {
 
-    constructor(private _http: HttpClient, private windowRef: WindowRef) { }
+    constructor(private _http: HttpClient, private _windowRef: WindowRef) { }
 
     public getAll() : Observable<Product[]> {
-        return this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetProducts').pipe(map(data=>{
+        return this._http.get(this._windowRef.nativeWindow.apiRootUrl + '/Order/GetProducts').pipe(map(data=>{
             var products = data as object[];
             return products.map(function(item: object) {
                 return new Product(item);

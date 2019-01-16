@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Product } from '../models/product.model';
 import { CartItem } from '../models/cart-item.model';
 import { BehaviorSubject } from 'rxjs';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { WindowRef } from "./windowRef";
 
 @Injectable()
@@ -19,7 +19,7 @@ export class CartService {
         return this._cartItems;
     }
 
-    constructor(private _http: HttpClient, private windowRef: WindowRef) {         
+    constructor(private _http: HttpClient, private _windowRef: WindowRef) {         
         setInterval(() => this._refreshCart(), 500);
     }
 
@@ -63,12 +63,12 @@ export class CartService {
     }
 
     private _saveCart() {
-        this._http.post(this.windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart',
+        this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart',
             {cart: JSON.stringify(this._cartItems)}).subscribe();
     }
 
     private _refreshCart() {
-        this._http.get(this.windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
+        this._http.get(this._windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
         .subscribe(data => this._setCartItems(this._parseCartItems(data)));      
     }
 
