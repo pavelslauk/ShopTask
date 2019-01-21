@@ -60287,7 +60287,7 @@ Zone.__load_patch('PromiseRejectionEvent', function (global, Zone) {
 /* 310 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"description-modal\" #descriptionModal>\r\n    <div class=\"description-modal-content\">\r\n      <span class=\"description-modal-close\" (click)=\"descriptionModal.classList.remove('description-modal-show')\">&times;</span>\r\n      <p #descriptionContent></p>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"order-products-body\">\r\n    <div class=\"order-product-form\" *ngFor=\"let item of products\">      \r\n        <div class=\"order-product-title\" (click)=\"ShowDescription(descriptionModal, descriptionContent, item.description)\">     <!-- modal.style.display = 'block' -->\r\n            {{ item.title }}\r\n        </div>\r\n        <div class=\"order-product-description\">{{ item.description }}</div>\r\n        <div class=\"order-product-category\">{{ item.category }}</div>       \r\n        <div class=\"order-product-price\">Price: {{ item.price }}</div>\r\n        <button class=\"add-to-cart-but\" (click)=\"addToCart(item)\">Add</button>\r\n    </div>\r\n</div>";
+module.exports = "<div class=\"description-modal\" #descriptionModal>\r\n    <div class=\"description-modal-content\">\r\n      <span class=\"description-modal-close\" (click)=\"descriptionModal.classList.remove('description-modal-show')\">&times;</span>\r\n      <p #descriptionContent></p>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"order-products-body\">\r\n    <div class=\"order-product-form\" *ngFor=\"let item of products\">      \r\n        <div class=\"order-product-title\" (click)=\"showDescription(descriptionModal, descriptionContent, item.description)\">\r\n            {{ item.title }}\r\n        </div>\r\n        <div class=\"order-product-description\">{{ item.description }}</div>\r\n        <div class=\"order-product-category\">{{ item.category }}</div>       \r\n        <div class=\"order-product-price\">Price: {{ item.price }}</div>\r\n        <button class=\"add-to-cart-but\" (click)=\"addToCart(item)\">Add</button>\r\n    </div>\r\n</div>";
 
 /***/ }),
 /* 311 */
@@ -83984,13 +83984,15 @@ var cart_service_metadata = (undefined && undefined.__metadata) || function (k, 
 
 
 var cart_service_CartService = /** @class */ (function () {
-    function CartService(_http, _windowRef) {
+    function CartService(_http, _windowRef, _productsService) {
         var _this = this;
         this._http = _http;
         this._windowRef = _windowRef;
+        this._productsService = _productsService;
         this._cartItems = [];
         this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
-        setInterval(function () { return _this._refreshCart(); }, 500);
+        setInterval(function () { return _this.refreshCart(); }, 500);
+        this._productsService.getAll().subscribe(function (data) { return _this._products = data; });
     }
     Object.defineProperty(CartService.prototype, "cartItemsBehaviorSubject", {
         get: function () {
@@ -84015,67 +84017,69 @@ var cart_service_CartService = /** @class */ (function () {
         else {
             cartItem.productsCount++;
         }
-        this._saveCart();
+        this.saveCart();
     };
     CartService.prototype.removeFromCart = function (cartItem) {
-        this._setCartItems(this.cartItems.filter(function (item) { return item != cartItem; }));
-        this._saveCart();
+        this.setCartItems(this.cartItems.filter(function (item) { return item != cartItem; }));
+        this.saveCart();
     };
     ;
     CartService.prototype.increaseItemCount = function (cartItem) {
         cartItem.productsCount++;
-        this._saveCart();
+        this.saveCart();
     };
     ;
     CartService.prototype.decreaseItemCount = function (cartItem) {
         if (--cartItem.productsCount == 0) {
             this.removeFromCart(cartItem);
         }
-        this._saveCart();
+        this.saveCart();
     };
     ;
     CartService.prototype.clearCart = function () {
-        this._setCartItems([]);
-        this._saveCart();
+        this.setCartItems([]);
+        this.saveCart();
     };
     CartService.prototype.totalCartPrice = function () {
         var total = 0;
         this.cartItems.forEach(function (item) { return total += item.totalPrice; });
         return total.toFixed(2);
     };
-    CartService.prototype._saveCart = function () {
-        this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart', { cart: JSON.stringify(this._cartItems) }).subscribe();
+    CartService.prototype.saveCart = function () {
+        this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart', { cart: this.getMappedcartItems() }).subscribe();
     };
-    CartService.prototype._refreshCart = function () {
+    CartService.prototype.getMappedcartItems = function () {
+        return this._cartItems.map(function (item) {
+            return { productId: item.product.id, count: item.productsCount };
+        });
+    };
+    CartService.prototype.refreshCart = function () {
         var _this = this;
         this._http.get(this._windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
-            .subscribe(function (data) { return _this._setCartItems(_this._parseCartItems(data)); });
+            .subscribe(function (data) { return _this.setCartItems(_this.parseCartItems(data)); });
     };
-    CartService.prototype._setCartItems = function (cart) {
+    CartService.prototype.setCartItems = function (cart) {
         this._cartItems = cart;
         this.cartItemsBehaviorSubject.next(this._cartItems);
     };
-    CartService.prototype._parseCartItems = function (data) {
-        var cartItemsJSON = data;
-        if (!cartItemsJSON) {
+    CartService.prototype.parseCartItems = function (data) {
+        var _this = this;
+        if (!data) {
             return [];
         }
-        return cartItemsJSON.map(function (data) {
-            var product = new Product({
-                Id: data._product._id,
-                Title: data._product._title,
-                Price: data._product._price,
-                Category: data._product._category,
-                Description: data._product._description
-            });
-            var cartItem = new CartItem(product);
-            cartItem.productsCount = data._productsCount;
-            return cartItem;
+        var cartItems = data;
+        return cartItems.map(function (data) {
+            var product = _this._products.find(function (p) { return p.id == data.ProductId; });
+            if (product) {
+                var cartItem = new CartItem(product);
+                cartItem.productsCount = data.Count;
+                return cartItem;
+            }
         });
     };
     CartService = cart_service_decorate([
         Object(core["A" /* Injectable */])(),
-        cart_service_metadata("design:paramtypes", [http_HttpClient, windowRef_WindowRef])
+        cart_service_metadata("design:paramtypes", [http_HttpClient, windowRef_WindowRef, products_service_ProductsService])
     ], CartService);
     return CartService;
 }());
@@ -84095,18 +84099,25 @@ var product_list_component_metadata = (undefined && undefined.__metadata) || fun
 
 
 var product_list_component_ProductListComponent = /** @class */ (function () {
-    function ProductListComponent(productsService, cartService) {
-        this.productsService = productsService;
-        this.cartService = cartService;
+    function ProductListComponent(_productsService, _cartService) {
+        this._productsService = _productsService;
+        this._cartService = _cartService;
     }
+    Object.defineProperty(ProductListComponent.prototype, "products", {
+        get: function () {
+            return this._products;
+        },
+        enumerable: true,
+        configurable: true
+    });
     ProductListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.productsService.getAll().subscribe(function (data) { return _this.products = data; });
+        this._productsService.getAll().subscribe(function (data) { return _this._products = data; });
     };
     ProductListComponent.prototype.addToCart = function (product) {
-        this.cartService.addToCart(product);
+        this._cartService.addToCart(product);
     };
-    ProductListComponent.prototype.ShowDescription = function (descriptionModal, descriptionContent, description) {
+    ProductListComponent.prototype.showDescription = function (descriptionModal, descriptionContent, description) {
         descriptionModal.classList.add('description-modal-show');
         if (description != null) {
             descriptionContent.textContent = description;
@@ -84172,11 +84183,13 @@ var order_service_OrderService = /** @class */ (function () {
         this._windowRef = _windowRef;
         this._cartService = _cartService;
     }
-    OrderService.prototype.SaveOrder = function (orderDetails) {
-        this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveOrder', { data: JSON.stringify({ order: this.GetMappedOrderDetails(orderDetails),
-                cart: this.GetMappedCartItems() }) }).subscribe();
+    OrderService.prototype.saveOrder = function (orderDetails) {
+        var _this = this;
+        this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveOrder', { order: this.getMappedOrderDetails(orderDetails) })
+            .subscribe(function (result) { if (result)
+            _this._cartService.clearCart(); });
     };
-    OrderService.prototype.GetMappedOrderDetails = function (orderDetails) {
+    OrderService.prototype.getMappedOrderDetails = function (orderDetails) {
         return {
             name: orderDetails.name,
             surname: orderDetails.surname,
@@ -84184,11 +84197,6 @@ var order_service_OrderService = /** @class */ (function () {
             phone: orderDetails.phone,
             comments: orderDetails.comments
         };
-    };
-    OrderService.prototype.GetMappedCartItems = function () {
-        return this._cartService.cartItems.map(function (item) {
-            return { productId: item.product.id, orderPrice: item.product.price, count: item.productsCount };
-        });
     };
     OrderService = order_service_decorate([
         Object(core["A" /* Injectable */])(),
@@ -84347,7 +84355,7 @@ var order_details_component_OrderDetailsComponent = /** @class */ (function () {
         this._router = _router;
         this._orderService = _orderService;
         this._formSubmitAttempted = false;
-        this._orderDetails = this.GetOrderDetailsLocal();
+        this._orderDetails = this.getOrderDetailsLocal();
     }
     Object.defineProperty(OrderDetailsComponent.prototype, "formSubmitAttempted", {
         get: function () {
@@ -84410,23 +84418,22 @@ var order_details_component_OrderDetailsComponent = /** @class */ (function () {
             phone: new forms_FormControl(this.orderDetails.phone, forms_Validators.required),
             comments: new forms_FormControl(this.orderDetails.comments)
         });
-        this._orderDetailsControl.valueChanges.subscribe(function (value) { return _this.SaveOrderDetailsLocal(value); });
+        this._orderDetailsControl.valueChanges.subscribe(function (value) { return _this.saveOrderDetailsLocal(value); });
     };
     OrderDetailsComponent.prototype.saveData = function () {
         if (this._orderDetailsControl.valid) {
-            this._orderService.SaveOrder(this._orderDetails);
-            this._cartService.clearCart();
+            this._orderService.saveOrder(this._orderDetails);
             this._router.navigateByUrl('/shoptask/Order');
         }
         else {
             this._formSubmitAttempted = true;
         }
     };
-    OrderDetailsComponent.prototype.SaveOrderDetailsLocal = function (value) {
+    OrderDetailsComponent.prototype.saveOrderDetailsLocal = function (value) {
         this.orderDetails.SetData(value);
         localStorage.setItem('OrderDetails', JSON.stringify(this.orderDetails));
     };
-    OrderDetailsComponent.prototype.GetOrderDetailsLocal = function () {
+    OrderDetailsComponent.prototype.getOrderDetailsLocal = function () {
         var orderDetails = new OrderDetails();
         var orderDetailsJSON = JSON.parse(localStorage.getItem('OrderDetails'));
         if (orderDetailsJSON) {

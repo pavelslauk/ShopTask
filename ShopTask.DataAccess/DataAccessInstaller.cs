@@ -18,8 +18,7 @@ namespace ShopTask.DataAccess
             container.Register(Component.For<IUnitOfWork>().ImplementedBy<UnitOfWork>().LifestylePerWebRequest());
             container.Register(Component.For<IRepository<Category>>().ImplementedBy<CategoriesRepository>().LifestylePerWebRequest());
             container.Register(Component.For<IRepository<Product>>().ImplementedBy<ProductsRepository>().LifestylePerWebRequest());
-            container.Register(Component.For<IRepository<Order>>().ImplementedBy<OrdersRepository>().LifestylePerWebRequest());
-            container.Register(Component.For<IRepository<OrderItem>>().ImplementedBy<OrderItemsRepository>().LifestylePerWebRequest());
+            container.Register(Component.For<IRepository<Order>>().ImplementedBy<OrdersRepository>().LifestylePerWebRequest());           
         }
     }
 }

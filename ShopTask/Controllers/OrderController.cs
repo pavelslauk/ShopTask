@@ -11,6 +11,7 @@ using ShopTask.Models;
 using Newtonsoft.Json.Linq;
 using Nito.AsyncEx;
 
+
 namespace ShopTask.Controllers
 {
     public class OrderController : BaseController
@@ -18,15 +19,13 @@ namespace ShopTask.Controllers
         private IUnitOfWork _unitOfWork;
         private IRepository<Product> _productsRepository;
         private IRepository<Order> _ordersRepository;
-        private IRepository<OrderItem> _orderItemsRepository;
 
-        public OrderController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, IRepository<Product> productsRepository, 
-            IRepository<Order> ordersRepository, IRepository<OrderItem> orderItemsRepository) : base(categoriesRepository)
+        public OrderController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository,
+            IRepository<Product> productsRepository, IRepository<Order> ordersRepository) : base(categoriesRepository)
         {
             _unitOfWork = unitOfWork;
             _productsRepository = productsRepository;
             _ordersRepository = ordersRepository;
-            _orderItemsRepository = orderItemsRepository;
         }
 
         [HttpGet]
@@ -36,13 +35,13 @@ namespace ShopTask.Controllers
         }
 
         [HttpGet]
-        public object GetCart()
+        public JsonResult GetCart()
         {
-            return Session["Cart"];
+            return Json(Session["Cart"], JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public void SaveCart(string cart)
+        public void SaveCart(OrderItem[] cart)
         {           
             Session["Cart"] = cart;
         }
@@ -56,23 +55,21 @@ namespace ShopTask.Controllers
         }
 
         [HttpPost]
-        public void SaveOrder(string data)
+        public async Task<JsonResult> SaveOrder(Order order)
         {
-            Order order = JObject.Parse(data)["order"].ToObject<Order>();
-            OrderItem[] orderItems = JObject.Parse(data)["cart"].ToObject<OrderItem[]>();
-            _ordersRepository.Add(order);
-            AsyncContext.Run(async () => await _unitOfWork.CommitAsync());
-            SaveOrderItems(order.Id, orderItems);
-        }
-
-        private void SaveOrderItems(int orderId, OrderItem[] orderItems)
-        {
-            foreach(var item in orderItems)
+            order.OrderItems = (OrderItem[])Session["Cart"];
+            if (!order.OrderItems.Any())
             {
-                item.OrderId = orderId;
-                _orderItemsRepository.Add(item);
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
-            AsyncContext.Run(async () => await _unitOfWork.CommitAsync());
+            foreach (var item in order.OrderItems)
+            {
+                item.Price = (await _productsRepository.GetByIdAsync(item.ProductId)).Price;
+            }
+            _ordersRepository.Add(order);
+            await _unitOfWork.CommitAsync();
+
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

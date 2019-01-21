@@ -25,7 +25,7 @@ namespace ShopTask.DataAccess.Entities
 
         public string Comments { get; set; }
 
-        public ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
 
         public Order()
         {

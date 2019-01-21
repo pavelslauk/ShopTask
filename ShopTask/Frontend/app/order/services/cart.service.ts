@@ -2,14 +2,16 @@ import { Injectable } from "@angular/core";
 import { Product } from '../models/product.model';
 import { CartItem } from '../models/cart-item.model';
 import { BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient} from "@angular/common/http";
 import { WindowRef } from "./windowRef";
+import { ProductsService } from '../services/products.service';
 
 @Injectable()
 export class CartService {
 
     private _cartItems: CartItem[] = [];
     private _cartItemsBehaviorSubject = new BehaviorSubject(this.cartItems);
+    private _products: Product[];
 
     public get cartItemsBehaviorSubject(): BehaviorSubject<CartItem[]> {
         return this._cartItemsBehaviorSubject;
@@ -19,8 +21,9 @@ export class CartService {
         return this._cartItems;
     }
 
-    constructor(private _http: HttpClient, private _windowRef: WindowRef) {         
-        setInterval(() => this._refreshCart(), 500);
+    constructor(private _http: HttpClient, private _windowRef: WindowRef,private _productsService: ProductsService) {         
+        setInterval(() => this.refreshCart(), 500);
+        this._productsService.getAll().subscribe(data => this._products = data);
     }
 
     public addToCart(product: Product) {
@@ -31,29 +34,29 @@ export class CartService {
         } else {
             cartItem.productsCount++;
         }
-        this._saveCart();
+        this.saveCart();
     }
 
     public removeFromCart(cartItem: CartItem) {
-        this._setCartItems(this.cartItems.filter(item => item != cartItem));
-        this._saveCart();
+        this.setCartItems(this.cartItems.filter(item => item != cartItem));
+        this.saveCart();
     };
 
     public increaseItemCount(cartItem: CartItem) {
         cartItem.productsCount++;
-        this._saveCart();
+        this.saveCart();
     };
 
     public decreaseItemCount (cartItem: CartItem) {
         if (--cartItem.productsCount == 0) {
             this.removeFromCart(cartItem);
         }
-        this._saveCart();
+        this.saveCart();
     };
 
     public clearCart() {
-        this._setCartItems([]);
-        this._saveCart();
+        this.setCartItems([]);
+        this.saveCart();
     }
 
     public totalCartPrice(){
@@ -62,37 +65,40 @@ export class CartService {
         return total.toFixed(2);
     }
 
-    private _saveCart() {
+    private saveCart() {
         this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveCart',
-            {cart: JSON.stringify(this._cartItems)}).subscribe();
+            {cart: this.getMappedcartItems()}).subscribe();
     }
 
-    private _refreshCart() {
+    private getMappedcartItems(){
+        return this._cartItems.map(function(item: CartItem) {
+            return {productId: item.product.id, count: item.productsCount}
+          });
+    }
+
+    private refreshCart() {
         this._http.get(this._windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
-        .subscribe(data => this._setCartItems(this._parseCartItems(data)));      
+        .subscribe(data => this.setCartItems(this.parseCartItems(data)));      
     }
 
-    private _setCartItems(cart: CartItem[]) {
+    private setCartItems(cart: CartItem[]) {
         this._cartItems = cart;
         this.cartItemsBehaviorSubject.next(this._cartItems);
     }
 
-    private _parseCartItems(data: object) {
-        var cartItemsJSON = data as Array<any>;
-        if(!cartItemsJSON){
+    private parseCartItems(data: object) {
+        if(!data){
             return [];
         }
-        return cartItemsJSON.map(data => {
-            var product = new Product({
-                Id: data._product._id,
-                Title: data._product._title,
-                Price: data._product._price,
-                Category: data._product._category,
-                Description: data._product._description
-            })
+        var cartItems = data as Array<any>;
+             
+        return cartItems.map(data => {
+            var product = this._products.find(p => p.id == data.ProductId);
+            if(product) {
             var cartItem = new CartItem(product);
-            cartItem.productsCount = data._productsCount;
+            cartItem.productsCount = data.Count;
             return cartItem;
+            }
         });
     }
 }

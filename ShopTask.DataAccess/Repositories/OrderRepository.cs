@@ -36,6 +36,10 @@ namespace ShopTask.DataAccess.Repositories
         public void Add(Order order)
         {
             _dbContext.Orders.Add(order);
+            foreach (var item in order.OrderItems)
+            {
+                _dbContext.OrderItems.Add(item);
+            }
         }
 
         public void Update(Order order)
