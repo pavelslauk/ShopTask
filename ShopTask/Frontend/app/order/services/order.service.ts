@@ -11,7 +11,7 @@ export class OrderService {
 
     public saveOrder(orderDetails: OrderDetails) {
         this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveOrder',
-            {order: this.getMappedOrderDetails(orderDetails)})
+            {orderModel: this.getMappedOrderDetails(orderDetails)})
             .subscribe(result => {if(result) this._cartService.clearCart()});
     }
 

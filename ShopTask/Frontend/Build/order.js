@@ -84185,7 +84185,7 @@ var order_service_OrderService = /** @class */ (function () {
     }
     OrderService.prototype.saveOrder = function (orderDetails) {
         var _this = this;
-        this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveOrder', { order: this.getMappedOrderDetails(orderDetails) })
+        this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveOrder', { orderModel: this.getMappedOrderDetails(orderDetails) })
             .subscribe(function (result) { if (result)
             _this._cartService.clearCart(); });
     };

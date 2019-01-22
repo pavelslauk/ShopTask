@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ShopTask.Models;
 using Newtonsoft.Json.Linq;
-using Nito.AsyncEx;
 
 
 namespace ShopTask.Controllers
@@ -41,7 +40,7 @@ namespace ShopTask.Controllers
         }
 
         [HttpPost]
-        public void SaveCart(OrderItem[] cart)
+        public void SaveCart(OrderItemModel[] cart)
         {           
             Session["Cart"] = cart;
         }
@@ -55,16 +54,19 @@ namespace ShopTask.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> SaveOrder(Order order)
+        public async Task<JsonResult> SaveOrder(OrderModel orderModel)
         {
-            order.OrderItems = (OrderItem[])Session["Cart"];
-            if (!order.OrderItems.Any())
+            var order = Mapper.Map<OrderModel, Order>(orderModel);
+            order.OrderItems = Mapper.Map<OrderItemModel[], OrderItem[]>((OrderItemModel[])Session["Cart"]);
+            if (!(order.OrderItems?.Any() ?? new bool?(false)).Value)
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
+
+            var products = await _productsRepository.GetAllAsync(product => product.Category);
             foreach (var item in order.OrderItems)
             {
-                item.Price = (await _productsRepository.GetByIdAsync(item.ProductId)).Price;
+                item.Price = products.First(p => p.Id == item.ProductId).Price;
             }
             _ordersRepository.Add(order);
             await _unitOfWork.CommitAsync();
