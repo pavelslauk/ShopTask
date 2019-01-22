@@ -205,7 +205,7 @@
     </Compile>
     <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
-    <Compile Include="Models\OrderModel.cs" />
+    <Compile Include="Models\OrderDetailsModel.cs" />
     <Compile Include="Models\ProductOrderModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

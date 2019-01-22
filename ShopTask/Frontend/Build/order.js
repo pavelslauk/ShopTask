@@ -83991,8 +83991,8 @@ var cart_service_CartService = /** @class */ (function () {
         this._productsService = _productsService;
         this._cartItems = [];
         this._cartItemsBehaviorSubject = new BehaviorSubject_BehaviorSubject(this.cartItems);
+        this._productsService.getAll().subscribe(function (data) { _this._products = data; _this.refreshCart(); });
         setInterval(function () { return _this.refreshCart(); }, 500);
-        this._productsService.getAll().subscribe(function (data) { return _this._products = data; });
     }
     Object.defineProperty(CartService.prototype, "cartItemsBehaviorSubject", {
         get: function () {
@@ -84185,11 +84185,11 @@ var order_service_OrderService = /** @class */ (function () {
     }
     OrderService.prototype.saveOrder = function (orderDetails) {
         var _this = this;
-        this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveOrder', { orderModel: this.getMappedOrderDetails(orderDetails) })
+        this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Order/SaveOrder', { orderDetails: this.getPostModel(orderDetails) })
             .subscribe(function (result) { if (result)
             _this._cartService.clearCart(); });
     };
-    OrderService.prototype.getMappedOrderDetails = function (orderDetails) {
+    OrderService.prototype.getPostModel = function (orderDetails) {
         return {
             name: orderDetails.name,
             surname: orderDetails.surname,

@@ -21,9 +21,9 @@ export class CartService {
         return this._cartItems;
     }
 
-    constructor(private _http: HttpClient, private _windowRef: WindowRef,private _productsService: ProductsService) {         
+    constructor(private _http: HttpClient, private _windowRef: WindowRef,private _productsService: ProductsService) {     
+        this._productsService.getAll().subscribe(data => {this._products = data; this.refreshCart()});
         setInterval(() => this.refreshCart(), 500);
-        this._productsService.getAll().subscribe(data => this._products = data);
     }
 
     public addToCart(product: Product) {
@@ -78,7 +78,8 @@ export class CartService {
 
     private refreshCart() {
         this._http.get(this._windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
-        .subscribe(data => this.setCartItems(this.parseCartItems(data)));      
+        .subscribe(data => this.setCartItems(this.parseCartItems(data)));
+          
     }
 
     private setCartItems(cart: CartItem[]) {

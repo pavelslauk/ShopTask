@@ -40,7 +40,7 @@ namespace ShopTask.Controllers
         }
 
         [HttpPost]
-        public void SaveCart(OrderItemModel[] cart)
+        public void SaveCart(CartItemModel[] cart)
         {           
             Session["Cart"] = cart;
         }
@@ -54,19 +54,21 @@ namespace ShopTask.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> SaveOrder(OrderModel orderModel)
+        public async Task<JsonResult> SaveOrder(OrderDetailsModel orderDetails)
         {
-            var order = Mapper.Map<OrderModel, Order>(orderModel);
-            order.OrderItems = Mapper.Map<OrderItemModel[], OrderItem[]>((OrderItemModel[])Session["Cart"]);
-            if (!(order.OrderItems?.Any() ?? new bool?(false)).Value)
+            var order = Mapper.Map<OrderDetailsModel, Order>(orderDetails);
+            order.OrderItems = Mapper.Map<CartItemModel[], OrderItem[]>((CartItemModel[])Session["Cart"]);
+            if (order.OrderItems?.Any() != true)
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
 
-            var products = await _productsRepository.GetAllAsync(product => product.Category);
+            var productIds = order.OrderItems.Select(i => i.ProductId);
+            var products = await _productsRepository.FindAsync(where: product => productIds.Contains(product.Id), 
+                include: product => product.Category);
             foreach (var item in order.OrderItems)
             {
-                item.Price = products.First(p => p.Id == item.ProductId).Price;
+                item.Price = products.Single(p => p.Id == item.ProductId).Price;
             }
             _ordersRepository.Add(order);
             await _unitOfWork.CommitAsync();
