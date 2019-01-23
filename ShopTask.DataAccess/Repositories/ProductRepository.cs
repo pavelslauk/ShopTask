@@ -18,8 +18,12 @@ namespace ShopTask.DataAccess.Repositories
             _dbContext = context;
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync(Expression<Func<Product, object>> include)
+        public async Task<IEnumerable<Product>> GetAllAsync(Expression<Func<Product, object>> include = null)
         {
+            if(include == null)
+            {
+                return await _dbContext.Products.ToListAsync();
+            }
             return await _dbContext.Products.Include(include).ToListAsync();
         }
 
@@ -28,8 +32,12 @@ namespace ShopTask.DataAccess.Repositories
             return await _dbContext.Products.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> where, Expression<Func<Product, object>> include)
+        public async Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> where, Expression<Func<Product, object>> include = null)
         {
+            if (include == null)
+            {
+                return await _dbContext.Products.Where(where).ToListAsync();
+            }
             return await _dbContext.Products.Include(include).Where(where).ToListAsync();
         }
 

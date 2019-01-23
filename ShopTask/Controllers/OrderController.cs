@@ -8,7 +8,6 @@ using ShopTask.DataAccess.Repositories;
 using System.Threading.Tasks;
 using AutoMapper;
 using ShopTask.Models;
-using Newtonsoft.Json.Linq;
 
 
 namespace ShopTask.Controllers
@@ -41,7 +40,7 @@ namespace ShopTask.Controllers
 
         [HttpPost]
         public void SaveCart(CartItemModel[] cart)
-        {           
+        {
             Session["Cart"] = cart;
         }
 
@@ -64,8 +63,7 @@ namespace ShopTask.Controllers
             }
 
             var productIds = order.OrderItems.Select(i => i.ProductId);
-            var products = await _productsRepository.FindAsync(where: product => productIds.Contains(product.Id), 
-                include: product => product.Category);
+            var products = await _productsRepository.FindAsync(where: product => productIds.Contains(product.Id));
             foreach (var item in order.OrderItems)
             {
                 item.Price = products.Single(p => p.Id == item.ProductId).Price;
