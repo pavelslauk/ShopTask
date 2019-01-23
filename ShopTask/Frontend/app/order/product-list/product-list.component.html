@@ -7,7 +7,7 @@
 
 <div class="order-products-body">
     <div class="order-product-form" *ngFor="let item of products">      
-        <div class="order-product-title" (click)="ShowDescription(descriptionModal, descriptionContent, item.description)">     <!-- modal.style.display = 'block' -->
+        <div class="order-product-title" (click)="showDescription(descriptionModal, descriptionContent, item.description)">
             {{ item.title }}
         </div>
         <div class="order-product-description">{{ item.description }}</div>

@@ -9,21 +9,25 @@ import { CartService } from '../services/cart.service';
 })
 export class ProductListComponent implements OnInit { 
   
-    private products: Product[];
+    private _products: Product[];
 
-    constructor(private productsService: ProductsService, private cartService: CartService) { 
+    public get products(){
+        return this._products;
+    }
+
+    constructor(private _productsService: ProductsService, private _cartService: CartService) { 
         
     }
 
     ngOnInit() { 
-        this.productsService.getAll().subscribe(data => this.products = data);
+        this._productsService.getAll().subscribe(data => this._products = data);
     }
 
     private addToCart(product: Product){
-        this.cartService.addToCart(product);
+        this._cartService.addToCart(product);
     }
 
-    private ShowDescription(descriptionModal: Element, descriptionContent: Element, description: string){
+    private showDescription(descriptionModal: Element, descriptionContent: Element, description: string){
         descriptionModal.classList.add('description-modal-show');
         if(description != null){
             descriptionContent.textContent = description;

@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators, AbstractControl } from "@angular/fo
 import { OrderDetails } from '../models/order-details.model';
 import { CartService } from '../services/cart.service';
 import { Router } from '@angular/router';
+import { OrderService } from '../services/order.service';
      
 @Component({
     selector: 'customer-data',
@@ -46,8 +47,8 @@ export class OrderDetailsComponent implements OnInit {
         return this._orderDetailsControl.get('phone');
     }
 
-    constructor(private _cartService: CartService, private _router: Router) {
-        this._orderDetails = this.GetOrderDetailsLocal();
+    constructor(private _cartService: CartService, private _router: Router, private _orderService: OrderService) {
+        this._orderDetails = this.getOrderDetailsLocal();
     }
 
     ngOnInit() {
@@ -59,12 +60,12 @@ export class OrderDetailsComponent implements OnInit {
             comments: new FormControl(this.orderDetails.comments)
         })
 
-        this._orderDetailsControl.valueChanges.subscribe((value) => this.SaveOrderDetailsLocal(value));
+        this._orderDetailsControl.valueChanges.subscribe((value) => this.saveOrderDetailsLocal(value));
     }
 
     public saveData() {
         if(this._orderDetailsControl.valid) {
-            this._cartService.clearCart();
+            this._orderService.saveOrder(this._orderDetails);
             this._router.navigateByUrl('/shoptask/Order');
         }
         else {
@@ -72,12 +73,12 @@ export class OrderDetailsComponent implements OnInit {
         }
     }
 
-    private SaveOrderDetailsLocal(value: any) {
+    private saveOrderDetailsLocal(value: any) {
         this.orderDetails.SetData(value);
         localStorage.setItem('OrderDetails', JSON.stringify(this.orderDetails));
     }
 
-    private GetOrderDetailsLocal() {
+    private getOrderDetailsLocal() {
         var orderDetails = new OrderDetails();
         var orderDetailsJSON = JSON.parse(localStorage.getItem('OrderDetails'));
         if(orderDetailsJSON){

@@ -203,7 +203,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
+    <Compile Include="Models\OrderDetailsModel.cs" />
     <Compile Include="Models\ProductOrderModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -302,7 +304,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>51021</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:51021/shoptask/</IISUrl>
+          <IISUrl>http://localhost:51022/shoptask/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

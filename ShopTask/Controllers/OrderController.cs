@@ -9,15 +9,21 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ShopTask.Models;
 
+
 namespace ShopTask.Controllers
 {
     public class OrderController : BaseController
     {
+        private IUnitOfWork _unitOfWork;
         private IRepository<Product> _productsRepository;
+        private IRepository<Order> _ordersRepository;
 
-        public OrderController(IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository)
+        public OrderController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository,
+            IRepository<Product> productsRepository, IRepository<Order> ordersRepository) : base(categoriesRepository)
         {
+            _unitOfWork = unitOfWork;
             _productsRepository = productsRepository;
+            _ordersRepository = ordersRepository;
         }
 
         [HttpGet]
@@ -27,13 +33,13 @@ namespace ShopTask.Controllers
         }
 
         [HttpGet]
-        public object GetCart()
+        public JsonResult GetCart()
         {
-            return Session["Cart"];
+            return Json(Session["Cart"], JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public void SaveCart(string cart)
+        public void SaveCart(CartItemModel[] cart)
         {
             Session["Cart"] = cart;
         }
@@ -46,6 +52,26 @@ namespace ShopTask.Controllers
             return Json(products, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public async Task<JsonResult> SaveOrder(OrderDetailsModel orderDetails)
+        {
+            var order = Mapper.Map<OrderDetailsModel, Order>(orderDetails);
+            order.OrderItems = Mapper.Map<CartItemModel[], OrderItem[]>((CartItemModel[])Session["Cart"]);
+            if (order.OrderItems?.Any() != true)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
 
+            var productIds = order.OrderItems.Select(i => i.ProductId);
+            var products = await _productsRepository.FindAsync(where: product => productIds.Contains(product.Id));
+            foreach (var item in order.OrderItems)
+            {
+                item.Price = products.Single(p => p.Id == item.ProductId).Price;
+            }
+            _ordersRepository.Add(order);
+            await _unitOfWork.CommitAsync();
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }

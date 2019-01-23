@@ -105,7 +105,7 @@ namespace ShopTask.Controllers
             {
                 Logger.Default.Warn(e);
 
-                return !(await _productsRepository.FindAsync(where: product => product.Id == productId, include: product => product.Category)).Any();
+                return !(await _productsRepository.FindAsync(where: product => product.Id == productId)).Any();
             }
         }
 
