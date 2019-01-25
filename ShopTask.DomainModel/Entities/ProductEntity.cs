@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace ShopTask.DataAccess.Entities
+namespace ShopTask.DomainModel.Entities
 {
     public class Product
     {

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ShopTask.DataAccess.Entities;
-using ShopTask.DataAccess.Repositories;
+using ShopTask.DomainModel.Repositories;  //
+using ShopTask.DomainModel.Entities;   //
+using ShopTask.Application.Models;
+using ShopTask.Application;
 using System.Threading.Tasks;
 using AutoMapper;
-using ShopTask.Models;
 
 
 namespace ShopTask.Controllers
@@ -17,13 +18,15 @@ namespace ShopTask.Controllers
         private IUnitOfWork _unitOfWork;
         private IRepository<Product> _productsRepository;
         private IRepository<Order> _ordersRepository;
+        private IOrderService _orderService;
 
         public OrderController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository,
-            IRepository<Product> productsRepository, IRepository<Order> ordersRepository) : base(categoriesRepository)
+            IRepository<Product> productsRepository, IRepository<Order> ordersRepository, IOrderService orderService) : base(categoriesRepository)
         {
             _unitOfWork = unitOfWork;
             _productsRepository = productsRepository;
             _ordersRepository = ordersRepository;
+            _orderService = orderService;
         }
 
         [HttpGet]
@@ -55,23 +58,10 @@ namespace ShopTask.Controllers
         [HttpPost]
         public async Task<JsonResult> SaveOrder(OrderDetailsModel orderDetails)
         {
-            var order = Mapper.Map<OrderDetailsModel, Order>(orderDetails);
-            order.OrderItems = Mapper.Map<CartItemModel[], OrderItem[]>((CartItemModel[])Session["Cart"]);
-            if (order.OrderItems?.Any() != true)
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
+            var orderItems = (CartItemModel[])Session["Cart"];
+            var result = await _orderService.SubmitOrderAsync(orderDetails, orderItems);
 
-            var productIds = order.OrderItems.Select(i => i.ProductId);
-            var products = await _productsRepository.FindAsync(where: product => productIds.Contains(product.Id));
-            foreach (var item in order.OrderItems)
-            {
-                item.Price = products.Single(p => p.Id == item.ProductId).Price;
-            }
-            _ordersRepository.Add(order);
-            await _unitOfWork.CommitAsync();
-
-            return Json(true, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

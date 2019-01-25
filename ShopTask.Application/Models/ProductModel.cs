@@ -1,12 +1,11 @@
-﻿using ShopTask.DataAccess.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 using ShopTask.Resources.Products;
 
-namespace ShopTask.Models
+namespace ShopTask.Application.Models
 {
     public class ProductModel
     {

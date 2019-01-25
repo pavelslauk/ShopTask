@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ShopTask.Models
+namespace ShopTask.Application.Models
 {
     public class OrderDetailsModel
     {

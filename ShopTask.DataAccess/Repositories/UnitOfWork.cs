@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ShopTask.Core.Utils;
+using ShopTask.DomainModel.Repositories;
 
 namespace ShopTask.DataAccess.Repositories
 {
