@@ -5,16 +5,14 @@ using System.Reflection;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using ShopTask.DomainModel;
-using ShopTask.DomainModel.Services;
 
-namespace ShopTask.Application
+namespace ShopTask.DomainModel
 {
-    public class ApplicationInstaller : IWindsorInstaller
+    public class DomainModelInstaller : IWindsorInstaller
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container.Register(Component.For<IOrderDomainService>().ImplementedBy<OrderDomainService>().LifestylePerWebRequest());        
+            container.Register(Component.For<IOrderMailService>().ImplementedBy<OrderLoggerService>().LifestylePerWebRequest());
         }
     }
 }

@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ShopTask.DomainModel.Entities;
 
-namespace ShopTask.DomainModel
+namespace ShopTask.DomainModel.Services
 {
     public interface IOrderDomainService
     {
-        Task<bool> SubmitOrder(Order order);
+        bool SubmitOrder(Order order, IEnumerable<Product> products);
     }
 }

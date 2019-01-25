@@ -15,17 +15,13 @@ namespace ShopTask.Controllers
 {
     public class OrderController : BaseController
     {
-        private IUnitOfWork _unitOfWork;
         private IRepository<Product> _productsRepository;
-        private IRepository<Order> _ordersRepository;
         private IOrderService _orderService;
 
-        public OrderController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository,
-            IRepository<Product> productsRepository, IRepository<Order> ordersRepository, IOrderService orderService) : base(categoriesRepository)
+        public OrderController(IRepository<Category> categoriesRepository,
+            IRepository<Product> productsRepository, IOrderService orderService) : base(categoriesRepository)
         {
-            _unitOfWork = unitOfWork;
             _productsRepository = productsRepository;
-            _ordersRepository = ordersRepository;
             _orderService = orderService;
         }
 
