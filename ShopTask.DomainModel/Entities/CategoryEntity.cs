@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ShopTask.DataAccess.Entities
+namespace ShopTask.DomainModel.Entities
 {
     public class Category
     {

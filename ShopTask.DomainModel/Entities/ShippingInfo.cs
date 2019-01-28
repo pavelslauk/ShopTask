@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ShopTask.Models
+namespace ShopTask.DomainModel.Entities
 {
-    public class OrderDetailsModel
+    public class ShippingInfo
     {
         public string Name { get; set; }
 

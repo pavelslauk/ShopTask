@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
-using ShopTask.DataAccess.Entities;
+using ShopTask.DomainModel.Entities;
 
 namespace ShopTask.DataAccess
 {

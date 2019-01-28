@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using ShopTask.Resources.Categories;
 
-namespace ShopTask.Models
+namespace ShopTask.Application.Models
 {
     public class CategoryModel
     {

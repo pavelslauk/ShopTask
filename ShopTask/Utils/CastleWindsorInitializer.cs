@@ -13,7 +13,8 @@ namespace ShopTask.Utils
         public static void Initialize()
         {
             var container = new WindsorContainer();
-            container.Install(new ApplicationInstaller(), FromAssembly.Named("ShopTask.DataAccess"));
+            container.Install(new PresentationInstaller(), FromAssembly.Named("ShopTask.DataAccess"), 
+                FromAssembly.Named("ShopTask.Application"), FromAssembly.Named("ShopTask.DomainModel"));
             ControllerBuilder.Current.SetControllerFactory(new CastleControllerFactory(container));
         }
     }

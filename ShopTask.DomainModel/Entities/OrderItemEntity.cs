@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopTask.DataAccess.Entities
+namespace ShopTask.DomainModel.Entities
 {
     public class OrderItem
     {
