@@ -29,9 +29,10 @@ namespace ShopTask.DomainModel
             _orderMailService = orderMailService;
         }
 
-        public bool SubmitOrder(ShippingInfo shippingInfo, IEnumerable<CartItem> cartItems)
+        public bool SubmitOrder(ShippingInfo shippingInfo, CartItem[] cartItems)
         {
             var order = Mapper.Map<ShippingInfo, Order>(shippingInfo);
+            order.OrderItems = Mapper.Map<CartItem[], OrderItem[]>(cartItems);
             _ordersRepository.Add(order);
             _orderMailService.SendMessage(order, cartItems);
 

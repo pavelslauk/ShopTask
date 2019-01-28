@@ -14,9 +14,9 @@ namespace ShopTask.DomainModel
         {
             var message = new StringBuilder(order.Name + " " + order.Surname + " заказал:");
             message.AppendLine();
-            foreach (var item in order.OrderItems)
+            foreach (var item in cartItems)
             {
-                message.AppendLine(item.Count + " " + cartItems.Single(p => p.Id == item.ProductId).Title);
+                message.AppendLine(item.Count + " " + item.Title);
             }
 
             Logger.Default.Debug(message.ToString());
