@@ -7,6 +7,7 @@ using ShopTask.Core.Utils;
 using ShopTask.DomainModel.Entities;
 using ShopTask.DomainModel.Repositories;
 using ShopTask.DomainModel.Services;
+using AutoMapper;
 
 
 namespace ShopTask.DomainModel
@@ -28,10 +29,11 @@ namespace ShopTask.DomainModel
             _orderMailService = orderMailService;
         }
 
-        public bool SubmitOrder(Order order, IEnumerable<Product> products)
+        public bool SubmitOrder(ShippingInfo shippingInfo, IEnumerable<CartItem> cartItems)
         {
+            var order = Mapper.Map<ShippingInfo, Order>(shippingInfo);
             _ordersRepository.Add(order);
-            _orderMailService.SendMessage(order, products);
+            _orderMailService.SendMessage(order, cartItems);
 
             return true;
         }

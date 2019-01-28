@@ -18,8 +18,10 @@ namespace ShopTask.Application.Utils
                 config.CreateMap<ProductModel, Product>();
                 config.CreateMap<Category, CategoryModel>();
                 config.CreateMap<Product, ProductOrderModel>().ForMember("Category", opt => opt.MapFrom(p => p.Category.Name));
-                config.CreateMap<OrderDetailsModel, Order>();
                 config.CreateMap<CartItemModel, OrderItem>();
+                config.CreateMap<OrderDetailsModel, ShippingInfo>();
+                config.CreateMap<Product, CartItem>();
+                config.CreateMap<ShippingInfo, Order>();
             });
         }
     }

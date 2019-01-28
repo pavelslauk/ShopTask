@@ -26,19 +26,19 @@ namespace ShopTask.Application
 
         public async Task<bool> SubmitOrderAsync(OrderDetailsModel orderDetails, CartItemModel[] orderItems)
         {
-            var order = Mapper.Map<OrderDetailsModel, Order>(orderDetails);
-            order.OrderItems = Mapper.Map<CartItemModel[], OrderItem[]>(orderItems);
-            if (order.OrderItems?.Any() != true)
+            var shippingInfo = Mapper.Map<OrderDetailsModel, ShippingInfo>(orderDetails);
+            shippingInfo.OrderItems = Mapper.Map<CartItemModel[], OrderItem[]>(orderItems);
+            if (shippingInfo.OrderItems?.Any() != true)
             {
                 return false;
             }
-            var productIds = order.OrderItems.Select(i => i.ProductId);
-            var products = await _productsRepository.FindAsync(where: product => productIds.Contains(product.Id));
-            foreach (var item in order.OrderItems)
+            var productIds = shippingInfo.OrderItems.Select(i => i.ProductId);
+            var products = Mapper.Map<IEnumerable<Product>, IEnumerable<CartItem>>(await _productsRepository.FindAsync(where: product => productIds.Contains(product.Id)));
+            foreach (var item in shippingInfo.OrderItems)
             {
                 item.Price = products.Single(p => p.Id == item.ProductId).Price;
             }
-            var result = _orderDomainService.SubmitOrder(order, products);
+            var result = _orderDomainService.SubmitOrder(shippingInfo, products);
             await _unitOfWork.CommitAsync();
 
             return result;

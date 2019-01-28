@@ -9,6 +9,6 @@ namespace ShopTask.DomainModel
 {
     public interface IOrderMailService
     {
-        void SendMessage(Order order, IEnumerable<Product> products);
+        void SendMessage(Order order, IEnumerable<CartItem> cartItems);
     }
 }

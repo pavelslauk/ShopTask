@@ -9,6 +9,6 @@ namespace ShopTask.DomainModel.Services
 {
     public interface IOrderDomainService
     {
-        bool SubmitOrder(Order order, IEnumerable<Product> products);
+        bool SubmitOrder(ShippingInfo shippingInfo, IEnumerable<CartItem> cartItems);
     }
 }

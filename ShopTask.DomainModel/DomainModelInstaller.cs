@@ -12,7 +12,7 @@ namespace ShopTask.DomainModel
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container.Register(Component.For<IOrderMailService>().ImplementedBy<OrderLoggerService>().LifestylePerWebRequest());
+            container.Register(Component.For<IOrderMailService>().ImplementedBy<StubOrderMailService>().LifestylePerWebRequest());
         }
     }
 }

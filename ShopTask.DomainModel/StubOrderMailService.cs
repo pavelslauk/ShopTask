@@ -8,15 +8,15 @@ using ShopTask.DomainModel.Entities;
 
 namespace ShopTask.DomainModel
 {
-    class OrderLoggerService : IOrderMailService
+    class StubOrderMailService : IOrderMailService
     {
-        public void SendMessage(Order order, IEnumerable<Product> products)
+        public void SendMessage(Order order, IEnumerable<CartItem> cartItems)
         {
             var message = new StringBuilder(order.Name + " " + order.Surname + " заказал:");
             message.AppendLine();
             foreach (var item in order.OrderItems)
             {
-                message.AppendLine(item.Count + " " + products.Single(p => p.Id == item.ProductId).Title);
+                message.AppendLine(item.Count + " " + cartItems.Single(p => p.Id == item.ProductId).Title);
             }
 
             Logger.Default.Debug(message.ToString());
