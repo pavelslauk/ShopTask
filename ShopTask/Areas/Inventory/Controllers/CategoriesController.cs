@@ -11,8 +11,9 @@ using ShopTask.DomainModel.Repositories;
 using AutoMapper;
 using System.Threading.Tasks;
 using Nito.AsyncEx;
+using ShopTask.Controllers;
 
-namespace ShopTask.Controllers
+namespace ShopTask.Areas.Inventory.Controllers
 {
     public class CategoriesController : BaseController
     {
@@ -43,7 +44,7 @@ namespace ShopTask.Controllers
         public async Task<ActionResult> UpdateCategories(Category[] categories)
         {
             ModelState.Clear();
-            var isUpdated = await UpdateCategoriesInternal(categories);
+            var isUpdated = await UpdateCategoriesInternal(categories).ConfigureAwait(false); ;
             if (!isUpdated)
             {
                 ModelState.AddModelError("UpdateFailed", "There is some error");

@@ -5,6 +5,7 @@
 @{
     var category = ViewBag.FilterCategory as Category;
     ViewBag.Title = category != null ? $"{Res.ProductsTitle} - {category.Name}" : Res.ProductsTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @if (Model.Any())

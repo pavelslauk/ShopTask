@@ -11,22 +11,7 @@ namespace ShopTask
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.MapRoute(
-                name: "Categories",
-                url: "Categories",
-                defaults: new { controller = "Categories", action = "Index" });
-
-            routes.MapRoute(
-                name: "CreateProduct",
-                url: "{controller}/Product",
-                defaults: new { action = "CreateProduct" });
-
-            routes.MapRoute(
-                name: "EditProduct",
-                url: "{controller}/Product/{productId}",
-                defaults: new { action = "EditProduct" });
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");          
 
             routes.MapRoute(
                 name: "GetProducts",
@@ -56,7 +41,9 @@ namespace ShopTask
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Products", action = "Index", id = UrlParameter.Optional });
+                defaults: new { controller = "Products", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "ShopTask.Areas.Inventory.Controllers" })
+                .DataTokens.Add("Area", "Inventory");
         }
     }
 }

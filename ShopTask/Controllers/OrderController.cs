@@ -47,7 +47,7 @@ namespace ShopTask.Controllers
         public async Task<JsonResult> GetProductsAsync()
         {
             var products = Mapper.Map<Product[], ProductOrderModel[]>((await _productsRepository
-                .GetAllAsync(include: product => product.Category)).ToArray());
+                .GetAllAsync(include: product => product.Category).ConfigureAwait(false)).ToArray());
             return Json(products, JsonRequestBehavior.AllowGet);
         }
 
@@ -55,7 +55,7 @@ namespace ShopTask.Controllers
         public async Task<JsonResult> SaveOrder(OrderDetailsModel orderDetails)
         {
             var orderItems = (CartItemModel[])Session["Cart"];
-            var result = await _orderService.SubmitOrderAsync(orderDetails, orderItems);
+            var result = await _orderService.SubmitOrderAsync(orderDetails, orderItems).ConfigureAwait(false);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
