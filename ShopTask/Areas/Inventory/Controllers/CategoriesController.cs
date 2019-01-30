@@ -33,8 +33,7 @@ namespace ShopTask.Areas.Inventory.Controllers
         [HttpGet]
         public ActionResult CategoriesPartial()
         {
-            var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(AsyncContext
-                .Run(async () => await _categoriesRepository.GetAllAsync()));
+            var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(_categoriesRepository.GetAllAsync().Result);
             categories.Add(new CategoryModel());
 
             return PartialView("CategoriesPartial", categories);
@@ -44,7 +43,7 @@ namespace ShopTask.Areas.Inventory.Controllers
         public async Task<ActionResult> UpdateCategories(Category[] categories)
         {
             ModelState.Clear();
-            var isUpdated = await UpdateCategoriesInternal(categories).ConfigureAwait(false); ;
+            var isUpdated = await UpdateCategoriesInternal(categories);
             if (!isUpdated)
             {
                 ModelState.AddModelError("UpdateFailed", "There is some error");

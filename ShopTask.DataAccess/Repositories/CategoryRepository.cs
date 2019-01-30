@@ -21,7 +21,7 @@ namespace ShopTask.DataAccess.Repositories
 
         public async Task<IEnumerable<Category>> GetAllAsync(Expression<Func<Category, object>> include = null)
         {
-            return await _dbContext.Categories.ToListAsync();
+            return await _dbContext.Categories.ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<Category> GetByIdAsync(int id)

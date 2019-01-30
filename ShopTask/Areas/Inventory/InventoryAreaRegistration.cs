@@ -21,13 +21,13 @@ namespace ShopTask.Areas.Inventory
 
             context.MapRoute(
                 name: "CreateProduct",
-                url: "Inventory/{controller}/Product",
-                defaults: new { action = "CreateProduct" });
+                url: "Inventory/Product",
+                defaults: new { controller = "Products", action = "CreateProduct" });
 
             context.MapRoute(
                 name: "EditProduct",
-                url: "Inventory/{controller}/Product/{productId}",
-                defaults: new { action = "EditProduct" });
+                url: "Inventory/Product/{productId}",
+                defaults: new { controller = "Products", action = "EditProduct" });
 
             context.MapRoute(
                  "Inventory_default",

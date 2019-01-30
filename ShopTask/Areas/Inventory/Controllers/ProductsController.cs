@@ -28,9 +28,9 @@ namespace ShopTask.Areas.Inventory.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(int? filterCategoryId)
         {
-            var products = (await _productsRepository.FindAsync(where: product => !filterCategoryId.HasValue || product.CategoryId == filterCategoryId, include: product => product.Category).ConfigureAwait(false))
+            var products = (await _productsRepository.FindAsync(where: product => !filterCategoryId.HasValue || product.CategoryId == filterCategoryId, include: product => product.Category))
                 .ToList();
-            ViewBag.FilterCategory = (await _categoriesRepository.FindAsync(where: category => category.Id == filterCategoryId).ConfigureAwait(false))
+            ViewBag.FilterCategory = (await _categoriesRepository.FindAsync(where: category => category.Id == filterCategoryId))
                 .FirstOrDefault();
 
             return View(products);
@@ -39,7 +39,7 @@ namespace ShopTask.Areas.Inventory.Controllers
         [HttpGet]
         public async Task<ActionResult> CreateProduct()
         {
-            var productModel = new ProductModel { Categories = await GetCategorySelectListAsync().ConfigureAwait(false) };
+            var productModel = new ProductModel { Categories = await GetCategorySelectListAsync() };
 
             return View("ProductView", productModel);
         }
@@ -54,7 +54,7 @@ namespace ShopTask.Areas.Inventory.Controllers
             }
             var product = Mapper.Map<ProductModel, Product>(productModel);
             _productsRepository.Add(product);
-            await _unitOfWork.CommitAsync().ConfigureAwait(false);
+            await _unitOfWork.CommitAsync();
 
             return RedirectToAction("Index");
         }
@@ -62,8 +62,8 @@ namespace ShopTask.Areas.Inventory.Controllers
         [HttpGet]
         public async Task<ActionResult> EditProduct(int productId)
         {
-            var product = Mapper.Map<Product, ProductModel>(await _productsRepository.GetByIdAsync(productId).ConfigureAwait(false));
-            product.Categories = await GetCategorySelectListAsync(product.CategoryId).ConfigureAwait(false);
+            var product = Mapper.Map<Product, ProductModel>(await _productsRepository.GetByIdAsync(productId));
+            product.Categories = await GetCategorySelectListAsync(product.CategoryId);
 
             return View("ProductView", product);
         }
@@ -79,7 +79,7 @@ namespace ShopTask.Areas.Inventory.Controllers
             
             var product = Mapper.Map<ProductModel, Product>(productModel);
             _productsRepository.Update(product);
-            await _unitOfWork.CommitAsync().ConfigureAwait(false);
+            await _unitOfWork.CommitAsync();
 
             return RedirectToAction("Index");
         }
@@ -87,7 +87,7 @@ namespace ShopTask.Areas.Inventory.Controllers
         [HttpPost]
         public async Task<JsonResult> DeleteProduct(int productId)
         {
-            var isDeleted = await DeleteProductInternal(productId).ConfigureAwait(false);
+            var isDeleted = await DeleteProductInternal(productId);
 
             return Json(isDeleted, JsonRequestBehavior.AllowGet);
         }
