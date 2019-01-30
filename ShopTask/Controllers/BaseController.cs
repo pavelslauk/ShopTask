@@ -32,8 +32,7 @@ namespace ShopTask.Controllers
         {
             if (actionContext.Result is ViewResult)
             {
-                ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(AsyncContext
-                    .Run(async () => await _categoriesRepository.GetAllAsync()));
+                ViewBag.Categories = Mapper.Map<IEnumerable<Category>, CategoryModel[]>(_categoriesRepository.GetAllAsync().Result);
             }
         }
 

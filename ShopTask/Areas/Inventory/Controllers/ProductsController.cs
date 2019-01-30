@@ -10,8 +10,9 @@ using ShopTask.DomainModel.Entities;
 using ShopTask.DomainModel.Repositories;
 using AutoMapper;
 using System.Threading.Tasks;
+using ShopTask.Controllers;
 
-namespace ShopTask.Controllers
+namespace ShopTask.Areas.Inventory.Controllers
 {
     public class ProductsController : BaseController
     {

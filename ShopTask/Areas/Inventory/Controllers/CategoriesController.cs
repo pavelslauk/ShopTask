@@ -11,8 +11,9 @@ using ShopTask.DomainModel.Repositories;
 using AutoMapper;
 using System.Threading.Tasks;
 using Nito.AsyncEx;
+using ShopTask.Controllers;
 
-namespace ShopTask.Controllers
+namespace ShopTask.Areas.Inventory.Controllers
 {
     public class CategoriesController : BaseController
     {
@@ -32,8 +33,7 @@ namespace ShopTask.Controllers
         [HttpGet]
         public ActionResult CategoriesPartial()
         {
-            var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(AsyncContext
-                .Run(async () => await _categoriesRepository.GetAllAsync()));
+            var categories = Mapper.Map<IEnumerable<Category>, List<CategoryModel>>(_categoriesRepository.GetAllAsync().Result);
             categories.Add(new CategoryModel());
 
             return PartialView("CategoriesPartial", categories);
