@@ -1,42 +1,7 @@
-﻿@using ShopTask.DomainModel.Entities;
-@using ShopTask.Resources.Products;
-@model IEnumerable<Product>
-
-@{
-    var category = ViewBag.FilterCategory as Category;
-    ViewBag.Title = category != null ? $"{Res.ProductsTitle} - {category.Name}" : Res.ProductsTitle;
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (Model.Any())
-{
-    <table id="productTable" class="product-table"
-           data-delete-url="@Url.Action("DeleteProduct")">
-        <tr>
-            <td>
-                @Res.ProductModelTitle
-            </td>
-            <td>
-                @Res.CategoryModelName
-            </td>
-            <td>
-                @Res.ProductModelPrice
-            </td>
-            <td></td>
-        </tr>
+<products></products>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td class="js-table-product-title"><a href="@Url.Action("EditProduct", new { productId = item.Id})" class="edit-link">@item.Title</a></td>
-                <td class="table-product-category">@item.Category.Name</td>
-                <td class="table-product-price">@item.Price</td>
-                <td class="table-product-delete">
-                    <a href="#" class="js-delete-link" data-id="@item.Id">@Res.DeleteLink</a>
-                </td>
-            </tr>
-        }
-    </table>
-}
-
-<p class="@(Model.Any() ? "hidden " : "")js-empty-table-placeholder">@Res.EmptyTablePlaceholder</p>
+@Scripts.Render("~/bundles/products")

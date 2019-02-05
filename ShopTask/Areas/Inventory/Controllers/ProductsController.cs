@@ -17,71 +17,42 @@ namespace ShopTask.Areas.Inventory.Controllers
     public class ProductsController : BaseController
     {
         private IUnitOfWork _unitOfWork;
-        private IRepository<Product> _productsRepository;
 
-        public ProductsController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository)
+        public ProductsController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository, productsRepository)
         {
             _unitOfWork = unitOfWork;
             _productsRepository = productsRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int? filterCategoryId)
+        public ActionResult Index()
         {
-            var products = (await _productsRepository.FindAsync(where: product => !filterCategoryId.HasValue || product.CategoryId == filterCategoryId, include: product => product.Category))
-                .ToList();
-            ViewBag.FilterCategory = (await _categoriesRepository.FindAsync(where: category => category.Id == filterCategoryId))
-                .FirstOrDefault();
-
-            return View(products);
+            return View();
         }
 
         [HttpGet]
-        public async Task<ActionResult> CreateProduct()
+        public async Task<JsonResult> GetCategoriesAsync()
         {
-            var productModel = new ProductModel { Categories = await GetCategorySelectListAsync() };
-
-            return View("ProductView", productModel);
+            var categories = (await _categoriesRepository.GetAllAsync()).ToArray();
+            return Json(categories, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateProduct(ProductModel productModel)
+        public async Task<JsonResult> SaveNewProduct(ProductModel newProduct)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("ProductView");
-            }
-            var product = Mapper.Map<ProductModel, Product>(productModel);
+            var product = Mapper.Map<ProductModel, Product>(newProduct);
             _productsRepository.Add(product);
             await _unitOfWork.CommitAsync();
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> EditProduct(int productId)
-        {
-            var product = Mapper.Map<Product, ProductModel>(await _productsRepository.GetByIdAsync(productId));
-            product.Categories = await GetCategorySelectListAsync(product.CategoryId);
-
-            return View("ProductView", product);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditProduct(ProductModel productModel)
+        public async Task<JsonResult> SaveChangedProduct(ProductModel changetProduct)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("ProductView");
-            }
-            
-            var product = Mapper.Map<ProductModel, Product>(productModel);
+            var product = Mapper.Map<ProductModel, Product>(changetProduct);
             _productsRepository.Update(product);
             await _unitOfWork.CommitAsync();
-
-            return RedirectToAction("Index");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -108,11 +79,6 @@ namespace ShopTask.Areas.Inventory.Controllers
 
                 return !(await _productsRepository.FindAsync(where: product => product.Id == productId)).Any();
             }
-        }
-
-        private async Task<SelectList> GetCategorySelectListAsync(int? currentCategory = null)
-        {
-            return new SelectList(await _categoriesRepository.GetAllAsync(), "Id", "Name", currentCategory);
         }
     }
 }

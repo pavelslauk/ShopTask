@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ShopTask.Application.Models
 {
-    public class ProductOrderModel
+    public class ProductPresentationModel
     {
         public int Id { get; set; }
 

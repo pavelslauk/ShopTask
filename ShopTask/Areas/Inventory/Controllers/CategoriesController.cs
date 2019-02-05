@@ -19,7 +19,7 @@ namespace ShopTask.Areas.Inventory.Controllers
     {
         private IUnitOfWork _unitOfWork;
 
-        public CategoriesController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository) : base (categoriesRepository)
+        public CategoriesController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base (categoriesRepository, productsRepository)
         {
             _unitOfWork = unitOfWork;
         }

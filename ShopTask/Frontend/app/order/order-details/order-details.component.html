@@ -3,6 +3,7 @@
         <p class="form-header-text">Input your data</p>
     </div>
     <div class="input-form-body" [formGroup]="orderDetailsControl">
+        
         <p class="order-details-error-message" *ngIf="(name.dirty || name.touched || formSubmitAttempted) && name.invalid && name.errors.required" >Field Name is requred</p>
         <label class="input-form-col1">Name <span class="required-symbol">*</span></label>
         <div class="input-form-col2">

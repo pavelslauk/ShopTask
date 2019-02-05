@@ -78,8 +78,7 @@ export class CartService {
 
     private refreshCart() {
         this._http.get(this._windowRef.nativeWindow.apiRootUrl + '/Order/GetCart')
-        .subscribe(data => this.setCartItems(this.parseCartItems(data)));
-          
+        .subscribe(data => this.setCartItems(this.parseCartItems(data))); 
     }
 
     private setCartItems(cart: CartItem[]) {

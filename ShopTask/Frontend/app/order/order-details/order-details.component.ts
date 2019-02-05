@@ -64,7 +64,7 @@ export class OrderDetailsComponent implements OnInit {
     }
 
     public saveData() {
-        if(this._orderDetailsControl.valid) {
+        if(this.orderDetailsControl.valid) {
             this._orderService.saveOrder(this._orderDetails);
             this._router.navigateByUrl('/shoptask/Order');
         }

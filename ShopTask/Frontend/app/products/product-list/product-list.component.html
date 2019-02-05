@@ -1,0 +1,25 @@
+<table class="product-table" *ngIf="(products| async).length != 0">
+    <tr>
+        <td>
+            Title
+        </td>
+        <td>
+            Category
+        </td>
+        <td>
+            Price
+        </td>
+        <td></td>
+    </tr>
+
+    <tr *ngFor="let item of products| async">
+            <td class="js-table-product-title"><a [routerLink]="['/shoptask/Inventory/Product', item.id]" class="edit-link">{{item.title}}</a></td>
+            <td class="table-product-category">{{item.category}}</td>
+            <td class="table-product-price">{{item.price}}</td>
+            <td class="table-product-delete">
+                <a href="#" class="js-delete-link" (click)="deleteProduct(item.id)">Delete</a>
+            </td>
+    </tr>
+</table>
+
+<p class="js-empty-table-placeholder" *ngIf="(products| async).length == 0">No products!</p>
