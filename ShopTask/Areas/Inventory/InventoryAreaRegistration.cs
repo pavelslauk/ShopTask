@@ -20,14 +20,9 @@ namespace ShopTask.Areas.Inventory
                 defaults: new { controller = "Categories", action = "Index" });
 
             context.MapRoute(
-                name: "SaveNewProduct",
-                url: "Inventory/SaveNewProduct",
-                defaults: new { controller = "Products", action = "SaveNewProduct" });
-
-            context.MapRoute(
-                name: "SaveChangedProduct",
-                url: "Inventory/SaveChangedProduct",
-                defaults: new { controller = "Products", action = "SaveChangedProduct" });
+                name: "SaveProduct",
+                url: "Inventory/SaveProduct",
+                defaults: new { controller = "Products", action = "SaveProduct" });
 
             context.MapRoute(
                 name: "DeleteProduct",
@@ -37,7 +32,7 @@ namespace ShopTask.Areas.Inventory
             context.MapRoute(
                 name: "GetCategories",
                 url: "Inventory/GetCategories",
-                defaults: new { controller = "Products", action = "GetCategoriesAsync" });
+                defaults: new { controller = "Products", action = "GetCategories" });
 
             context.MapRoute(
                 name: "Products",

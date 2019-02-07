@@ -29,15 +29,15 @@ export class Product {
         this._category = value;
     }
 
-    constructor(data: any) {
-        if(data) {
-            this._id = data.Id;
-            this._title = data.Title;
-            this._price = data.Price;
-            this._description = data.Description;
-            this._category = data.Category;
-        }
-     }
+    constructor() {}
+
+    public InitializeProduct(data: any){
+        this._id = data.Id;
+        this._title = data.Title;
+        this._price = data.Price;
+        this._description = data.Description;
+        this._category = data.Category;
+    }
 
     public SetData(data: any){
         this._title = data.title;

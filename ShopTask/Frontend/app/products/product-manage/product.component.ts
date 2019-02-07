@@ -3,19 +3,20 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators, AbstractControl } from "@angular/forms";
 import { Router } from '@angular/router';
 import { Product } from "../models/product.model"
-import { ProductManageService } from '../services/product-manage.service';
+import { ProductsManagementService } from '../services/products-management.service';
 import { CategoriesService } from '../services/categories.service';
 import { Category } from '../models/category.model';
 import { ProductsService } from '../services/products.service';
+import { Element } from '@angular/compiler';
      
 @Component({
-    selector: 'edit-product',
+    selector: 'product',
     templateUrl: './product.component.html'
 })
-export class EditProductComponent implements OnInit { 
+export class ProductComponent implements OnInit { 
 
-    private _product: Product;
-    private _productControl: FormGroup;
+    private _product = new Product();
+    private _formGroup: FormGroup;
     private _formSubmitAttempted: boolean = false;
     private _categories: Category[];
 
@@ -35,62 +36,61 @@ export class EditProductComponent implements OnInit {
         return this._product;
     }
 
-    public get productControl(): FormGroup {
-        return this._productControl;
+    public get formGroup(): FormGroup {
+        return this._formGroup;
     }
 
     public get title(): AbstractControl {
-        return this.productControl.get('title');
+        return this.formGroup.get('title');
     }
 
     public get category(): AbstractControl {
-        return this.productControl.get('category');
+        return this.formGroup.get('category');
     }
 
     public get price(): AbstractControl {
-        return this.productControl.get('price');
+        return this.formGroup.get('price');
     }
 
     public get description(): AbstractControl {
-        return this.productControl.get('description');
+        return this.formGroup.get('description');
     }
 
-    constructor(private activatedRoute: ActivatedRoute, private _router: Router,
-        private _productManageService: ProductManageService, private _categoriesService: CategoriesService,
-        private _productsService: ProductsService) {         
-            this.activatedRoute.params.subscribe(params => this._product = _productsService.findById(params['productId']));
+    constructor(private _router: Router,
+        private _productsManagementService: ProductsManagementService, private _categoriesService: CategoriesService,
+        private _productsService: ProductsService) {
+                this._product = _productsManagementService.editableProduct;
+                this._categoriesService.getAll().subscribe(data => {
+                    this._categories = data;
+                    if(this.product.id) this.mapCategory(); 
+                    this.formGroupInitiate()
+                });
         }
 
-     ngOnInit() {    
-        this._categoriesService.getAll().subscribe(data => {
-            this._categories = data; 
-            this.mapCategory(); 
-            this.productControlInitiate()
-        });        
-    } 
+     ngOnInit() { } 
 
-    public saveData() {
-        if(this.productControl.valid) {
-            this._productManageService.saveChangedProduct(this.product);
-            this._router.navigateByUrl('/shoptask/Inventory');
+    public saveData(backLink: HTMLLinkElement) {
+        if(this.formGroup.valid) {
+            this._productsManagementService.saveProduct(this.product)
+            .subscribe(() => backLink.click());
         }
         else {
             this.formSubmitAttempted = true;
         }
     }
 
-    private productControlInitiate() {
-        this._productControl = new FormGroup({
+    private formGroupInitiate() {
+        this._formGroup = new FormGroup({
             title: new FormControl(this.product.title, Validators.required),
             category: new FormControl(this.product.category, Validators.required),
             price: new FormControl(this.product.price, [Validators.required, 
                 Validators.pattern('((^[1-9][0-9]*(\.[0-9]*)?)|(^0\.(([0-9]*)?[1-9]([0-9]*)?)))$')]),
             description: new FormControl(this.product.description)
         })    
-        this._productControl.valueChanges.subscribe((value) => this.product.SetData(value));
+        this.formGroup.valueChanges.subscribe((value) => this.product.SetData(value));
     }
 
     private mapCategory() {
-        this._product.category = this.categories.find(item => item.name == this._product.category).id;
+        this.product.category = this.categories.find(item => item.name == this._product.category).id;
     }
 }

@@ -31,7 +31,7 @@ namespace ShopTask.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetProductsAsync()
+        public async Task<JsonResult> GetProducts()
         {
             var products = Mapper.Map<Product[], ProductPresentationModel[]>((await _productsRepository
                 .GetAllAsync(include: product => product.Category)).ToArray());

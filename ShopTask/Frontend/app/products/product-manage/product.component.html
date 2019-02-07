@@ -2,7 +2,7 @@
         <div class="form-header">
             <p class="form-header-text">Product</p>
         </div>
-        <div class="input-form-body" [formGroup]="productControl">
+        <div class="input-form-body" [formGroup]="formGroup">
             
             <p class="order-details-error-message" *ngIf="(title.dirty || title.touched || formSubmitAttempted) && title.invalid && title.errors.required" >Field Title is requred</p>
             <label class="input-form-col1">Title <span class="required-symbol">*</span></label>
@@ -30,11 +30,11 @@
             </div>
     
             <div class="input-form-col2">
-                <button class="form-save-button" (click)="saveData()">Save</button>
+                <button class="form-save-button" (click)="saveData(backLink)">Save</button>
             </div>
     
             <div class="input-form-col2">
-                <div class="input-back-link"><a routerLink="/shoptask/Inventory">Back</a></div>     
+                <div class="input-back-link"><a href="\shoptask\Inventory" #backLink>Back</a></div>     
             </div>
         </div>
         

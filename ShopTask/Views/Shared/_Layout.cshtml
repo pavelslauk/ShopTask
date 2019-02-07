@@ -52,7 +52,7 @@
                     <ul class="categories-filter">
                         @foreach (var category in categories)
                         {
-                            <li class="category-filter-link"><a href="\shoptask\Inventory?filterCategoryId=@category.Id">@category.Name</a></li>
+                            <li class="category-filter-link"><a href="\shoptask\Inventory?filterCategory=@category.Name">@category.Name</a></li>
                         }
                     </ul>
                 }

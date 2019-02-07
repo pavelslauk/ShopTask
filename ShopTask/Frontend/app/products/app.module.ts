@@ -7,9 +7,8 @@ import { APP_BASE_HREF } from '@angular/common';
 
 import { ProductListComponent } from './product-list/product-list.component'
 import { ProductsComponent } from './products.component';
-import { EditProductComponent } from './product-manage/edit-product.component';
-import { CreateProductComponent } from './product-manage/create-product.component';
-import { ProductManageService } from './services/product-manage.service'
+import { ProductComponent } from './product-manage/product.component';
+import { ProductsManagementService } from './services/products-management.service'
 import { CategoriesService } from './services/categories.service'
 import { ProductsService } from './services/products.service'
 import { WindowRef } from './services/windowRef'
@@ -17,15 +16,15 @@ import { WindowRef } from './services/windowRef'
 const routes = [
     { path: 'shoptask', component: ProductListComponent},
     { path: 'shoptask/Inventory', component: ProductListComponent},
-    { path: 'shoptask/Inventory/Product', component: CreateProductComponent},
-    { path: 'shoptask/Inventory/Product/:productId', component: EditProductComponent}
+    { path: 'shoptask/Inventory/Product', component: ProductComponent},
+    { path: 'shoptask/Inventory/Product/:productId', component: ProductComponent}
 ]
 
 @NgModule({
     imports:      [ BrowserModule, FormsModule, HttpClientModule, FormsModule, ReactiveFormsModule, RouterModule.forRoot(routes) ],
-    declarations: [ ProductsComponent, EditProductComponent, CreateProductComponent, ProductListComponent ],
+    declarations: [ ProductsComponent, ProductComponent, ProductListComponent ],
     bootstrap:    [ ProductsComponent ],
-    providers:    [ ProductManageService, ProductsService, CategoriesService, WindowRef, {provide: APP_BASE_HREF, useValue : '' } ]
+    providers:    [ ProductsManagementService, ProductsService, CategoriesService, WindowRef, {provide: APP_BASE_HREF, useValue : '' } ]
 })
 
 export class AppModule { }

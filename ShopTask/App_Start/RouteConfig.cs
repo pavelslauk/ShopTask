@@ -16,7 +16,7 @@ namespace ShopTask
             routes.MapRoute(
                 name: "GetProducts",
                 url: "Base/GetProducts",
-                defaults: new { controller = "Base", action = "GetProductsAsync" });
+                defaults: new { controller = "Base", action = "GetProducts" });
 
             routes.MapRoute(
                 name: "GetCart",

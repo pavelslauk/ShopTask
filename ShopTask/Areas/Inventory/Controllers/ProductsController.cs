@@ -31,28 +31,26 @@ namespace ShopTask.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetCategoriesAsync()
+        public async Task<JsonResult> GetCategories()
         {
             var categories = (await _categoriesRepository.GetAllAsync()).ToArray();
             return Json(categories, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public async Task<JsonResult> SaveNewProduct(ProductModel newProduct)
+        public async Task<JsonResult> SaveProduct(ProductModel productModel)
         {
-            var product = Mapper.Map<ProductModel, Product>(newProduct);
-            _productsRepository.Add(product);
+            var product = Mapper.Map<ProductModel, Product>(productModel);
+            if(product.Id == 0)
+            {
+                _productsRepository.Add(product);
+            }
+            else
+            {
+                _productsRepository.Update(product);
+            } 
             await _unitOfWork.CommitAsync();
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> SaveChangedProduct(ProductModel changetProduct)
-        {
-            var product = Mapper.Map<ProductModel, Product>(changetProduct);
-            _productsRepository.Update(product);
-            await _unitOfWork.CommitAsync();
-            return Json(true, JsonRequestBehavior.AllowGet);
+            return Json(true);
         }
 
         [HttpPost]
@@ -60,7 +58,7 @@ namespace ShopTask.Areas.Inventory.Controllers
         {
             var isDeleted = await DeleteProductInternal(productId);
 
-            return Json(isDeleted, JsonRequestBehavior.AllowGet);
+            return Json(isDeleted);
         }
 
         private async Task<bool> DeleteProductInternal(int productId)

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from "../models/product.model"
-import { CategoriesService } from '../services/categories.service';
+import { Router } from '@angular/router';
 import { ProductsService } from '../services/products.service';
-import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { ProductManageService } from '../services/product-manage.service';
+import { ProductsManagementService } from '../services/products-management.service';
      
 @Component({
     selector: 'product-list',
@@ -12,32 +11,37 @@ import { ProductManageService } from '../services/product-manage.service';
 })
 export class ProductListComponent implements OnInit { 
 
-    private _products: Observable<Product[]>;
+    private _products: Product[] = [];
 
     public get products(){
         return this._products;
     }
 
-    constructor(private _productsService: ProductsService, private _productManageService: ProductManageService, 
-        private activatedRoute: ActivatedRoute, private _categoriesService: CategoriesService) {
-            this.activatedRoute.queryParams.subscribe(params => this.setCategoryFilterName(params['filterCategoryId']));
-        }
+    constructor(private _router: Router,private _productsService: ProductsService, private _productsManagementService: ProductsManagementService, 
+        private activatedRoute: ActivatedRoute) { }
 
     ngOnInit() {
-        this._products = this._productsService.productsBehaviorSubject.asObservable();
-
+        this.activatedRoute.queryParams.subscribe(params => this.setProducts(params['filterCategory']));
     } 
 
+    private setProducts(categoryFilter: string) {
+        if(categoryFilter) {
+            this._productsService.getAllProducts().
+            subscribe(products => this._products = products.filter(item => item.category == categoryFilter));
+        } else {
+            this._productsService.getAllProducts().subscribe(products => this._products = products);
+        }
+        
+    }
+
+    private editProduct(product: Product) {
+        this._productsManagementService.editableProduct = product;
+        this._router.navigateByUrl("/shoptask/Inventory/Product/" + product.id);
+    }
+
     private deleteProduct(productId: number) {
-        this._productManageService.deleteProduct(productId);
+        this._productsManagementService.deleteProduct(productId).subscribe(result => {
+            if(result) this._products = this.products.filter(item => item.id != productId);
+        });
     }
-
-    private setCategoryFilterName(categoryFilterId: number) {
-        this._categoriesService.getAll().subscribe(data => {
-            var category = data.find(item => item.id == categoryFilterId);
-            if(category)
-            this._productsService.categoryFilter = category.name});
-    }
-
-
 }
