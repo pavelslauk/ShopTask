@@ -17,26 +17,21 @@ export class ProductListComponent implements OnInit {
         return this._products;
     }
 
-    constructor(private _router: Router,private _productsService: ProductsService, private _productsManagementService: ProductsManagementService, 
+    constructor(private _productsService: ProductsService, private _productsManagementService: ProductsManagementService, 
         private activatedRoute: ActivatedRoute) { }
 
     ngOnInit() {
-        this.activatedRoute.queryParams.subscribe(params => this.setProducts(params['filterCategory']));
+        this.activatedRoute.queryParams.subscribe(params => this.changeProductsFilter(params['filterCategory']));
     } 
 
-    private setProducts(categoryFilter: string) {
-        if(categoryFilter) {
-            this._productsService.getAllProducts().
-            subscribe(products => this._products = products.filter(item => item.category == categoryFilter));
-        } else {
-            this._productsService.getAllProducts().subscribe(products => this._products = products);
-        }
-        
-    }
-
-    private editProduct(product: Product) {
-        this._productsManagementService.editableProduct = product;
-        this._router.navigateByUrl("/shoptask/Inventory/Product/" + product.id);
+    private changeProductsFilter(categoryFilter: string) {
+            this._productsService.getAllProducts().subscribe(products => {
+                if(categoryFilter) {
+                this._products = products.filter(item => item.category == categoryFilter)
+                } else {
+                    this._products = products;
+                }
+            });
     }
 
     private deleteProduct(productId: number) {

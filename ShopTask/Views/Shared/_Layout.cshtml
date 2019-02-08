@@ -4,22 +4,6 @@
 @using System.Globalization;
 @using ShopTask.Utils;
 
-@helper AddActivePageClassByAction(string action, string controller)
-{
-    if (action == ViewContext.RouteData.GetRequiredString("action") && (controller == ViewContext.RouteData.GetRequiredString("controller")))
-    {
-        @:active-page-link
-    }
-}
-
-@helper AddActivePageClassByUrl(string url)
-{
-    if (url == Request.Url.AbsolutePath)
-    {
-        @:active-page-link
-    }
-}
-
 @{
     CategoryModel[] categories = ViewBag.Categories;
 }
@@ -44,9 +28,9 @@
 
     <div class="navbar">
         <div class="navbar-body">
-            <a href="\shoptask\Inventory\Product" class="navbar-link @AddActivePageClassByUrl("/shoptask/Inventory/Product")">@Res.CreateProductTitle</a>
+            <a href="\shoptask\Inventory\Product" class="navbar-link">@Res.CreateProductTitle</a>
             <div class="inventory-link">
-                <a href="\shoptask\Inventory" class="navbar-link @AddActivePageClassByUrl("/shoptask/Inventory")">@Res.ProductsTitle</a>
+                <a href="\shoptask\Inventory" class="navbar-link">@Res.ProductsTitle</a>
                 @if (categories.Any())
                 {
                     <ul class="categories-filter">
@@ -57,8 +41,8 @@
                     </ul>
                 }
             </div>
-            <a href="@Url.Action("Index", new { area = "", controller = "Order" })" class="navbar-link @AddActivePageClassByAction("Index", "Order")">@Res.OrdersTitle</a>
-            <a href="@Url.Action("Index", new { area = "Inventory", controller= "Categories"})" class="navbar-link @AddActivePageClassByAction("Index", "Categories")">@Res.CategoriesTitle</a>
+            <a href="@Url.Action("Index", new { area = "", controller = "Order" })" class="navbar-link">@Res.OrdersTitle</a>
+            <a href="@Url.Action("Index", new { area = "Inventory", controller= "Categories"})" class="navbar-link">@Res.CategoriesTitle</a>
 
             <select class="js-culture-select" data-change-culture-url="@Url.Action("ChangeCulture", new { area = "", controller = "Base" })">
                 <option disabled selected>@Res.DefaultCultureSelect</option>

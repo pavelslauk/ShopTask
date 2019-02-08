@@ -13,7 +13,7 @@
     </tr>
 
     <tr *ngFor="let item of products">
-            <td class="js-table-product-title"><a href="#" (click)="editProduct(item)" class="edit-link">{{item.title}}</a></td>
+            <td class="js-table-product-title"><a [routerLink]="['/shoptask/Inventory/Product', item.id]" class="edit-link">{{item.title}}</a></td>
             <td class="table-product-category">{{item.category}}</td>
             <td class="table-product-price">{{item.price}}</td>
             <td class="table-product-delete">

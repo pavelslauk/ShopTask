@@ -6,18 +6,6 @@ import { Product } from "../models/product.model";
 @Injectable()
 export class ProductsManagementService {
 
-    private _editableProduct: Product = new Product;
-
-    public get editableProduct() : Product {
-        var product = this._editableProduct;
-        this._editableProduct = new Product;
-        return product;
-    }
-
-    public set editableProduct( value: Product) {
-        this._editableProduct = value;
-    }
-
     constructor(private _http: HttpClient, private _windowRef: WindowRef) { }
 
     public saveProduct(product: Product) {

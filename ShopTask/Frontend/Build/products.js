@@ -60287,7 +60287,7 @@ Zone.__load_patch('PromiseRejectionEvent', function (global, Zone) {
 /* 310 */
 /***/ (function(module, exports) {
 
-module.exports = "<table class=\"product-table\" *ngIf=\"products.length != 0\">\r\n    <tr>\r\n        <td>\r\n            Title\r\n        </td>\r\n        <td>\r\n            Category\r\n        </td>\r\n        <td>\r\n            Price\r\n        </td>\r\n        <td></td>\r\n    </tr>\r\n\r\n    <tr *ngFor=\"let item of products\">\r\n            <td class=\"js-table-product-title\"><a href=\"#\" (click)=\"editProduct(item)\" class=\"edit-link\">{{item.title}}</a></td>\r\n            <td class=\"table-product-category\">{{item.category}}</td>\r\n            <td class=\"table-product-price\">{{item.price}}</td>\r\n            <td class=\"table-product-delete\">\r\n                <a href=\"#\" class=\"js-delete-link\" (click)=\"deleteProduct(item.id)\">Delete</a>\r\n            </td>\r\n    </tr>\r\n</table>\r\n\r\n<p class=\"js-empty-table-placeholder\" *ngIf=\"products.length == 0\">No products!</p>\r\n";
+module.exports = "<table class=\"product-table\" *ngIf=\"products.length != 0\">\r\n    <tr>\r\n        <td>\r\n            Title\r\n        </td>\r\n        <td>\r\n            Category\r\n        </td>\r\n        <td>\r\n            Price\r\n        </td>\r\n        <td></td>\r\n    </tr>\r\n\r\n    <tr *ngFor=\"let item of products\">\r\n            <td class=\"js-table-product-title\"><a [routerLink]=\"['/shoptask/Inventory/Product', item.id]\" class=\"edit-link\">{{item.title}}</a></td>\r\n            <td class=\"table-product-category\">{{item.category}}</td>\r\n            <td class=\"table-product-price\">{{item.price}}</td>\r\n            <td class=\"table-product-delete\">\r\n                <a href=\"#\" class=\"js-delete-link\" (click)=\"deleteProduct(item.id)\">Delete</a>\r\n            </td>\r\n    </tr>\r\n</table>\r\n\r\n<p class=\"js-empty-table-placeholder\" *ngIf=\"products.length == 0\">No products!</p>\r\n";
 
 /***/ }),
 /* 311 */
@@ -60299,7 +60299,7 @@ module.exports = "<router-outlet></router-outlet>";
 /* 312 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"input-form\">\r\n        <div class=\"form-header\">\r\n            <p class=\"form-header-text\">Product</p>\r\n        </div>\r\n        <div class=\"input-form-body\" [formGroup]=\"formGroup\">\r\n            \r\n            <p class=\"order-details-error-message\" *ngIf=\"(title.dirty || title.touched || formSubmitAttempted) && title.invalid && title.errors.required\" >Field Title is requred</p>\r\n            <label class=\"input-form-col1\">Title <span class=\"required-symbol\">*</span></label>\r\n            <div class=\"input-form-col2\">\r\n                <input class=\"input-text-box\" formControlName=\"title\"/>\r\n            </div>\r\n    \r\n            <p class=\"order-details-error-message\" *ngIf=\"(category.dirty || category.touched || formSubmitAttempted) && category.invalid && category.errors.required\" >Field Category is requred</p>\r\n            <label class=\"input-form-col1\">Category</label>\r\n            <div class=\"input-form-col2\">\r\n                <select class=\"input-dropdownlist\" formControlName=\"category\">\r\n                    <option *ngFor=\"let item of categories\" [value]=\"item.id\" [selected]=\"category.value == item.id\">{{item.name}}</option>\r\n                </select>\r\n            </div>\r\n    \r\n            <p class=\"order-details-error-message\" *ngIf=\"(price.dirty || price.touched || formSubmitAttempted) && price.invalid\" >Field Price is incorrect</p>\r\n            <label class=\"input-form-col1\">Price <span class=\"required-symbol\">*</span></label>\r\n            <div class=\"input-form-col2\">\r\n                <input class=\"input-text-box\" formControlName=\"price\"/>\r\n            </div>\r\n    \r\n            <label class=\"input-form-col1\">Description</label>\r\n            <div class=\"input-form-col2\">\r\n                <textarea class=\"input-textarea\" cols=\"20\" rows=\"6\" formControlName=\"description\"></textarea>\r\n            </div>\r\n    \r\n            <div class=\"input-form-col2\">\r\n                <button class=\"form-save-button\" (click)=\"saveData(backLink)\">Save</button>\r\n            </div>\r\n    \r\n            <div class=\"input-form-col2\">\r\n                <div class=\"input-back-link\"><a href=\"\\shoptask\\Inventory\" #backLink>Back</a></div>     \r\n            </div>\r\n        </div>\r\n        \r\n    </div>";
+module.exports = "<div class=\"input-form\">\r\n        <div class=\"form-header\">\r\n            <p class=\"form-header-text\">Product</p>\r\n        </div>\r\n        <div class=\"input-form-body\" [formGroup]=\"formGroup\">\r\n            \r\n            <p class=\"order-details-error-message\" *ngIf=\"(title.dirty || title.touched || formSubmitAttempted) && title.invalid && title.errors.required\" >Field Title is requred</p>\r\n            <label class=\"input-form-col1\">Title <span class=\"required-symbol\">*</span></label>\r\n            <div class=\"input-form-col2\">\r\n                <input class=\"input-text-box\" formControlName=\"title\"/>\r\n            </div>\r\n    \r\n            <p class=\"order-details-error-message\" *ngIf=\"(category.dirty || category.touched || formSubmitAttempted) && category.invalid && category.errors.required\" >Field Category is requred</p>\r\n            <label class=\"input-form-col1\">Category</label>\r\n            <div class=\"input-form-col2\">\r\n                <select class=\"input-dropdownlist\" formControlName=\"category\">\r\n                    <option *ngFor=\"let item of categories\" [value]=\"item.id\" [selected]=\"category.value == item.id\">{{item.name}}</option>\r\n                </select>\r\n            </div>\r\n    \r\n            <p class=\"order-details-error-message\" *ngIf=\"(price.dirty || price.touched || formSubmitAttempted) && price.invalid\" >Field Price is incorrect</p>\r\n            <label class=\"input-form-col1\">Price <span class=\"required-symbol\">*</span></label>\r\n            <div class=\"input-form-col2\">\r\n                <input class=\"input-text-box\" formControlName=\"price\"/>\r\n            </div>\r\n    \r\n            <label class=\"input-form-col1\">Description</label>\r\n            <div class=\"input-form-col2\">\r\n                <textarea class=\"input-textarea\" cols=\"20\" rows=\"6\" formControlName=\"description\"></textarea>\r\n            </div>\r\n    \r\n            <div class=\"input-form-col2\">\r\n                <button class=\"form-save-button\" (click)=\"saveData()\">Save</button>\r\n            </div>\r\n    \r\n            <div class=\"input-form-col2\">\r\n                <div class=\"input-back-link\"><a routerLink=\"/shoptask/Inventory\">Back</a></div>     \r\n            </div>\r\n        </div>\r\n        \r\n    </div>";
 
 /***/ }),
 /* 313 */
@@ -83944,25 +83944,11 @@ var products_management_service_metadata = (undefined && undefined.__metadata) |
 
 
 
-
 var products_management_service_ProductsManagementService = /** @class */ (function () {
     function ProductsManagementService(_http, _windowRef) {
         this._http = _http;
         this._windowRef = _windowRef;
-        this._editableProduct = new Product;
     }
-    Object.defineProperty(ProductsManagementService.prototype, "editableProduct", {
-        get: function () {
-            var product = this._editableProduct;
-            this._editableProduct = new Product;
-            return product;
-        },
-        set: function (value) {
-            this._editableProduct = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
     ProductsManagementService.prototype.saveProduct = function (product) {
         return this._http.post(this._windowRef.nativeWindow.apiRootUrl + '/Inventory/SaveProduct', { productModel: this.getPostModel(product) });
     };
@@ -84000,10 +83986,8 @@ var product_list_component_metadata = (undefined && undefined.__metadata) || fun
 
 
 
-
 var product_list_component_ProductListComponent = /** @class */ (function () {
-    function ProductListComponent(_router, _productsService, _productsManagementService, activatedRoute) {
-        this._router = _router;
+    function ProductListComponent(_productsService, _productsManagementService, activatedRoute) {
         this._productsService = _productsService;
         this._productsManagementService = _productsManagementService;
         this.activatedRoute = activatedRoute;
@@ -84018,21 +84002,18 @@ var product_list_component_ProductListComponent = /** @class */ (function () {
     });
     ProductListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.activatedRoute.queryParams.subscribe(function (params) { return _this.setProducts(params['filterCategory']); });
+        this.activatedRoute.queryParams.subscribe(function (params) { return _this.changeProductsFilter(params['filterCategory']); });
     };
-    ProductListComponent.prototype.setProducts = function (categoryFilter) {
+    ProductListComponent.prototype.changeProductsFilter = function (categoryFilter) {
         var _this = this;
-        if (categoryFilter) {
-            this._productsService.getAllProducts().
-                subscribe(function (products) { return _this._products = products.filter(function (item) { return item.category == categoryFilter; }); });
-        }
-        else {
-            this._productsService.getAllProducts().subscribe(function (products) { return _this._products = products; });
-        }
-    };
-    ProductListComponent.prototype.editProduct = function (product) {
-        this._productsManagementService.editableProduct = product;
-        this._router.navigateByUrl("/shoptask/Inventory/Product/" + product.id);
+        this._productsService.getAllProducts().subscribe(function (products) {
+            if (categoryFilter) {
+                _this._products = products.filter(function (item) { return item.category == categoryFilter; });
+            }
+            else {
+                _this._products = products;
+            }
+        });
     };
     ProductListComponent.prototype.deleteProduct = function (productId) {
         var _this = this;
@@ -84046,7 +84027,7 @@ var product_list_component_ProductListComponent = /** @class */ (function () {
             selector: 'product-list',
             template: __webpack_require__(310),
         }),
-        product_list_component_metadata("design:paramtypes", [router_Router, products_service_ProductsService, products_management_service_ProductsManagementService,
+        product_list_component_metadata("design:paramtypes", [products_service_ProductsService, products_management_service_ProductsManagementService,
             router_ActivatedRoute])
     ], ProductListComponent);
     return ProductListComponent;
@@ -84158,21 +84139,27 @@ var product_component_metadata = (undefined && undefined.__metadata) || function
 
 
 
+
 var product_component_ProductComponent = /** @class */ (function () {
-    function ProductComponent(_router, _productsManagementService, _categoriesService, _productsService) {
+    function ProductComponent(activatedRoute, _router, _productsManagementService, _categoriesService, _productsService) {
         var _this = this;
+        this.activatedRoute = activatedRoute;
         this._router = _router;
         this._productsManagementService = _productsManagementService;
         this._categoriesService = _categoriesService;
         this._productsService = _productsService;
         this._product = new Product();
         this._formSubmitAttempted = false;
-        this._product = _productsManagementService.editableProduct;
-        this._categoriesService.getAll().subscribe(function (data) {
-            _this._categories = data;
-            if (_this.product.id)
-                _this.mapCategory();
-            _this.formGroupInitiate();
+        this.activatedRoute.params.subscribe(function (params) {
+            _this._categoriesService.getAll().subscribe(function (data) {
+                _this._categories = data;
+                if (params['productId']) {
+                    _this.getEditableProduct(params['productId']);
+                }
+                else {
+                    _this.formGroupInitialize();
+                }
+            });
         });
     }
     Object.defineProperty(ProductComponent.prototype, "categories", {
@@ -84235,16 +84222,29 @@ var product_component_ProductComponent = /** @class */ (function () {
         configurable: true
     });
     ProductComponent.prototype.ngOnInit = function () { };
-    ProductComponent.prototype.saveData = function (backLink) {
+    ProductComponent.prototype.saveData = function () {
+        var _this = this;
         if (this.formGroup.valid) {
             this._productsManagementService.saveProduct(this.product)
-                .subscribe(function () { return backLink.click(); });
+                .subscribe(function () { return _this._router.navigateByUrl('/shoptask/Inventory'); });
         }
         else {
             this.formSubmitAttempted = true;
         }
     };
-    ProductComponent.prototype.formGroupInitiate = function () {
+    ProductComponent.prototype.getEditableProduct = function (productId) {
+        var _this = this;
+        this._productsService.getAllProducts().subscribe(function (products) {
+            _this._product = products.find(function (item) { return item.id == productId; });
+            _this.mapCategory();
+            _this.formGroupInitialize();
+        });
+    };
+    ProductComponent.prototype.mapCategory = function () {
+        var _this = this;
+        this.product.category = this.categories.find(function (item) { return item.name == _this._product.category; }).id;
+    };
+    ProductComponent.prototype.formGroupInitialize = function () {
         var _this = this;
         this._formGroup = new forms_FormGroup({
             title: new forms_FormControl(this.product.title, forms_Validators.required),
@@ -84255,16 +84255,12 @@ var product_component_ProductComponent = /** @class */ (function () {
         });
         this.formGroup.valueChanges.subscribe(function (value) { return _this.product.SetData(value); });
     };
-    ProductComponent.prototype.mapCategory = function () {
-        var _this = this;
-        this.product.category = this.categories.find(function (item) { return item.name == _this._product.category; }).id;
-    };
     ProductComponent = product_component_decorate([
         Object(core["n" /* Component */])({
             selector: 'product',
             template: __webpack_require__(312)
         }),
-        product_component_metadata("design:paramtypes", [router_Router,
+        product_component_metadata("design:paramtypes", [router_ActivatedRoute, router_Router,
             products_management_service_ProductsManagementService, categories_service_CategoriesService,
             products_service_ProductsService])
     ], ProductComponent);

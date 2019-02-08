@@ -7,7 +7,6 @@ import { ProductsManagementService } from '../services/products-management.servi
 import { CategoriesService } from '../services/categories.service';
 import { Category } from '../models/category.model';
 import { ProductsService } from '../services/products.service';
-import { Element } from '@angular/compiler';
      
 @Component({
     selector: 'product',
@@ -56,30 +55,46 @@ export class ProductComponent implements OnInit {
         return this.formGroup.get('description');
     }
 
-    constructor(private _router: Router,
+    constructor(private activatedRoute: ActivatedRoute, private _router: Router,
         private _productsManagementService: ProductsManagementService, private _categoriesService: CategoriesService,
         private _productsService: ProductsService) {
-                this._product = _productsManagementService.editableProduct;
+            this.activatedRoute.params.subscribe(params => {
                 this._categoriesService.getAll().subscribe(data => {
                     this._categories = data;
-                    if(this.product.id) this.mapCategory(); 
-                    this.formGroupInitiate()
+                    if(params['productId']) {
+                        this.getEditableProduct(params['productId']);
+                    } else {
+                        this.formGroupInitialize()
+                    }                  
                 });
+            });                   
         }
 
      ngOnInit() { } 
 
-    public saveData(backLink: HTMLLinkElement) {
+    public saveData() {
         if(this.formGroup.valid) {
             this._productsManagementService.saveProduct(this.product)
-            .subscribe(() => backLink.click());
+                .subscribe(() => this._router.navigateByUrl('/shoptask/Inventory'));
         }
         else {
             this.formSubmitAttempted = true;
         }
     }
 
-    private formGroupInitiate() {
+    private getEditableProduct(productId: number) {
+        this._productsService.getAllProducts().subscribe(products =>{
+            this._product = products.find(item => item.id == productId);
+            this.mapCategory();
+            this.formGroupInitialize()
+        });
+    }
+    
+    private mapCategory() {
+        this.product.category = this.categories.find(item => item.name == this._product.category).id;
+    }
+
+    private formGroupInitialize() {
         this._formGroup = new FormGroup({
             title: new FormControl(this.product.title, Validators.required),
             category: new FormControl(this.product.category, Validators.required),
@@ -88,9 +103,5 @@ export class ProductComponent implements OnInit {
             description: new FormControl(this.product.description)
         })    
         this.formGroup.valueChanges.subscribe((value) => this.product.SetData(value));
-    }
-
-    private mapCategory() {
-        this.product.category = this.categories.find(item => item.name == this._product.category).id;
     }
 }
