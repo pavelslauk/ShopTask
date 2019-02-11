@@ -15,11 +15,10 @@ namespace ShopTask.Controllers
 {
     public class OrderController : BaseController
     {
-        private IRepository<Product> _productsRepository;
         private IOrderService _orderService;
 
         public OrderController(IRepository<Category> categoriesRepository,
-            IRepository<Product> productsRepository, IOrderService orderService) : base(categoriesRepository)
+            IRepository<Product> productsRepository, IOrderService orderService) : base(categoriesRepository, productsRepository)
         {
             _productsRepository = productsRepository;
             _orderService = orderService;
@@ -41,14 +40,6 @@ namespace ShopTask.Controllers
         public void SaveCart(CartItemModel[] cart)
         {
             Session["Cart"] = cart;
-        }
-
-        [HttpGet]
-        public async Task<JsonResult> GetProductsAsync()
-        {
-            var products = Mapper.Map<Product[], ProductOrderModel[]>((await _productsRepository
-                .GetAllAsync(include: product => product.Category)).ToArray());
-            return Json(products, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

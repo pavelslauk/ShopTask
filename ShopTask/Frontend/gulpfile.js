@@ -2,80 +2,101 @@
 const named = require('vinyl-named');
 const gulp = require("gulp");
 
-gulp.task('build-js', function ()
-{
-    let options = {
-        output:{
-            path: __dirname + '/build',
-            filename: "[name].js"
-        },
-        resolve: {
-            extensions: ['.ts', '.js']
-        },
-        module:{
-            rules:[
+let options = {
+    output:{
+        path: __dirname + '/build',
+        filename: "[name].js"
+    },
+    resolve: {
+        extensions: ['.ts', '.js']
+    },
+    module:{
+        rules:[
+        {
+           test: /\.ts$/,
+           use: [
             {
-               test: /\.ts$/,
-               use: [
-                {
-                    loader: 'awesome-typescript-loader',
-                    options: { configFileName: __dirname + '/tsconfig.json' }
-                },
-                'angular2-template-loader'
-                ]
+                loader: 'awesome-typescript-loader',
+                options: { configFileName: __dirname + '/tsconfig.json' }
             },
-            {
-                test: /\.html$/,
-                loader: 'html-loader'
-            }]
+            'angular2-template-loader'
+            ]
         },
-        optimization: {
-            minimize: false
-        }
-    };
+        {
+            test: /\.html$/,
+            loader: 'html-loader'
+        }]
+    },
+    optimization: {
+        minimize: false
+    }
+};
 
-    return gulp.src('./app/*.ts')        
+let optionsMinify = {
+    output:{
+        path: __dirname + '/build',
+        filename: "[name].min.js"
+    },
+    resolve: {
+        extensions: ['.ts', '.js']
+    },
+    module:{
+        rules:[
+        {
+           test: /\.ts$/,
+           use: [
+            {
+                loader: 'awesome-typescript-loader',
+                options: { configFileName: __dirname + '/tsconfig.json' }
+            },
+            'angular2-template-loader'
+            ]
+        },
+        {
+            test: /\.html$/,
+            loader: 'html-loader'
+        }]
+    }
+};
+
+gulp.task('build-order-js', function ()
+{   
+    return gulp.src('./app/order.ts')        
         .pipe(named())
         .pipe(webpackStream(options))
         .pipe(gulp.dest('build'));
 
 });
 
-gulp.task('build-js-minify', function () 
+gulp.task('build-order-js-minify', function () 
 {
-    let options = {
-        output:{
-            path: __dirname + '/build',
-            filename: "[name].min.js"
-        },
-        resolve: {
-            extensions: ['.ts', '.js']
-        },
-        module:{
-            rules:[
-            {
-               test: /\.ts$/,
-               use: [
-                {
-                    loader: 'awesome-typescript-loader',
-                    options: { configFileName: __dirname + '/tsconfig.json' }
-                },
-                'angular2-template-loader'
-                ]
-            },
-            {
-                test: /\.html$/,
-                loader: 'html-loader'
-            }]
-        }
-    };
-
-    return gulp.src('./app/*.ts')        
+    return gulp.src('./app/order.ts')        
         .pipe(named())
-        .pipe(webpackStream(options))
+        .pipe(webpackStream(optionsMinify))
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('build', gulp.series('build-js', 'build-js-minify'));
+gulp.task('build-products-js', function ()
+{   
+    return gulp.src('./app/products.ts')        
+        .pipe(named())
+        .pipe(webpackStream(options))
+        .pipe(gulp.dest('build'));
 
-gulp.watch('./app', gulp.series('build-js'));
+});
+
+gulp.task('build-products-js-minify', function () 
+{
+    return gulp.src('./app/products.ts')        
+        .pipe(named())
+        .pipe(webpackStream(optionsMinify))
+        .pipe(gulp.dest('build'));
+});
+
+gulp.task('build-order', gulp.series('build-order-js', 'build-order-js-minify'));
+
+gulp.task('build-products', gulp.series('build-products-js', 'build-products-js-minify'));
+
+//gulp.watch('./app/order', gulp.series('build-order-js'));
+
+gulp.watch('./app/products', gulp.series('build-products-js'));

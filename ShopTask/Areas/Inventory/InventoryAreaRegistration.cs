@@ -20,14 +20,24 @@ namespace ShopTask.Areas.Inventory
                 defaults: new { controller = "Categories", action = "Index" });
 
             context.MapRoute(
-                name: "CreateProduct",
-                url: "Inventory/Product",
-                defaults: new { controller = "Products", action = "CreateProduct" });
+                name: "SaveProduct",
+                url: "Inventory/SaveProduct",
+                defaults: new { controller = "Products", action = "SaveProduct" });
 
             context.MapRoute(
-                name: "EditProduct",
-                url: "Inventory/Product/{productId}",
-                defaults: new { controller = "Products", action = "EditProduct" });
+                name: "DeleteProduct",
+                url: "Inventory/DeleteProduct",
+                defaults: new { controller = "Products", action = "DeleteProduct" });
+
+            context.MapRoute(
+                name: "GetCategories",
+                url: "Inventory/GetCategories",
+                defaults: new { controller = "Products", action = "GetCategories" });
+
+            context.MapRoute(
+                name: "Products",
+                url: "Inventory/{param}",
+                defaults: new { controller = "Products", action = "Index", param = UrlParameter.Optional });
 
             context.MapRoute(
                  "Inventory_default",

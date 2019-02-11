@@ -16,3 +16,5 @@
         <button class="add-to-cart-but" (click)="addToCart(item)">Add</button>
     </div>
 </div>
+
+<p class="js-empty-table-placeholder" *ngIf="products.length == 0">No products!</p>
