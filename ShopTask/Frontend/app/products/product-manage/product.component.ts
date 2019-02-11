@@ -55,22 +55,18 @@ export class ProductComponent implements OnInit {
         return this.formGroup.get('description');
     }
 
-    constructor(private activatedRoute: ActivatedRoute, private _router: Router,
+    constructor(private _activatedRoute: ActivatedRoute, private _router: Router,
         private _productsManagementService: ProductsManagementService, private _categoriesService: CategoriesService,
-        private _productsService: ProductsService) {
-            this.activatedRoute.params.subscribe(params => {
-                this._categoriesService.getAll().subscribe(data => {
-                    this._categories = data;
-                    if(params['productId']) {
-                        this.getEditableProduct(params['productId']);
-                    } else {
-                        this.formGroupInitialize()
-                    }                  
-                });
-            });                   
-        }
+        private _productsService: ProductsService) { }
 
-     ngOnInit() { } 
+     ngOnInit() { 
+        this._activatedRoute.params.subscribe(params => {
+            this._categoriesService.getAll().subscribe(data => {
+                this._categories = data;
+                this.setupForProductId(params['productId']);                  
+            });
+        }); 
+     } 
 
     public saveData() {
         if(this.formGroup.valid) {
@@ -82,12 +78,16 @@ export class ProductComponent implements OnInit {
         }
     }
 
-    private getEditableProduct(productId: number) {
-        this._productsService.getAllProducts().subscribe(products =>{
-            this._product = products.find(item => item.id == productId);
-            this.mapCategory();
-            this.formGroupInitialize()
-        });
+    private setupForProductId(productId: number) {
+        if(productId) {
+            this._productsService.getAllProducts().subscribe(products =>{
+                this._product = products.find(item => item.id == productId);
+                this.mapCategory();
+                this.formGroupInitialize()
+            });
+        } else {
+            this.formGroupInitialize();
+        }
     }
     
     private mapCategory() {

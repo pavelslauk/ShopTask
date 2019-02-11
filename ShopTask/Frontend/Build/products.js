@@ -84141,26 +84141,14 @@ var product_component_metadata = (undefined && undefined.__metadata) || function
 
 
 var product_component_ProductComponent = /** @class */ (function () {
-    function ProductComponent(activatedRoute, _router, _productsManagementService, _categoriesService, _productsService) {
-        var _this = this;
-        this.activatedRoute = activatedRoute;
+    function ProductComponent(_activatedRoute, _router, _productsManagementService, _categoriesService, _productsService) {
+        this._activatedRoute = _activatedRoute;
         this._router = _router;
         this._productsManagementService = _productsManagementService;
         this._categoriesService = _categoriesService;
         this._productsService = _productsService;
         this._product = new Product();
         this._formSubmitAttempted = false;
-        this.activatedRoute.params.subscribe(function (params) {
-            _this._categoriesService.getAll().subscribe(function (data) {
-                _this._categories = data;
-                if (params['productId']) {
-                    _this.getEditableProduct(params['productId']);
-                }
-                else {
-                    _this.formGroupInitialize();
-                }
-            });
-        });
     }
     Object.defineProperty(ProductComponent.prototype, "categories", {
         get: function () {
@@ -84221,7 +84209,15 @@ var product_component_ProductComponent = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    ProductComponent.prototype.ngOnInit = function () { };
+    ProductComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this._activatedRoute.params.subscribe(function (params) {
+            _this._categoriesService.getAll().subscribe(function (data) {
+                _this._categories = data;
+                _this.setupForProductId(params['productId']);
+            });
+        });
+    };
     ProductComponent.prototype.saveData = function () {
         var _this = this;
         if (this.formGroup.valid) {
@@ -84232,13 +84228,18 @@ var product_component_ProductComponent = /** @class */ (function () {
             this.formSubmitAttempted = true;
         }
     };
-    ProductComponent.prototype.getEditableProduct = function (productId) {
+    ProductComponent.prototype.setupForProductId = function (productId) {
         var _this = this;
-        this._productsService.getAllProducts().subscribe(function (products) {
-            _this._product = products.find(function (item) { return item.id == productId; });
-            _this.mapCategory();
-            _this.formGroupInitialize();
-        });
+        if (productId) {
+            this._productsService.getAllProducts().subscribe(function (products) {
+                _this._product = products.find(function (item) { return item.id == productId; });
+                _this.mapCategory();
+                _this.formGroupInitialize();
+            });
+        }
+        else {
+            this.formGroupInitialize();
+        }
     };
     ProductComponent.prototype.mapCategory = function () {
         var _this = this;
