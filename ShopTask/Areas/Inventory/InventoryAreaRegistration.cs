@@ -35,6 +35,11 @@ namespace ShopTask.Areas.Inventory
                 defaults: new { controller = "Products", action = "GetCategories" });
 
             context.MapRoute(
+                name: "GetAttributes",
+                url: "Inventory/GetAttributes",
+                defaults: new { controller = "Products", action = "GetAttributes" });
+
+            context.MapRoute(
                 name: "Products",
                 url: "Inventory/{param}",
                 defaults: new { controller = "Products", action = "Index", param = UrlParameter.Optional });

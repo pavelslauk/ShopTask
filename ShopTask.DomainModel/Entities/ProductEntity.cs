@@ -20,5 +20,12 @@ namespace ShopTask.DomainModel.Entities
         public int CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
+
+        public virtual ICollection<ProductAttribute> AttributeValues { get; set; }
+
+        public Product()
+        {
+            AttributeValues = new HashSet<ProductAttribute>();
+        }
     }
 }

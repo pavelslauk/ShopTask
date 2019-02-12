@@ -15,7 +15,7 @@ namespace ShopTask.DataAccess.Repositories
 
         public UnitOfWork(ShopContext context)
         {
-            _dbContext = context;
+            _dbContext = context;           
             _dbContext.Database.Log = transaction => Logger.Default.Info(transaction);
         }
 
