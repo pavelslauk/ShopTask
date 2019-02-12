@@ -17,11 +17,14 @@ namespace ShopTask.Areas.Inventory.Controllers
     public class ProductsController : BaseController
     {
         private IUnitOfWork _unitOfWork;
+        private IRepository<ProductAttribute> _attributesRepository;
 
-        public ProductsController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, IRepository<Product> productsRepository) : base(categoriesRepository, productsRepository)
+        public ProductsController(IUnitOfWork unitOfWork, IRepository<Category> categoriesRepository, 
+            IRepository<Product> productsRepository, IRepository<ProductAttribute> attributesRepository) : base(categoriesRepository, productsRepository)
         {
             _unitOfWork = unitOfWork;
             _productsRepository = productsRepository;
+            _attributesRepository = attributesRepository;
         }
 
         [HttpGet]
@@ -35,6 +38,13 @@ namespace ShopTask.Areas.Inventory.Controllers
         {
             var categories = (await _categoriesRepository.GetAllAsync()).ToArray();
             return Json(categories, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAttributes()
+        {
+            var attributes = (await _attributesRepository.GetAllAsync(attribute => attribute.AttributeValues)).ToArray();
+            return Json(attributes, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
