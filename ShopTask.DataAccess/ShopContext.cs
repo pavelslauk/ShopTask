@@ -14,15 +14,10 @@ namespace ShopTask.DataAccess
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
-        public DbSet<AttributeValue> AttributeValues { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AttributeValue>().HasMany(attribute => attribute.Products)
-                .WithMany(product => product.AttributeValues)
-                .Map(t => t.MapLeftKey("AttributeId")
-                .MapRightKey("ProductId")
-                .ToTable("AttributeProduct"));
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

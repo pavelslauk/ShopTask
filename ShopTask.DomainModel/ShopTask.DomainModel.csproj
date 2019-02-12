@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="DomainModelInstaller.cs" />
     <Compile Include="Entities\ProductAttributeEntity.cs" />
-    <Compile Include="Entities\AttributeValueEntity.cs" />
     <Compile Include="Entities\CartItem.cs" />
     <Compile Include="Entities\CategoryEntity.cs" />
     <Compile Include="Entities\OrderEntity.cs" />

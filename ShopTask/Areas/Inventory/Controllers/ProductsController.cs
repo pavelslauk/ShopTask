@@ -43,7 +43,7 @@ namespace ShopTask.Areas.Inventory.Controllers
         [HttpGet]
         public async Task<JsonResult> GetAttributes()
         {
-            var attributes = (await _attributesRepository.GetAllAsync(attribute => attribute.AttributeValues)).ToArray();
+            var attributes = (await _attributesRepository.GetAllAsync()).ToArray();
             return Json(attributes, JsonRequestBehavior.AllowGet);
         }
 

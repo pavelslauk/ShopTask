@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ShopTask.DomainModel.Entities
 {
@@ -10,13 +12,16 @@ namespace ShopTask.DomainModel.Entities
         public int Id { get; set; }
 
         [Required]
+        public string Value { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
-        public virtual ICollection<AttributeValue> AttributeValues { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
 
         public ProductAttribute()
         {
-            AttributeValues = new List<AttributeValue>();
+            Products = new HashSet<Product>();
         }
     }
 }

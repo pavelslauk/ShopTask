@@ -21,11 +21,11 @@ namespace ShopTask.DomainModel.Entities
 
         public virtual Category Category { get; set; }
 
-        public virtual ICollection<AttributeValue> AttributeValues { get; set; }
+        public virtual ICollection<ProductAttribute> AttributeValues { get; set; }
 
         public Product()
         {
-            AttributeValues = new List<AttributeValue>();
+            AttributeValues = new HashSet<ProductAttribute>();
         }
     }
 }
